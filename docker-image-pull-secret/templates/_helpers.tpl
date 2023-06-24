@@ -41,7 +41,7 @@ app.kubernetes.io/instance: {{ .Release.Name }}
     {{- if $index }}
       {{- print "," }}
     {{- end }}
-    {{- printf "\"%s\":{\"auth\":\"%s\"}" $item.registry (printf "%s:%s" $item.username $item.accessToken | b64enc) }}
+    {{- printf "\"%s\":{\"username\":\"%s\", \"password\":\"%s\", \"auth\":\"%s\"}" $item.registry $item.username $item.accessToken (printf "%s:%s" $item.username $item.accessToken | b64enc) }}
   {{- end }}
   {{- print "}}" }}
 {{- end }}
