@@ -1,0 +1,14 @@
+# Specify if you want the secret to have a specific name, example: "github-docker-registry"
+secretName: ""
+
+# A list of different registries that you want to authenticate against with the following properties:
+#
+# imageCredentials[]
+#   @registry: The Docker registry
+#   @username: The Docker user's username
+#   @accessToken: The Docker user's access token or password
+
+imageCredentials:
+  - registry: https://ghcr.io
+    username: ""
+    accessToken: ""

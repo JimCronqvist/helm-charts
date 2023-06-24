@@ -1,0 +1,10 @@
+Your 'dockerconfigjson' secret has been created. You can now reference it in your Deployment spec like this:
+```
+imagePullSecrets:
+  - name: {{ default (include "docker-image-pull-secret.name" .) .Values.secretName }}
+```
+
+{{/*
+  Test required values
+*/}}
+{{- if include "docker-image-pull-secret.required" . -}}{{- end -}}

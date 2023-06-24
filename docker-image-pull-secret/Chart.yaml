@@ -1,0 +1,9 @@
+apiVersion: v2
+name: docker-image-pull-secret
+description: A Helm chart for pulling docker images from private docker registries for Kubernetes
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates.
+# Versions are expected to follow Semantic Versioning (https://semver.org/)
+version: 0.1.0
