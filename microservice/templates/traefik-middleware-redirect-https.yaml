@@ -1,0 +1,12 @@
+{{- if and .Values.ingressroute.enabled .Values.ingressroute.tls.enabled }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ include "microservice.fullname" . }}-redirect-https
+  labels:
+    {{- include "microservice.labels" . | nindent 4 }}
+spec:
+  redirectScheme:
+    scheme: https
+    permanent: true
+{{- end }}

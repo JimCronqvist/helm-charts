@@ -1,0 +1,70 @@
+{{- $fullName := include "microservice.fullname" . -}}
+{{- $labels := include "microservice.labels" . -}}
+{{- $serviceAccountName := include "microservice.serviceAccountName" . -}}
+{{- range $cronjob := .Values.cronjobs }}
+---
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: {{ printf "%s-%s" $fullName ($cronjob.name | replace " " "-" | lower) | trunc 53 | trimSuffix "-" }}
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  schedule: "{{ $cronjob.schedule }}"
+  timeZone: {{ default "Europe/Stockholm" $cronjob.timeZone }}
+  startingDeadlineSeconds: {{ default nil $cronjob.startingDeadlineSeconds }}
+  concurrencyPolicy: {{ default "Allow" $cronjob.concurrencyPolicy }}
+  suspend: {{ default false $cronjob.suspend }}
+  successfulJobsHistoryLimit: {{ default 3 $cronjob.successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ default 1 $cronjob.failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      backoffLimit: {{ default 6 $cronjob.backoffLimit }}
+      {{- if $cronjob.activeDeadlineSeconds }}
+      activeDeadlineSeconds: {{ $cronjob.activeDeadlineSeconds }}
+      {{- end }}
+      template:
+        spec:
+          restartPolicy: OnFailure
+          {{- with $.Values.imagePullSecrets }}
+          imagePullSecrets:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          serviceAccountName: {{ $serviceAccountName }}
+          securityContext:
+            {{- toYaml $.Values.podSecurityContext | nindent 12 }}
+          containers:
+            - name: {{ $cronjob.name | replace " " "-" | lower }}
+              command:
+                - /bin/sh
+                - -c
+                - {{ $cronjob.command }}
+              securityContext:
+                {{- toYaml $.Values.securityContext | nindent 16 }}
+              image: "{{ $.Values.image.repository }}:{{ include "helpers.image-tag" $ }}"
+              imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              env:
+                {{- include "helpers.list-env-variables" $ | indent 16 }}
+              resources:
+                {{- toYaml $.Values.resources | nindent 16 }}
+              {{- with $.Values.pvc }}
+              volumeMounts:
+                {{- include "helpers.volume-mounts" . | indent 16 }}
+              {{- end }}
+          {{- with $.Values.pvc }}
+          volumes:
+            {{- include "helpers.volumes" (list $ .) | indent 12 }}
+          {{- end }}
+          {{- with $.Values.nodeSelector }}
+          nodeSelector:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $.Values.affinity }}
+          affinity:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $.Values.tolerations }}
+          tolerations:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+{{- end }}

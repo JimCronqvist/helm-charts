@@ -1,0 +1,65 @@
+{{- $fullName := include "microservice.fullname" . -}}
+{{- $labels := include "microservice.labels" . -}}
+{{- $serviceAccountName := include "microservice.serviceAccountName" . -}}
+{{- range $job := .Values.jobs }}
+---
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ printf "%s-%s" $fullName ($job.name | replace " " "-" | lower) | trunc 53 | trimSuffix "-" }}
+  labels:
+    {{- $labels | nindent 4 }}
+  {{- with $job.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+spec:
+  backoffLimit: {{ default 6 $job.backoffLimit }}
+  {{- if $job.activeDeadlineSeconds }}
+  activeDeadlineSeconds: {{ $job.activeDeadlineSeconds }}
+  {{- end }}
+  template:
+    spec:
+      restartPolicy: OnFailure
+      {{- with $.Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 12 }}
+      {{- end }}
+      serviceAccountName: {{ $serviceAccountName }}
+      securityContext:
+        {{- toYaml $.Values.podSecurityContext | nindent 12 }}
+      containers:
+        - name: {{ $job.name | replace " " "-" | lower }}
+          command:
+            - /bin/sh
+            - -c
+            - {{ $job.command }}
+          securityContext:
+            {{- toYaml $.Values.securityContext | nindent 16 }}
+          image: "{{ $.Values.image.repository }}:{{ include "helpers.image-tag" $ }}"
+          imagePullPolicy: {{ $.Values.image.pullPolicy }}
+          env:
+            {{- include "helpers.list-env-variables" $ | indent 16 }}
+          resources:
+            {{- toYaml $.Values.resources | nindent 16 }}
+          {{- with $.Values.pvc }}
+          volumeMounts:
+            {{- include "helpers.volume-mounts" . | indent 16 }}
+          {{- end }}
+      {{- with $.Values.pvc }}
+      volumes:
+        {{- include "helpers.volumes" (list $ .) | indent 12 }}
+      {{- end }}
+      {{- with $.Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 12 }}
+      {{- end }}
+      {{- with $.Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 12 }}
+      {{- end }}
+      {{- with $.Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 12 }}
+      {{- end }}
+{{- end }}
