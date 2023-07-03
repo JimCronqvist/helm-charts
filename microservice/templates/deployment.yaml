@@ -49,13 +49,13 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
-          {{- if and .Values.probes .Values.probes.livenessPath }}
+          {{- if and .Values.service.enabled .Values.probes .Values.probes.livenessPath }}
           livenessProbe:
             httpGet:
               path: {{ .Values.probes.livenessPath }}
               port: http
           {{- end }}
-          {{- if and .Values.probes .Values.probes.readinessPath }}
+          {{- if and .Values.service.enabled .Values.probes .Values.probes.readinessPath }}
           readinessProbe:
             httpGet:
               path: {{ .Values.probes.readinessPath }}
