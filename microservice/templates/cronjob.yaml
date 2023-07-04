@@ -24,6 +24,9 @@ spec:
       activeDeadlineSeconds: {{ $cronjob.activeDeadlineSeconds }}
       {{- end }}
       template:
+        metadata:
+          annotations:
+            {{- include "microservice.checksumPodAnnotations" . | indent 12 }}
         spec:
           restartPolicy: OnFailure
           {{- with $.Values.imagePullSecrets }}
