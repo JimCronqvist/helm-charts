@@ -27,7 +27,7 @@ data:
       console.log('Http request from ArgoCD received: ', request.method, request.url);
 
       // Check if the token provided matches, i.e. is this a valid request
-      const requestToken = request.headers['authorization'];
+      const requestToken = request.headers['authorization'] || '';
       if(token.length && `Bearer ${token}` === requestToken) {
         console.log('The token provided is valid.');
       } else {
