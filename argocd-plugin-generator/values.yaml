@@ -1,0 +1,23 @@
+# Default values for furnish.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+
+# Docker image + tag/version, examples:
+# - node:lts-alpine
+# - ghcr.io/jimcronqvist/node-octokit:master (node:lts-alpine but with @octokit/rest & lodash)
+# - python:3.11.3-slim
+image: ghcr.io/jimcronqvist/node-octokit:master
+
+pullPolicy: Always
+
+# Command to execute to start the web server
+command: node
+args:
+  - /app/index.js
+
+script: |
+  function plugin(input) {
+    console.log('Input:', input);
+    return input;
+  }

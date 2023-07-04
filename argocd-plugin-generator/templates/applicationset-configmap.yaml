@@ -1,0 +1,11 @@
+# This configmap lives with the ApplicationSet controller
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "argocd-plugin-generator.fullname" . }}
+  namespace: argocd
+  labels:
+    {{- include "argocd-plugin-generator.labels" . | nindent 4 }}
+data:
+  token: '${{ include "argocd-plugin-generator.fullname" . }}:token'
+  baseUrl: "http://{{ include "argocd-plugin-generator.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local"

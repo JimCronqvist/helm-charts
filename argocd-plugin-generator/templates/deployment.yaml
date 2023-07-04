@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "argocd-plugin-generator.fullname" . }}
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "argocd-plugin-generator.labels" . | nindent 4 }}
+spec:
+  selector:
+    matchLabels:
+      {{- include "argocd-plugin-generator.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- include "argocd-plugin-generator.checksumPodAnnotations" . | indent 8 }}
+      labels:
+        {{- include "argocd-plugin-generator.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: argocd-plugin-generator
+          image: "{{ .Values.image }}"
+          imagePullPolicy: {{ .Values.pullPolicy }}
+          command: ["{{ .Values.command }}"]
+          {{- with .Values.args }}
+          args:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          env:
+            {{- include "helpers.list-env-variables" . | indent 12 }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /var/run/argo/token
+              name: token
+              subPath: token
+              readOnly: true
+            - name: {{ include "argocd-plugin-generator.fullname" . }}-script
+              mountPath: "/app/index.js"
+              subPath: "index.js"
+      volumes:
+        - name: token
+          secret:
+            secretName: {{ include "argocd-plugin-generator.fullname" . }}
+        - name: {{ include "argocd-plugin-generator.fullname" . }}-script
+          configMap:
+            name: {{ include "argocd-plugin-generator.fullname" . }}-script

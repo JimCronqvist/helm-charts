@@ -1,0 +1,56 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "argocd-plugin-generator.fullname" . }}-script
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "argocd-plugin-generator.labels" . | nindent 4 }}
+data:
+  index.js: |
+    const http = require('http');
+    const fs = require('fs');
+
+    const token = fs.readFileSync('/var/run/argo/token', { encoding: 'utf8' }).trim();
+
+    // --- function passed in to argocd-plugin-generator from values
+    {{- .Values.script | nindent 4 -}}
+    // --- end
+
+    if(typeof plugin !== 'function') {
+      async function plugin(input) {
+        console.error('To use this helm-chart, provide a function "plugin(input){}" in the "script" key in values. Input:', input);
+        return [];
+      }
+    }
+
+    http.createServer(function (request, response) {
+      console.log('Http request from ArgoCD received: ', request.method, request.url);
+
+      // Check if the token provided matches, i.e. is this a valid request
+      const requestToken = request.headers['authorization'];
+      if(token.length && `Bearer ${token}` === requestToken) {
+        console.log('The token provided is valid.');
+      } else {
+        console.error('The token provided does not match, invalid request.', 'Token:', token.substring(0, 5)+'*****', ', requestToken:', requestToken.replace('Bearer ', '').substring(0, 5)+'*****');
+        response.writeHead(403, { 'Content-Type': 'text/plain' });
+        response.end('Forbidden, token mismatch.');
+        return;
+      }
+
+      let body = '';
+      request.on('data', chunk => body+= chunk);
+      request.on('end', async () => {
+        body = JSON.parse(body);
+        let output = await plugin(body.input.parameters);
+        output = output instanceof Array ? output : [output];
+        response.writeHead(200, { 'Content-Type': 'application/json' });
+        response.write(JSON.stringify({
+          output: {
+            parameters: output
+          }
+        }));
+        response.end();
+      });
+    }).listen(80, () => {
+      console.log('Http server started, listening on port 80.');
+    });
