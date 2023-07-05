@@ -21,7 +21,7 @@ spec:
   template:
     metadata:
       annotations:
-        {{- include "microservice.checksumPodAnnotations" . | indent 8 }}
+        {{- include "microservice.checksumPodAnnotations" $ | indent 8 }}
     spec:
       restartPolicy: OnFailure
       {{- with $.Values.imagePullSecrets }}
