@@ -23,11 +23,11 @@ spec:
       restartPolicy: OnFailure
       {{- with $.Values.imagePullSecrets }}
       imagePullSecrets:
-        {{- toYaml . | nindent 12 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ $serviceAccountName }}
       securityContext:
-        {{- toYaml $.Values.podSecurityContext | nindent 12 }}
+        {{- toYaml $.Values.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ $job.name | replace " " "-" | lower }}
           command:
@@ -35,31 +35,31 @@ spec:
             - -c
             - {{ $job.command }}
           securityContext:
-            {{- toYaml $.Values.securityContext | nindent 16 }}
+            {{- toYaml $.Values.securityContext | nindent 12 }}
           image: "{{ $.Values.image.repository }}:{{ include "helpers.image-tag" $ }}"
           imagePullPolicy: {{ $.Values.image.pullPolicy }}
           env:
-            {{- include "helpers.list-env-variables" $ | indent 16 }}
+            {{- include "helpers.list-env-variables" $ | indent 12 }}
           resources:
             {{- toYaml $.Values.resources | nindent 16 }}
           {{- with $.Values.pvc }}
           volumeMounts:
-            {{- include "helpers.volume-mounts" . | indent 16 }}
+            {{- include "helpers.volume-mounts" . | indent 12 }}
           {{- end }}
       {{- with $.Values.pvc }}
       volumes:
-        {{- include "helpers.volumes" (list $ .) | indent 12 }}
+        {{- include "helpers.volumes" (list $ .) | indent 8 }}
       {{- end }}
       {{- with $.Values.nodeSelector }}
       nodeSelector:
-        {{- toYaml . | nindent 12 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with $.Values.affinity }}
       affinity:
-        {{- toYaml . | nindent 12 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with $.Values.tolerations }}
       tolerations:
-        {{- toYaml . | nindent 12 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
 {{- end }}
