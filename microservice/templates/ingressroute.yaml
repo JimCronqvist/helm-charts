@@ -74,7 +74,7 @@ spec:
       services:
         - name: {{ $fullName }}
           port: {{ $svcPort }}
-          nativeLB: {{ .nativeLB | default false }}
+          #nativeLB: {{ .nativeLB | default false }}
       middlewares:
         {{- if $.Values.ingressroute.tls.enabled }}
         - name: {{ $fullName }}-redirect-https
