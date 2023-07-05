@@ -41,7 +41,7 @@ spec:
           env:
             {{- include "helpers.list-env-variables" $ | indent 12 }}
           resources:
-            {{- toYaml $.Values.resources | nindent 16 }}
+            {{- toYaml $.Values.resources | nindent 12 }}
           {{- with $.Values.pvc }}
           volumeMounts:
             {{- include "helpers.volume-mounts" . | indent 12 }}
