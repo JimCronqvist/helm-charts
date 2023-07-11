@@ -1,0 +1,104 @@
+{{- if .Values.ingressroute.enabled -}}
+{{- $fullName := include "webhook.fullname" . -}}
+{{- $svcPort := .Values.service.port -}}
+{{- $labels := include "webhook.labels" . -}}
+{{/*
+StripPrefix middleware
+*/}}
+{{- range $index, $route := .Values.ingressroute.routes }}
+{{- if .stripPrefix }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ $fullName }}-route{{ $index }}-strip
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  {{- if regexMatch "[+*()\\[\\]{}]" .stripPrefix }}
+  stripPrefixRegex:
+    regex:
+      - {{ .stripPrefix | quote }}
+  {{- else }}
+  stripPrefix:
+    prefixes:
+      - {{ .stripPrefix | quote }}
+  {{- end }}
+---
+{{- end }}
+{{- end }}
+{{/*
+Rewrite middleware
+*/}}
+{{- range $index, $route := .Values.ingressroute.routes }}
+{{- if and .rewrite .rewrite.regex .rewrite.replacement }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ $fullName }}-route{{ $index }}-rewrite
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  replacePathRegex:
+    regex: {{ .rewrite.regex }}
+    replacement: {{ .rewrite.replacement }}
+---
+{{- end }}
+{{- end }}
+{{/*
+IngressRoute
+*/}}
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  entryPoints:
+    {{- if .Values.ingressroute.tls.enabled }}
+    - websecure
+    {{- end }}
+    - web
+  routes:
+    {{- range $index, $route := .Values.ingressroute.routes }}
+    {{- $host := $.Values.ingressroute.overrideHost | default .host }}
+    - kind: Rule
+      priority: {{ .priority | default 0 }}
+      {{- if and $host (regexMatch "[+*()\\[\\]{}]" $host) }}
+      match: HostRegexp(`{{ $host | replace "," "`,`" }}`) && PathPrefix(`{{ .path }}`)
+      {{- else if $host }}
+      match: Host(`{{ $host | replace "," "`,`" }}`) && PathPrefix(`{{ .path }}`)
+      {{- else }}
+      match: PathPrefix(`{{ .path }}`)
+      {{- end }}
+      services:
+        - name: {{ $fullName }}
+          port: {{ $svcPort }}
+          #nativeLB: {{ .nativeLB | default false }}
+      middlewares:
+        {{- if $.Values.ingressroute.tls.enabled }}
+        - name: {{ $fullName }}-redirect-https
+        {{- end }}
+        {{- if .rewrite }}
+        - name: {{ $fullName }}-route{{ $index }}-rewrite
+        {{- else if .stripPrefix }}
+        - name: {{ $fullName }}-route{{ $index }}-strip
+        {{- end }}
+    {{- end }}
+  {{- if .Values.ingressroute.tls.enabled }}
+  tls:
+    {{- if .Values.ingressroute.tls.certResolver }}
+    certResolver: {{ .Values.ingressroute.tls.certResolver }}
+    {{- end }}
+    {{- if .Values.ingressroute.tls.domains }}
+    domains:
+    {{- range $domain := .Values.ingressroute.tls.domains }}
+      - main: {{ $domain.main }}
+        {{- with $domain.sans }}
+        sans:
+          {{- toYaml $domain.sans | nindent 10 }}
+        {{- end }}
+    {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}

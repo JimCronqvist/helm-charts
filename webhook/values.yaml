@@ -1,0 +1,160 @@
+# Default values for webhook.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+strategy:
+  # Allowed values: 'RollingUpdate' or 'Recreate'.
+  type: RollingUpdate
+  rollingUpdate:
+    maxSurge: 25%
+    maxUnavailable: 25%
+
+image:
+  repository: ghcr.io/jimcronqvist/docker-webhook
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: ""
+
+imagePullSecrets:
+  - name: docker-image-pull-secret
+
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: false
+  # Set whether it is a Role or ClusterRole
+  kind: Role
+  # Set the custom RBAC rules
+  # rules:
+  #   - apiGroups:
+  #       - ""
+  #     resources:
+  #       - pods
+  #     verbs:
+  #       - get
+  #       - list
+  rules: []
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+deployment:
+  enabled: true
+
+service:
+  enabled: true
+  type: ClusterIP
+  port: 80
+
+ingressroute:
+  enabled: true
+  tls:
+    enabled: true
+    #certResolver: letsencrypt
+    #domains:
+    #  - main: domain.com
+    #    sans:
+    #      - test.domain.com
+  routes:
+    # Path is required, and will match against PathPrefix(`...`), with an optional Host() or HostRegexp() match (multiple with commas)
+    # priority: 0, means the priority will be ignored, and the default traefik rules length sorting is applied.
+    # stripPrefix: {path}, use to remove a base path when the container does not expect it, such as nginx with static files
+    #
+    # - path: /
+    #   host: test.local
+    #   priority: 0
+    #   stripPrefix:
+    #
+    # - path: /{path:([0-9]{6,}}
+    #   host: test(.*).local
+    #   priority: 0
+    #   stripPrefix: /base-path
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 20
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+hostAliases: []
+
+# Format: { volumeName1: { size, accessMode, storageClass, mounts: [{ mountPath, subPath, [readonly] }, ...], ... } }
+pvc: {}
+  # data:
+  #   size: 8Gi
+  #   accessMode: ReadWriteOnce
+  #   # StorageClass: "-" to disable dynamic provisioning, if empty string the default provisioner is used
+  #   storageClass: ""
+  #   mounts:
+  #     - mountPath: "/mnt/data"
+
+# Paths for the probes to do http health checkups against. Set to empty or false to disable the probe.
+probes:
+  livenessPath: /
+  readinessPath: /
+
+# Set both normal and secret environment variables
+env: {}
+  # NODE_ENV: production
+secrets: {}
+  # API_SECRET_KEY: ...
+
+# Webhook configuration - See: https://github.com/adnanh/webhook/blob/master/docs/Hook-Definition.md
+hooks:
+  hello:
+    enabled: true
+    files:
+      /data/hello-world.sh: |
+        #!/bin/sh
+        echo Hello "$@"
+    hook:
+      id: hello-world
+      execute-command: /data/hello-world.sh
+      #response-message: Hello World!
+      include-command-output-in-response: true
+      incoming-payload-content-type: x-www-form-urlencoded
+      pass-arguments-to-command:
+        - source: url
+          name: name
