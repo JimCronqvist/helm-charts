@@ -32,6 +32,22 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: ""
 
+rbac:
+  # Specifies whether RBAC resources should be created
+  create: false
+  # Set whether it is a Role or ClusterRole
+  kind: Role
+  # Set the custom RBAC rules
+  # rules:
+  #   - apiGroups:
+  #       - ""
+  #     resources:
+  #       - pods
+  #     verbs:
+  #       - get
+  #       - list
+  rules: []
+
 podAnnotations: {}
 
 podSecurityContext: {}
