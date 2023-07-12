@@ -80,7 +80,7 @@ spec:
         - name: {{ $fullName }}-redirect-https
         {{- end }}
         {{- if $.Values.ingressroute.responseHeaderMicroservice }}
-        - name: {{ $fullName }}-microservice
+        - name: {{ $fullName }}-header
         {{- end }}
         {{- if .rewrite }}
         - name: {{ $fullName }}-route{{ $index }}-rewrite
