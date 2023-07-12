@@ -79,6 +79,9 @@ spec:
         {{- if $.Values.ingressroute.tls.enabled }}
         - name: {{ $fullName }}-redirect-https
         {{- end }}
+        {{- if .Values.ingressroute.responseHeaderMicroservice }}
+        - name: {{ $fullName }}-microservice
+        {{- end }}
         {{- if .rewrite }}
         - name: {{ $fullName }}-route{{ $index }}-rewrite
         {{- else if .stripPrefix }}

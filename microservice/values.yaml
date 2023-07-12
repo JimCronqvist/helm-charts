@@ -71,6 +71,7 @@ service:
 
 ingressroute:
   enabled: true
+  responseHeaderMicroservice: false
   tls:
     enabled: true
     #certResolver: letsencrypt
