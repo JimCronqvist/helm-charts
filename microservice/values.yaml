@@ -146,6 +146,7 @@ jobs: []
   #   command: "date; echo Completed bootstrap task"
   #   annotations: {}
   #   #backoffLimit: 6
+  #   #ttlSecondsAfterFinished: 3600
 
 cronjobs: []
   # - name: Cleanup task

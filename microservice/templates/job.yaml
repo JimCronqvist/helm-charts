@@ -14,6 +14,9 @@ metadata:
     {{- toYaml . | nindent 4 }}
   {{- end }}
 spec:
+  {{- if and (hasKey $job "ttlSecondsAfterFinished") (not (kindIs "invalid" $job.ttlSecondsAfterFinished)) }}
+  ttlSecondsAfterFinished: {{ $job.ttlSecondsAfterFinished }}
+  {{- end }}
   backoffLimit: {{ default 6 $job.backoffLimit }}
   {{- if $job.activeDeadlineSeconds }}
   activeDeadlineSeconds: {{ $job.activeDeadlineSeconds }}
