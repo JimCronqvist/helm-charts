@@ -3,7 +3,7 @@
 {{- $labels := include "webhook.labels" . -}}
 {{- $global := .Values.global -}}
 {{- range $pvcName, $pvc := .Values.pvc }}
-{{- if and (dig "enabled" true $pvc) (not $pvc.existingClaim) -}}
+{{- if and (dig "enabled" true $pvc) (not $pvc.existingClaim) (not .hostPath) (not .emptyDir) (not .nfs) -}}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim

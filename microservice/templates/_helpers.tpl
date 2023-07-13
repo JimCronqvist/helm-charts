@@ -150,6 +150,9 @@ volumes:
   {{- if .hostPath }}
   hostPath:
     {{- toYaml .hostPath | nindent 12 }}
+  {{- else if .nfs }}
+  nfs:
+    {{- toYaml .nfs | nindent 12 }}
   {{- else if .emptyDir }}
   emptyDir:
     {{- toYaml .emptyDir | nindent 12 }}
