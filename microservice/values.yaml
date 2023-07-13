@@ -68,6 +68,8 @@ service:
   enabled: true
   type: ClusterIP
   port: 80
+  # Set the primary container port if you need to use a different port for the exposed service
+  #containerPort:
 
 ingressroute:
   enabled: true

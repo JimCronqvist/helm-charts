@@ -48,7 +48,7 @@ spec:
             {{- include "helpers.list-env-variables" . | indent 12 }}
           ports:
             - name: http
-              containerPort: {{ .Values.service.port }}
+              containerPort: {{ .Values.service.containerPort | default .Values.service.port }}
               protocol: TCP
           {{- if and .Values.service.enabled .Values.probes .Values.probes.livenessPath }}
           livenessProbe:
