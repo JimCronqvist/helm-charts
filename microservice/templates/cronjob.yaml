@@ -6,7 +6,7 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ printf "%s-%s" $fullName ($cronjob.name | replace " " "-" | lower) | trunc 53 | trimSuffix "-" }}
+  name: {{ printf "%s-%s" $fullName ($cronjob.name | replace " " "-" | lower) | trunc 52 | trimSuffix "-" }}
   labels:
     {{- $labels | nindent 4 }}
 spec:
