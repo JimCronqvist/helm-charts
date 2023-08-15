@@ -18,7 +18,30 @@ karpenter:
       eks.amazonaws.com/role-arn:
 
 provisioner:
+  # EC2 instances are named containing the provisioner name
+  name: default
+
+  # Karpenter works to actively reduce cluster cost by identifying when:
+  # - Nodes can be removed as their workloads will run on other nodes in the cluster.
+  # - Nodes can be replaced with cheaper variants due to a change in the workloads.
+  consolidationEnabled: true
+
+  # Wait a number of seconds after a node has no provisioned pods running before Karpenter requests to delete the node
+  ttlSecondsAfterEmpty: 30
+
+  # Define a lifetime on the provisioned nodes, to automatically force recreation with newer up-to-date AMIs with
+  # security updates and latest versions installed.
+  ttlSecondsUntilExpired: 2592000 # 30 days = 30 * 24 * 3600 Seconds;
+
+  # Specify requirements constraints
   requirements:
+    - key: kubernetes.io/arch
+      operator: In
+      values: ["amd64"]
+    - key: kubernetes.io/os
+      operator: In
+      values: ["linux"]
     - key: karpenter.sh/capacity-type
       operator: In
-      values: ["spot"]
+      values: ["on-demand", "spot"]
+

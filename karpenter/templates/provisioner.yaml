@@ -1,7 +1,7 @@
 apiVersion: karpenter.sh/v1alpha5
 kind: Provisioner
 metadata:
-  name: default
+  name: {{ .Values.provisioner.name }}
   labels:
     {{- include "karpenter.labels" . | nindent 4 }}
 spec:
@@ -10,7 +10,10 @@ spec:
   limits:
     resources:
       cpu: 1000
+      memory: 1000Gi
+  ttlSecondsAfterEmpty: {{ .Values.provisioner.ttlSecondsAfterEmpty }}
+  ttlSecondsUntilExpired: {{ .Values.provisioner.ttlSecondsUntilExpired }}
+  consolidation:
+    enabled: {{ .Values.provisioner.consolidationEnabled }}
   providerRef:
     name: default
-  consolidation:
-    enabled: true
