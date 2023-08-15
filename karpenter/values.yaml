@@ -1,0 +1,22 @@
+
+karpenter:
+  settings:
+    aws:
+      # The EKS cluster name
+      clusterName:
+      # The public EKS Cluster https endpoint
+      clusterEndpoint:
+      # The Karpenter node instance profile - which role to pass to the ec2 instances
+      defaultInstanceProfile:
+      # The Karpenter SQS queue name
+      interruptionQueueName:
+  serviceAccount:
+    annotations:
+      # Karpenter IAM role for service account (IRSA)
+      eks\\.amazonaws\\.com/role-arn:
+
+provisioner:
+  requirements:
+    - key: karpenter.sh/capacity-type
+      operator: In
+      values: ["spot"]

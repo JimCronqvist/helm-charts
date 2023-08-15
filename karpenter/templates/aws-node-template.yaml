@@ -1,0 +1,13 @@
+apiVersion: karpenter.k8s.aws/v1alpha1
+kind: AWSNodeTemplate
+metadata:
+  name: default
+  labels:
+    {{- include "karpenter.labels" . | nindent 4 }}
+spec:
+  subnetSelector:
+    karpenter.sh/discovery: {{ .Values.karpenter.settings.aws.clusterName }}
+  securityGroupSelector:
+    karpenter.sh/discovery: {{ .Values.karpenter.settings.aws.clusterName }}
+  tags:
+    karpenter.sh/discovery: {{ .Values.karpenter.settings.aws.clusterName }}

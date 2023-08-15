@@ -1,0 +1,16 @@
+apiVersion: karpenter.sh/v1alpha5
+kind: Provisioner
+metadata:
+  name: default
+  labels:
+    {{- include "karpenter.labels" . | nindent 4 }}
+spec:
+  requirements:
+    {{- toYaml .Values.provisioner.requirements | nindent 4 }}
+  limits:
+    resources:
+      cpu: 1000
+  providerRef:
+    name: default
+  consolidation:
+    enabled: true
