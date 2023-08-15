@@ -9,7 +9,7 @@ spec:
     {{- toYaml .Values.provisioner.requirements | nindent 4 }}
   limits:
     resources:
-      cpu: 1000
+      cpu: 1k
       memory: 1000Gi
   {{- if not .Values.provisioner.consolidationEnabled }}
   ttlSecondsAfterEmpty: {{ .Values.provisioner.ttlSecondsAfterEmpty }}
