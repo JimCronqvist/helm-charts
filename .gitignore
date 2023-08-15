@@ -1,2 +1,4 @@
 dist/
 .idea/
+**/Chart.lock
+**.tgz
