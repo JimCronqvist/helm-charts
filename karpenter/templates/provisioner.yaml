@@ -11,7 +11,9 @@ spec:
     resources:
       cpu: 1000
       memory: 1000Gi
+  {{- if not .Values.provisioner.consolidationEnabled }}
   ttlSecondsAfterEmpty: {{ .Values.provisioner.ttlSecondsAfterEmpty }}
+  {{- end }}
   ttlSecondsUntilExpired: {{ .Values.provisioner.ttlSecondsUntilExpired }}
   consolidation:
     enabled: {{ .Values.provisioner.consolidationEnabled }}

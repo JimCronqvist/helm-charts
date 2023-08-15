@@ -26,7 +26,8 @@ provisioner:
   # - Nodes can be replaced with cheaper variants due to a change in the workloads.
   consolidationEnabled: true
 
-  # Wait a number of seconds after a node has no provisioned pods running before Karpenter requests to delete the node
+  # Wait a number of seconds after a node has no provisioned pods running before Karpenter requests to delete the node.
+  # Ignored if consolidationEnabled is set to true.
   ttlSecondsAfterEmpty: 30
 
   # Define a lifetime on the provisioned nodes, to automatically force recreation with newer up-to-date AMIs with
