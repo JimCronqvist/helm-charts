@@ -1,0 +1,12 @@
+microservice:
+  image:
+    repository: openspeedtest/latest
+    tag: "latest"
+
+  imagePullSecrets: []
+
+  ingressroute:
+    responseHeaderMicroservice: true
+    routes:
+      - path: /speedtest
+        priority: 910
