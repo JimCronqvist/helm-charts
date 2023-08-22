@@ -10,3 +10,7 @@ microservice:
     routes:
       - path: /speedtest
         priority: 910
+
+  probes:
+    livenessPath: /
+    readinessPath: /
