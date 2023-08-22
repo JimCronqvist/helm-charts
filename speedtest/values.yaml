@@ -5,11 +5,15 @@ microservice:
 
   imagePullSecrets: []
 
+  service:
+    port: 3000
+
   ingressroute:
     responseHeaderMicroservice: true
     routes:
       - path: /speedtest
         priority: 910
+        stripPrefix: /speedtest
 
   probes:
     livenessPath: /
