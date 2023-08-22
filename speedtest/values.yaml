@@ -14,6 +14,9 @@ microservice:
       - path: /speedtest
         priority: 910
         stripPrefix: /speedtest
+        rewrite:
+          regex: ^/speedtest(.*)
+          replacement: /speedtest/$1
 
   probes:
     livenessPath: /
