@@ -45,6 +45,24 @@ spec:
 {{- end }}
 {{- end }}
 {{/*
+Redirect middleware
+*/}}
+{{- range $index, $route := .Values.ingressroute.routes }}
+{{- if and .redirect .redirect.regex .redirect.replacement }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ $fullName }}-route{{ $index }}-redirect
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  redirectRegex:
+    regex: {{ .redirect.regex }}
+    replacement: {{ .redirect.replacement }}
+---
+{{- end }}
+{{- end }}
+{{/*
 IngressRoute
 */}}
 apiVersion: traefik.containo.us/v1alpha1
@@ -84,7 +102,11 @@ spec:
         {{- end }}
         {{- if .rewrite }}
         - name: {{ $fullName }}-route{{ $index }}-rewrite
-        {{- else if .stripPrefix }}
+        {{- end }}
+        {{- if .redirect }}
+        - name: {{ $fullName }}-route{{ $index }}-redirect
+        {{- end }}
+        {{- if .stripPrefix }}
         - name: {{ $fullName }}-route{{ $index }}-strip
         {{- end }}
     {{- end }}

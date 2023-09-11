@@ -14,9 +14,9 @@ microservice:
       - path: /speedtest
         priority: 910
         stripPrefix: /speedtest
-        rewrite:
-          regex: ^/speedtest$
-          replacement: /speedtest/
+        redirect:
+          regex: ^(https?://[a-z0-9-.]+)/speedtest$
+          replacement: $1/speedtest/
 
   probes:
     livenessPath: /
