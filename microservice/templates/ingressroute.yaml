@@ -63,6 +63,22 @@ spec:
 {{- end }}
 {{- end }}
 {{/*
+Custom middleware
+*/}}
+{{- range $index, $route := .Values.ingressroute.routes }}
+{{- if .middlewares }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ $fullName }}-route{{ $index }}-custom
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  {{- toYaml .middlewares | nindent 2 }}
+---
+{{- end }}
+{{- end }}
+{{/*
 IngressRoute
 */}}
 apiVersion: traefik.containo.us/v1alpha1
@@ -108,6 +124,9 @@ spec:
         {{- end }}
         {{- if .stripPrefix }}
         - name: {{ $fullName }}-route{{ $index }}-strip
+        {{- end }}
+        {{- if .middlewares }}
+        - name: {{ $fullName }}-route{{ $index }}-custom
         {{- end }}
     {{- end }}
   {{- if .Values.ingressroute.tls.enabled }}

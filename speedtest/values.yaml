@@ -17,6 +17,12 @@ microservice:
         redirect:
           regex: ^(https?://[a-z0-9-.]+)/speedtest$
           replacement: $1/speedtest/
+        middlewares:
+          buffering:
+            maxRequestBodyBytes: 10000000000
+            memRequestBodyBytes: 10000000000
+            memResponseBodyBytes: 10000000000
+            maxResponseBodyBytes: 10000000000
 
   probes:
     livenessPath: /
