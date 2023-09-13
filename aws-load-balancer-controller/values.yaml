@@ -5,5 +5,5 @@ aws-load-balancer-controller:
 
   # Specify required details about the EKS environment, by specifying all, it works to run the controller on Fargate.
   clusterName:
-  aws-region:
-  aws-vpc-id:
+  region:
+  vpcId:
