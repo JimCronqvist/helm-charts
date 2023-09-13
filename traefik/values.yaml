@@ -1,6 +1,4 @@
 traefik:
-  replicas: 2
-
   rbac:
     enabled: true
 
@@ -42,8 +40,11 @@ traefik:
 
   externalTrafficPolicy: Local
 
-  # Letsencrypt example with DNSMadeEasy
+
   deployment:
+    replicas: 2
+
+    # Letsencrypt permissions
     initContainers:
       - name: volume-permissions
         image: busybox:latest
@@ -51,6 +52,8 @@ traefik:
         volumeMounts:
           - name: data
             mountPath: /data
+
+  # Letsencrypt example with DNSMadeEasy
   #certResolvers:
   #  letsencrypt-dnsmadeeasy:
   #    dnsChallenge:
