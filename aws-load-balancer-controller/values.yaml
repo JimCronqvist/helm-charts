@@ -1,9 +1,12 @@
 aws-load-balancer-controller:
   serviceAccount:
-    create: true
+    # Override the name, as terraform will usually set the irsa to only allow 'kube-system:aws-load-balancer-controller' in the trust policy.
     name: aws-load-balancer-controller
+    annotations:
+      # AWS Load Balancer Controller IAM role for service account (IRSA)
+      eks.amazonaws.com/role-arn:
 
-  # Specify required details about the EKS environment, by specifying all, it works to run the controller on Fargate.
+  # Specify details about the EKS environment, if all is provided it will also run on Fargate.
   clusterName:
   region:
   vpcId:
