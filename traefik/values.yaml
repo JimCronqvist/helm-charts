@@ -43,7 +43,7 @@ traefik:
   externalTrafficPolicy: Local
 
   persistence:
-    enabled: true
+    enabled: false
 
   deployment:
     replicas: 3
