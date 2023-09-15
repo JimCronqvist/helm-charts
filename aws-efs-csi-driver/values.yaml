@@ -1,0 +1,7 @@
+aws-efs-csi-driver:
+  controller:
+    serviceAccount:
+      create: true
+  node:
+    serviceAccount:
+      create: true
