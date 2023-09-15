@@ -1,0 +1,32 @@
+cost-analyzer:
+  global:
+    grafana:
+      enabled: false
+      proxy: false
+
+  kubecostFrontend:
+    image: public.ecr.aws/kubecost/frontend
+
+  kubecostModel:
+    image: public.ecr.aws/kubecost/cost-model
+
+  kubecostMetrics:
+    emitPodAnnotations: true
+    emitNamespaceAnnotations: true
+
+  prometheus:
+    server:
+      image:
+        repository: public.ecr.aws/kubecost/prometheus
+    nodeExporter:
+      tolerations:
+        - operator: 'Exists'
+
+    configmapReload:
+      prometheus:
+        image:
+          repository: public.ecr.aws/bitnami/configmap-reload
+          tag: 0.11.1
+
+  reporting:
+    productAnalytics: false
