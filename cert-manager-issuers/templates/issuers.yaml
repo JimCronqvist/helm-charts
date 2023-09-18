@@ -13,7 +13,7 @@ metadata:
     {{- $labels | nindent 4 }}
 spec:
   {{- range $key, $val := . }}
-  {{- if not (has $key (list "enabled" "namespace")) }}
+  {{- if not (has $key (list "enabled" "namespace" "name")) }}
   {{- if or (kindIs "map" $val) }}
   {{ $key }}:
     {{- $val | toYaml | nindent 4}}
