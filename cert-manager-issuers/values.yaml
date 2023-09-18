@@ -15,14 +15,14 @@ clusterIssuers: []
 #              solverName: dnsmadeeasy
 #              config:
 #                apiKeyRef:
-#                  name: dnsmadeeasy
+#                  name: dnsmadeeasy-api-key
 #                  key: apiKey
 #                apiSecretRef:
-#                  name: dnsmadeeasy-apikey
+#                  name: dnsmadeeasy-api-key
 #                  key: apiSecret
 
 secrets: []
-#  dnsmadeeasy:
+#  dnsmadeeasy-api-key:
 #    apiKey: <key>
 #    apiSecret: <secret>
 
