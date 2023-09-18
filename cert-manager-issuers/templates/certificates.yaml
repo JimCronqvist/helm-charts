@@ -18,6 +18,7 @@ spec:
   secretTemplate:
     annotations:
       "helm.sh/resource-policy": keep
+      "argocd.argoproj.io/sync-options": Delete=false
       {{- if and .secretTemplate .secretTemplate.annotations }}
       {{- toYaml .secretTemplate.annotations | nindent 6 }}
       {{- end }}
