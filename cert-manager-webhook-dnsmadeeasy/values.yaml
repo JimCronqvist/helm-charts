@@ -1,4 +1,9 @@
 dnsmadeeasy-webhook:
+  # Provide details about how cert-manager is installed
+  certManager:
+    namespace: cert-manager
+    serviceAccountName: cert-manager
+
   # Override the fullname due to the length of the chart, if helm prepends anything, we mostly exceed the limit
   fullnameOverride: cert-manager-webhook-dnsmadeeasy
   groupName: dnsmadeeasy.challenger
