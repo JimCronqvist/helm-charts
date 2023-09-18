@@ -6,7 +6,7 @@ dnsmadeeasy-webhook:
 
   # Override the fullname due to the length of the chart, if helm prepends anything, we mostly exceed the limit
   fullnameOverride: cert-manager-webhook-dnsmadeeasy
-  groupName: dnsmadeeasy.challenger
+  groupName: cert-manager.webhook.dnsmadeeasy
 
   image:
     repository: ghcr.io/angelnu/dnsmadeeasy-webhook
