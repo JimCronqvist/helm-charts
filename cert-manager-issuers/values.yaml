@@ -25,3 +25,13 @@ secrets: []
 #  dnsmadeeasy:
 #    apiKey: <key>
 #    apiSecret: <secret>
+
+certificates: []
+#  - name: wildcard-example-com
+#    dnsNames:
+#      - "example.com"
+#      - "*.example.com"
+#    issuerRef:
+#      name: acme-dnsmadeeasy-issuer
+#      # Optional: defaults to 'ClusterIssuer'
+#      #kind: ClusterIssuer

@@ -2,7 +2,7 @@
 {{- $labels := include "cert-manager-issuers.labels" . -}}
 {{- range .Values.issuers }}
 {{- if (dig "enabled" true .) }}
-apiVersion: "cert-manager.io/v1"
+apiVersion: cert-manager.io/v1
 kind: Issuer
 metadata:
   name: {{ .name }}-issuer

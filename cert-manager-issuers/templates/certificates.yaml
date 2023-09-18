@@ -1,0 +1,29 @@
+{{- $fullName := include "cert-manager-issuers.fullname" . -}}
+{{- $labels := include "cert-manager-issuers.labels" . -}}
+{{- range .Values.certificates }}
+{{- if (dig "enabled" true .) }}
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: {{ .name }}
+  {{- if .namespace }}
+  namespace: {{ .namespace }}
+  {{- end }}
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  secretName: {{ .secretName | default (printf "%s-tls" .name) }}
+  duration: {{ .duration | default "2160h" }} # Default 90 days
+  renewBefore: {{ .renewBefore | default "720h" }} # Default 30 days
+  {{- with .secretTemplate }}
+  secretTemplate:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  dnsNames:
+    {{- toYaml .dnsNames | nindent 4 }}
+  issuerRef:
+    name: {{ .issuerRef.name }}
+    kind: {{ .issuerRef.kind | default "ClusterIssuer" }}
+---
+{{- end }}
+{{- end }}
