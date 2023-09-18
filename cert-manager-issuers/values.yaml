@@ -1,0 +1,27 @@
+issuers: []
+
+clusterIssuers: []
+#  - name: letsencrypt-dnsmadeeasy-issuer
+#    acme:
+#      email: user@example.com
+#      #server: https://acme-v02.api.letsencrypt.org/directory
+#      server: https://acme-staging-v02.api.letsencrypt.org/directory
+#      privateKeySecretRef:
+#        name: letsencrypt-dnsmadeeasy-issuer
+#      solvers:
+#        - dns01:
+#          webhook:
+#            groupName: dnsmadeeasy.challenger
+#            solverName: dnsmadeeasy
+#            config:
+#              apiKeyRef:
+#                name: dnsmadeeasy
+#                key: apiKey
+#              apiSecretRef:
+#                name: dnsmadeeasy-apikey
+#                key: apiSecret
+
+secrets: []
+#  dnsmadeeasy:
+#    apiKey: <key>
+#    apiSecret: <secret>
