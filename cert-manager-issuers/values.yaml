@@ -11,7 +11,7 @@ clusterIssuers: []
 #      solvers:
 #        - dns01:
 #            webhook:
-#              groupName: dnsmadeeasy.challenger
+#              groupName: cert-manager.webhook.dnsmadeeasy
 #              solverName: dnsmadeeasy
 #              config:
 #                apiKeyRef:
