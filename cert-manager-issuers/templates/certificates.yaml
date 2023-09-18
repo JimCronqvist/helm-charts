@@ -13,8 +13,8 @@ metadata:
     {{- $labels | nindent 4 }}
 spec:
   secretName: {{ .secretName | default (printf "%s-tls" .name) }}
-  duration: {{ .duration | default "2160h" }} # Default 90 days
-  renewBefore: {{ .renewBefore | default "720h" }} # Default 30 days
+  duration: {{ .duration | default "2160h0m0s" }} # Default 90 days
+  renewBefore: {{ .renewBefore | default "720h0m0s" }} # Default 30 days
   {{- with .secretTemplate }}
   secretTemplate:
     {{- toYaml . | nindent 4 }}
