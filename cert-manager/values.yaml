@@ -5,7 +5,7 @@ cert-manager:
   installCRDs: true
   serviceAccount:
     create: true
-    serviceAccountName: cert-manager
+    name: cert-manager
   webhook:
     # Default port is 10250, which is also used for kubelet on Fargate. Changing it to 10260 to avoid conflict.
     securePort: 10260
