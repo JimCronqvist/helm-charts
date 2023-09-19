@@ -9,14 +9,15 @@ traefik:
     traefik:
       expose: true
 
-    # Letsencrypt example with DNSMadeEasy
-    #websecure:
-    #  tls:
-    #    certResolver: letsencrypt-dnsmadeeasy
-    #    domains:
-    #      - main: ${DOMAIN}
-    #        sans:
-    #          - "*.${DOMAIN}"
+    websecure:
+      tls: {}
+
+  #      # Letsencrypt example with DNSMadeEasy
+  #      certResolver: letsencrypt-dnsmadeeasy
+  #      domains:
+  #        - main: ${DOMAIN}
+  #          sans:
+  #            - "*.${DOMAIN}"
 
   # Enable access logs
   logs:
@@ -45,18 +46,24 @@ traefik:
   persistence:
     enabled: false
 
+  ## Use an existing tls cert and set as default, for example when you use cert-manager for certificate management
+  #tlsStore:
+  #  default:
+  #    defaultCertificate:
+  #      secretName: wildcard-example-com-tls
+
   deployment:
     replicas: 3
 
-    # Letsencrypt permissions
-    initContainers:
-      - name: volume-permissions
-        image: busybox:latest
-        command: [ "sh", "-c", "chmod -Rv 600 /data/* || true" ]
-        volumeMounts:
-          - name: data
-            mountPath: /data
-
+  #  # Letsencrypt permissions
+  #  initContainers:
+  #    - name: volume-permissions
+  #      image: busybox:latest
+  #      command: [ "sh", "-c", "chmod -Rv 600 /data/* || true" ]
+  #      volumeMounts:
+  #        - name: data
+  #          mountPath: /data
+  #
   # Letsencrypt example with DNSMadeEasy
   #certResolvers:
   #  letsencrypt-dnsmadeeasy:
