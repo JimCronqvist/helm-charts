@@ -1,5 +1,8 @@
 metrics-server:
-  replicas: 1
+  replicas: 2
   serviceAccount:
     create: true
-    name:
+    name: metrics-server
+  #args:
+  #  - --kubelet-insecure-tls
+
