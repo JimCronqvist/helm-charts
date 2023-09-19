@@ -1,0 +1,3 @@
+keda:
+  crds:
+    install: true

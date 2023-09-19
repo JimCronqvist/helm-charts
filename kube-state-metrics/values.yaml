@@ -1,3 +1,14 @@
 kube-state-metrics:
   serviceAccount:
     create: true
+
+  #resources:
+  #  limits:
+  #    - cpu: 500m
+  #    - memory: 768Mi
+  #  requests:
+  #    - cpu: 200m      # minimum 100m
+  #    - memory: 512Mi  # minimum 256Mib
+
+  metricAllowlist: []
+  metricDenylist: []
