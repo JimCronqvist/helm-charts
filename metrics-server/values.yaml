@@ -1,1 +1,5 @@
 metrics-server:
+  replicas: 1
+  serviceAccount:
+    create: true
+    name:
