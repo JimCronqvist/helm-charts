@@ -28,6 +28,7 @@ secrets: []
 
 certificates: []
 #  - name: wildcard-example-com
+#    namespace: traefik
 #    dnsNames:
 #      - "example.com"
 #      - "*.example.com"
