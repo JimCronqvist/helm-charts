@@ -1,7 +1,8 @@
-ingress-nginx:
-  controller:
-    admissionWebhooks:
-      enabled: false
+controller:
+  admissionWebhooks:
+    enabled: false
+
+fullnameOverride: kubernetes-dashboard
 
 kubernetes-dashboard:
   fullnameOverride: kubernetes-dashboard
