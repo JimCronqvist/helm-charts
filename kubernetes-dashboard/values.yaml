@@ -1,3 +1,6 @@
+
+host: localhost
+
 kubernetes-dashboard:
   serviceAccount:
     create: true
@@ -13,6 +16,5 @@ kubernetes-dashboard:
 
   app:
     ingress:
-      enabled: false # IngressRoute is used by this parent chart instead.
-      hosts:
-        - localhost
+      # A Traefik IngressRoute is utilized instead of the included Ingress
+      enabled: false
