@@ -11,6 +11,6 @@ roleRef:
   name: {{ include "kubernetes-dashboard.fullname" . }}-readonly
 subjects:
   - kind: ServiceAccount
-    name: {{ include "kubernetes-dashboard.fullname" . }}
+    name: {{ include "kubernetes-dashboard.fullname" . }}-readonly
     namespace: {{ .Release.Namespace }}
 {{- end }}
