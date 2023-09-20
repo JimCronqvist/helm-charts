@@ -32,3 +32,11 @@ extraReadOnlyRoleRules:
       - get
       - list
       - watch
+  - apiGroups:
+      - traefik.containo.us/v1alpha1
+    resources:
+      - ingressroute
+    verbs:
+      - get
+      - list
+      - watch
