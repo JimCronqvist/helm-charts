@@ -1,10 +1,10 @@
+ingress-nginx:
+  controller:
+    admissionWebhooks:
+      enabled: false
+
 kubernetes-dashboard:
   fullnameOverride: kubernetes-dashboard
-
-  ingress-nginx:
-    controller:
-      admissionWebhooks:
-        enabled: false
 
   serviceAccount:
     create: true
