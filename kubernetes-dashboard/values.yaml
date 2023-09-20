@@ -13,4 +13,6 @@ kubernetes-dashboard:
 
   app:
     ingress:
-      enabled: false
+      enabled: false # IngressRoute is used by this parent chart instead.
+      hosts:
+        - localhost
