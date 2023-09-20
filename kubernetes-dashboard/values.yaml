@@ -1,7 +1,6 @@
-
-host: localhost
-
 kubernetes-dashboard:
+  fullnameOverride: kubernetes-dashboard
+
   serviceAccount:
     create: true
 
@@ -18,3 +17,8 @@ kubernetes-dashboard:
     ingress:
       # A Traefik IngressRoute is utilized instead of the included Ingress
       enabled: false
+
+
+host: localhost
+createReadOnlyUser: true
+extraReadOnlyRoleRules: []

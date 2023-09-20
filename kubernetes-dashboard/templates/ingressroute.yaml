@@ -1,7 +1,9 @@
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ include "kubernetes-dashboard.name" . }}
+  name: {{ include "kubernetes-dashboard.fullname" . }}
+  labels:
+    {{- include "kubernetes-dashboard.labels" . | nindent 4 }}
 spec:
   entryPoints:
     - websecure
