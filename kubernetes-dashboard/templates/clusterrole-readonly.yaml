@@ -106,6 +106,7 @@ rules:
     resources:
       - networkpolicies
       - ingresses
+      - ingressclasses
     verbs:
       - get
       - list
