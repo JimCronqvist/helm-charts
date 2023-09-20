@@ -14,3 +14,10 @@ dependencies:
   - name: kubernetes-dashboard
     version: 7.0.0-alpha1
     repository: https://kubernetes.github.io/dashboard/
+    import-values:
+      - child: app
+        parent: dashboard.app
+      - child: api
+        parent: dashboard.api
+      - child: web
+        parent: dashboard.web

@@ -1,0 +1,23 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: {{ include "kubernetes-dashboard.name" . }}
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`{{ index .Values.dashboard.app.ingress.hosts 0 }}`) && PathPrefix(`{{ .Values.dashboard.app.ingress.paths.web }}`)
+      services:
+        - name: {{ include "kubernetes-dashboard.fullname" . }}-{{ .Values.dashboard.web.role }}
+          {{- with (index .Values.dashboard.web.containers.ports 0) }}
+          port: {{ .containerPort }}
+          {{- end }}
+    - kind: Rule
+      match: Host(`{{ index .Values.dashboard.app.ingress.hosts 0 }}`) && PathPrefix(`{{ .Values.dashboard.app.ingress.paths.api }}`)
+      services:
+        - name: {{ include "kubernetes-dashboard.fullname" . }}-{{ .Values.dashboard.api.role }}
+          {{- with (index .Values.dashboard.api.containers.ports 0) }}
+          port: {{ .containerPort }}
+          {{- end }}
+  tls: {}

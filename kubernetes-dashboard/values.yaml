@@ -1,3 +1,16 @@
 kubernetes-dashboard:
   serviceAccount:
     create: true
+
+  nginx:
+    enabled: false
+
+  cert-manager:
+    enabled: false
+
+  metrics-server:
+    enabled: false
+
+  app:
+    ingress:
+      enabled: false
