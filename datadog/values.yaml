@@ -13,7 +13,7 @@ datadog-operator:
 
 secrets:
   secrets:
-    # Your DataDog credentials - Application Key & API Key (Key ID)
+    # Your DataDog credentials - Application Key & API Key
     # Note: If you update these, you will need to restart the deployments, as the secret is not automatically reloaded.
     datadog-secret:
       # Generate an Application Key here: https://app.datadoghq.eu/organization-settings/application-keys
