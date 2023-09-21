@@ -1,0 +1,59 @@
+datadog-operator:
+  enabled: true
+  installCRDs: true
+
+  # Intake site
+  site: datadoghq.eu
+
+  # Datadog credentials secret name
+  appKeyExistingSecret: datadog-secret
+  apiKeyExistingSecret: datadog-secret
+
+secrets:
+  secrets:
+    # Your DataDog credentials - Application Key & API Key (Key ID)
+    datadog-secret:
+      app-key:
+      api-key:
+
+datadogAgent:
+  clusterName:
+  site: datadoghq.eu
+  global: {}
+  override: {}
+  features:
+    #admissionController:
+    #  enabled: true
+    apm:
+      enabled: true
+    #clusterChecks:
+    #  enabled: true
+    #cspm:
+    #  enabled: false
+    #cws:
+    #  enabled: false
+    #ebpfCheck:
+    #  enabled: false
+    #externalMetricsServer:
+    #  enabled: false
+    #kubeStateMetricsCore:
+    #  enabled: true
+    #liveContainerCollection:
+    #  enabled: true
+    #liveProcessCollection:
+    #  enabled: false
+    logCollection:
+      enabled: true
+    #npm:
+    #  enabled: false
+    #oomKill:
+    #  enabled: false
+    #orchestratorExplorer:
+    #  enabled: true
+    #prometheusScrape:
+    #  enabled: false
+    #tcpQueueLength:
+    #  enabled: false
+    #usm:
+    #  enabled: false
+

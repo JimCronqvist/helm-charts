@@ -1,6 +1,6 @@
 apiVersion: v2
-name: datadog-operator
-description: A Helm chart for Datadog Operator
+name: datadog
+description: A Helm chart for Datadog Operator with a configurable DatadogAgent deployment
 
 # Application charts are a collection of templates that can be packaged into versioned archives
 # to be deployed.
@@ -14,3 +14,8 @@ dependencies:
   - name: datadog-operator
     version: 1.1.1
     repository: https://helm.datadoghq.com
+    condition: datadog-operator.enabled
+  - name: secrets
+    repository: file://../secrets
+    version: 0.1.0
+    condition: secrets.secrets
