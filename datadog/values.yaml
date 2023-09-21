@@ -21,9 +21,13 @@ secrets:
       # Generate an API Key here: https://app.datadoghq.eu/organization-settings/api-keys
       api-key:
 
+
 datadogAgent:
   clusterName:
   site: datadoghq.eu
+
+  # Configuration options available here:
+  # https://github.com/DataDog/datadog-operator/blob/main/docs/configuration.v2alpha1.md
   global: {}
   override: {}
   features:
@@ -49,6 +53,7 @@ datadogAgent:
     #  enabled: false
     logCollection:
       enabled: true
+      containerCollectAll: true
     #npm:
     #  enabled: false
     #oomKill:
