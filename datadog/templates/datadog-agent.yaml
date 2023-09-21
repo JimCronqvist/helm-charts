@@ -1,14 +1,9 @@
 apiVersion: datadoghq.com/v2alpha1
 kind: DatadogAgent
 metadata:
-  name: datadog
+  name: {{- include "datadog-operator.fullname" . | nindent 4 }}
   labels:
     {{- include "datadog-operator.labels" . | nindent 4 }}
-  # Fix for https://github.com/DataDog/datadog-operator/issues/654
-  finalizers: []
-  annotations:
-    argocd.argoproj.io/compare-options: IgnoreExtraneous
-    argocd.argoproj.io/sync-options: Prune=false
 spec:
   global:
     clusterName: {{ .Values.datadogAgent.clusterName }}
