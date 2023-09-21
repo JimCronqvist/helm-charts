@@ -9,9 +9,13 @@ datadog-operator:
   appKeyExistingSecret: datadog-secret
   apiKeyExistingSecret: datadog-secret
 
+  watchNamespaces: []
+
 secrets:
   secrets:
     # Your DataDog credentials - Application Key & API Key (Key ID)
+    # https://app.datadoghq.eu/organization-settings/api-keys
+    # Note: If you update these, you will need to restart the deployments, as the secret is not automatically reloaded.
     datadog-secret:
       app-key:
       api-key:

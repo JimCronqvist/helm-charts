@@ -2,6 +2,9 @@ apiVersion: datadoghq.com/v2alpha1
 kind: DatadogAgent
 metadata:
   name: datadog
+  finalizers: [] # Fix for https://github.com/DataDog/datadog-operator/issues/654
+  labels:
+    {{- include "datadog-operator.labels" . | nindent 4 }}
 spec:
   global:
     clusterName: {{ .Values.datadogAgent.clusterName }}
