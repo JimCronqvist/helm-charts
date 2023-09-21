@@ -8,6 +8,7 @@ metadata:
   finalizers: []
   annotations:
     argocd.argoproj.io/compare-options: IgnoreExtraneous
+    argocd.argoproj.io/sync-options: Prune=false
 spec:
   global:
     clusterName: {{ .Values.datadogAgent.clusterName }}
