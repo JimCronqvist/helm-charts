@@ -49,13 +49,13 @@ datadogAgent:
     #  enabled: true
     #liveContainerCollection:
     #  enabled: true
-    #liveProcessCollection:
-    #  enabled: false
+    liveProcessCollection:
+      enabled: true
     logCollection:
       enabled: true
       containerCollectAll: true
-    #npm:
-    #  enabled: false
+    npm:
+      enabled: false
     #oomKill:
     #  enabled: false
     #orchestratorExplorer:
