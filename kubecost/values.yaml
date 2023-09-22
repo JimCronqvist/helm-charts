@@ -15,6 +15,10 @@ cost-analyzer:
     emitNamespaceAnnotations: true
 
   prometheus:
+    # Disable if you already have kube-state-metrics running in your cluster
+    kubeStateMetrics:
+      enabled: false
+
     server:
       image:
         repository: public.ecr.aws/kubecost/prometheus
