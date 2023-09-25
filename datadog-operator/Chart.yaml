@@ -1,5 +1,5 @@
 apiVersion: v2
-name: datadog
+name: datadog-operator
 description: A Helm chart for Datadog Operator with a configurable DatadogAgent deployment
 
 # Application charts are a collection of templates that can be packaged into versioned archives
