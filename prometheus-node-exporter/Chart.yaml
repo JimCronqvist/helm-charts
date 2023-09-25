@@ -1,0 +1,16 @@
+apiVersion: v2
+name: prometheus-node-exporter
+description: A Helm chart for Prometheus Node Exporter
+
+# Application charts are a collection of templates that can be packaged into versioned archives
+# to be deployed.
+type: application
+
+# The chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: 0.1.0
+
+dependencies:
+  - name: prometheus-node-exporter
+    version: 4.23.1
+    repository: https://prometheus-community.github.io/helm-charts
