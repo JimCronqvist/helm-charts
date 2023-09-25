@@ -36,7 +36,7 @@ spec:
     - kind: Rule
       match: Host(`{{ .Values.host }}`) && PathPrefix(`/kubecost`)
       services:
-        - name: {{ include "cost-analyzer.fullname" . }}
+        - name: {{ include "cost-analyzer.serviceName" . }}
           port: {{ .Values.kubecost.service.targetPort }}
       middlewares:
         - name: {{ include "cost-analyzer.fullname" . }}
