@@ -12,16 +12,24 @@ stringData:
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
-  name: {{ include "cost-analyzer.fullname" . }}
+  name: {{ include "cost-analyzer.fullname" . }}-strip
+  labels:
+    {{- include "kubecost.chartLabels" . | nindent 4 }}
+spec:
+  stripPrefix:
+    prefixes:
+      - "/kubecost"
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ include "cost-analyzer.fullname" . }}-auth
   labels:
     {{- include "kubecost.chartLabels" . | nindent 4 }}
 spec:
   basicAuth:
     realm: {{ include "cost-analyzer.fullname" . }}
     secret: {{ include "cost-analyzer.fullname" . }}-traefik-auth
-  stripPrefix:
-    prefixes:
-      - "/kubecost"
 ---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
@@ -39,5 +47,6 @@ spec:
         - name: {{ include "cost-analyzer.serviceName" . }}
           port: {{ .Values.kubecost.service.targetPort }}
       middlewares:
-        - name: {{ include "cost-analyzer.fullname" . }}
+        - name: {{ include "cost-analyzer.fullname" . }}-strip
+        - name: {{ include "cost-analyzer.fullname" . }}-auth
   tls: {}
