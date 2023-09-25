@@ -1,4 +1,8 @@
-cost-analyzer:
+host: localhost
+username: kubecost
+password: <password>
+
+kubecost:
   global:
     grafana:
       enabled: false
@@ -19,12 +23,29 @@ cost-analyzer:
     kubeStateMetrics:
       enabled: false
 
+    # Disable both if you already have kube-state-metrics running in your cluster
+    #serviceAccounts:
+    #  nodeExporter:
+    #    create: false
+    #nodeExporter:
+    #  enabled: false
+
     server:
       image:
         repository: public.ecr.aws/kubecost/prometheus
     nodeExporter:
       tolerations:
         - operator: 'Exists'
+      # Do not deploy node-exporter to Fargate nodes
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: eks.amazonaws.com/compute-type
+                    operator: NotIn
+                    values:
+                      - fargate
 
     configmapReload:
       prometheus:
