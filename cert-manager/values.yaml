@@ -1,4 +1,6 @@
 cert-manager:
+  # The chart is a bit buggy with the CRDs installation if the releaseName is provided, lets override the name to avoid issues
+  fullnameOverride: cert-manager
   #namespace: cert-manager
   extraArgs:
     - --enable-certificate-owner-ref=true
