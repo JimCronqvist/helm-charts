@@ -66,6 +66,11 @@ deployment:
   # Leave empty to use the defaults set in the Docker image. command = ENTRYPOINT, args = CMD, in the docker world
   command: []
   args: []
+  initContainers: []
+    #- name: volume-permissions
+    #  image: busybox:latest
+    #  command: ["sh", "-c", "touch /data/acme.json; chmod -v 600 /data/acme.json"]
+    #  securityContext: {}
 
 service:
   enabled: true

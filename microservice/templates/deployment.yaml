@@ -38,6 +38,18 @@ spec:
       serviceAccountName: {{ include "microservice.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- with .Values.deployment.initContainers }}
+      initContainers:
+        {{- range . }}
+        {{- toYaml (list .) | nindent 8 }}
+          env:
+            {{- include "helpers.list-env-variables" $ | indent 12 }}
+          {{- with $.Values.pvc }}
+          volumeMounts:
+            {{- include "helpers.volume-mounts" . | indent 12 }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
       containers:
         - name: {{ .Chart.Name }}
           {{- with .Values.deployment.command }}
