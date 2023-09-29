@@ -67,9 +67,25 @@ spec:
           env:
             {{- include "helpers.list-env-variables" . | indent 12 }}
           ports:
-            - name: http
+            - name: {{ .Values.service.name | default "http" }}
               containerPort: {{ .Values.service.containerPort | default .Values.service.port }}
               protocol: TCP
+            {{- with .Values.service.extraPorts }}
+            {{- range $extra := . }}
+            {{- if $extra.portRange }}
+            {{- range until (sub $extra.portRange.end $extra.portRange.start | add1 | int) }}
+            {{- $port := add $extra.portRange.start . }}
+            - name: {{ $extra.name }}-{{ $port }}
+              protocol: TCP
+              containerPort: {{ $port }}
+            {{- end }}
+            {{- else }}
+            - name: {{ $extra.name }}
+              protocol: TCP
+              containerPort: {{ $extra.port }}
+            {{- end }}
+            {{- end }}
+            {{- end }}
           {{- if and .Values.service.enabled .Values.probes .Values.probes.livenessPath }}
           livenessProbe:
             httpGet:

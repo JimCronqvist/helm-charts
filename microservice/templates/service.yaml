@@ -9,9 +9,34 @@ spec:
   type: {{ .Values.service.type }}
   ports:
     - port: {{ .Values.service.port }}
-      targetPort: http
+      {{- if .Values.service.appProtocol }}
+      appProtocol: {{ .Values.service.appProtocol }}
+      {{- end }}
+      targetPort: {{ .Values.service.name | default "http" }}
       protocol: TCP
-      name: http
+      name: {{ .Values.service.name | default "http" }}
+    {{- with .Values.service.extraPorts }}
+    {{- range $extra := . }}
+    {{- if $extra.portRange }}
+    {{- range until (sub $extra.portRange.end $extra.portRange.start | add1 | int) }}
+    {{- $port := add $extra.portRange.start . }}
+    - name: {{ $extra.name }}-{{ $port }}
+      protocol: TCP
+      port: {{ $port }}
+      {{- if $extra.appProtocol }}
+      appProtocol: {{ $extra.appProtocol }}
+      {{- end }}
+    {{- end }}
+    {{- else }}
+    - name: {{ $extra.name }}
+      protocol: TCP
+      port: {{ $extra.port }}
+      {{- if $extra.appProtocol }}
+      appProtocol: {{ $extra.appProtocol }}
+      {{- end }}
+    {{- end }}
+    {{- end }}
+    {{- end }}
   selector:
     {{- include "microservice.selectorLabels" . | nindent 4 }}
 {{- end }}

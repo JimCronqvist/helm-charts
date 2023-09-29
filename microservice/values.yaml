@@ -66,18 +66,31 @@ deployment:
   # Leave empty to use the defaults set in the Docker image. command = ENTRYPOINT, args = CMD, in the docker world
   command: []
   args: []
-  initContainers: []
+  initContainers: [ ]
     #- name: volume-permissions
     #  image: busybox:latest
-    #  command: ["sh", "-c", "touch /data/acme.json; chmod -v 600 /data/acme.json"]
-    #  securityContext: {}
+  #  command: ["sh", "-c", "touch /data/acme.json; chmod -v 600 /data/acme.json"]
+  #  securityContext: {}
 
 service:
   enabled: true
   type: ClusterIP
+  name: http
+  appProtocol: http
   port: 80
+
   # Set the primary container port if you need to use a different port for the exposed service
   #containerPort:
+
+  # Configure extra ports if needed, either a static port or a port range
+  #extraPorts:
+  #  - name: ftp-data
+  #    port: 20
+  #  - name: ftp-passive
+  #    portRange:
+  #      start: 1000
+  #      end: 1100
+
 
 ingressroute:
   enabled: true
