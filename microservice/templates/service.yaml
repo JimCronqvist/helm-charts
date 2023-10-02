@@ -7,7 +7,9 @@ metadata:
     {{- include "microservice.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
+  {{- if list "LoadBalancer" "NodePort" | has .Values.service.type }}
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | default "Cluster" }}
+  {{- end }}
   ports:
     - port: {{ .Values.service.port }}
       {{- if .Values.service.appProtocol }}
