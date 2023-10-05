@@ -1,6 +1,6 @@
 apiVersion: v2
-name: external-dns
-description: A Helm chart for External DNS
+name: github-actions-runner-controller
+description: A Helm chart for GitHub Actions Runner Controller
 
 # Application charts are a collection of templates that can be packaged into versioned archives
 # to be deployed.
@@ -11,6 +11,6 @@ type: application
 version: 0.1.0
 
 dependencies:
-  - name: external-dns
-    version: 6.13.1
-    repository: https://charts.bitnami.com/bitnami
+  - name: gha-runner-scale-set-controller
+    version: 0.6.1
+    repository: oci://ghcr.io/actions/actions-runner-controller-charts/gha-runner-scale-set-controller

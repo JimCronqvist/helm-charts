@@ -1,0 +1,17 @@
+gha-runner-scale-set:
+  # GitHub url for where you want to configure runners
+  # - For a repo: https://github.com/org/repo
+  # - For an org: https://github.com/org
+  githubConfigUrl:
+
+  # GitHub authentication
+  githubConfigSecret:
+    # GitHub Personal Access Token (PAT)
+    github_token:
+
+  # Name of the "runs-on" in your workflows.
+  runnerScaleSetName: ""
+
+  # Autoscaling
+  minRunners: 0
+  maxRunners: 5
