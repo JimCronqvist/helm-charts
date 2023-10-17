@@ -1,0 +1,13 @@
+{{- if and .Values.files -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "microservice.fullname" . }}-files
+  labels:
+    {{- include "microservice.labels" . | nindent 4 }}
+data:
+  {{- range $name, $val := .Values.files }}
+  file.{{ $name | replace "/" "_" }}: |
+    {{- $val | nindent 4 }}
+  {{- end }}
+{{- end }}

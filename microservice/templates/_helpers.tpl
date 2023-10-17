@@ -170,11 +170,11 @@ volumes:
 Checksum pod annotations
 */}}
 {{- define "microservice.checksumPodAnnotations" -}}
-{{- $files := list "secret.yaml" -}}
+{{- $files := list "secret.yaml" "configmap-files.yaml" -}}
 {{- range $files }}
 checksum/{{ . }}: {{ include (print $.Template.BasePath (printf "/%s" .)) $ | sha256sum }}
 {{- end }}
-{{- $valueKeys := list "env" "secrets" -}}
+{{- $valueKeys := list "env" "secrets" "files" -}}
 {{- range $valueKeys }}
 {{- if index $.Values . }}
 checksum/values.{{ . }}: {{ index $.Values . | toJson | sha256sum }}

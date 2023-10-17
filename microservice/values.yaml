@@ -180,3 +180,6 @@ env: {}
   # NODE_ENV: production
 secrets: {}
   # API_SECRET_KEY: ...
+
+# Add configuration files to the container
+files: {}
