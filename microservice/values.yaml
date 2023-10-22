@@ -97,6 +97,7 @@ ingressroute:
   responseHeaderMicroservice: false
   tls:
     enabled: true
+    forceHttps: true
     #certResolver: letsencrypt
     #domains:
     #  - main: domain.com

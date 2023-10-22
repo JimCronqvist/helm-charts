@@ -10,6 +10,8 @@ microservice:
 
   ingressroute:
     responseHeaderMicroservice: true
+    tls:
+      forceHttps: false
     routes:
       - path: /speedtest
         priority: 910

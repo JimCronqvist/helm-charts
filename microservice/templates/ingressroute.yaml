@@ -110,7 +110,7 @@ spec:
           port: {{ $svcPort }}
           #nativeLB: {{ .nativeLB | default false }}
       middlewares:
-        {{- if $.Values.ingressroute.tls.enabled }}
+        {{- if and $.Values.ingressroute.tls.enabled $.Values.ingressroute.tls.forceHttps }}
         - name: {{ $fullName }}-redirect-https
         {{- end }}
         {{- if $.Values.ingressroute.responseHeaderMicroservice }}
