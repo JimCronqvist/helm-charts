@@ -1,4 +1,4 @@
-{{- if and .Values.ingressroute.enabled .Values.ingressroute.tls.enabled }}
+{{- if and .Values.ingressroute.enabled .Values.ingressroute.tls.enabled .Values.ingressroute.tls.forceHttps }}
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
