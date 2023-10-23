@@ -7,7 +7,7 @@ StripPrefix middleware
 */}}
 {{- range $index, $route := .Values.ingressroute.routes }}
 {{- if .stripPrefix }}
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
   name: {{ $fullName }}-route{{ $index }}-strip
@@ -31,7 +31,7 @@ Rewrite middleware
 */}}
 {{- range $index, $route := .Values.ingressroute.routes }}
 {{- if and .rewrite .rewrite.regex .rewrite.replacement }}
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
   name: {{ $fullName }}-route{{ $index }}-rewrite
@@ -47,7 +47,7 @@ spec:
 {{/*
 IngressRoute
 */}}
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: {{ $fullName }}

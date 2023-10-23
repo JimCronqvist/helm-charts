@@ -9,7 +9,7 @@ stringData:
   username: {{ .Values.username }}
   password: {{ .Values.password }}
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
   name: {{ include "cost-analyzer.fullname" . }}-strip
@@ -20,7 +20,7 @@ spec:
     prefixes:
       - "/kubecost"
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
   name: {{ include "cost-analyzer.fullname" . }}-auth
@@ -31,7 +31,7 @@ spec:
     realm: {{ include "cost-analyzer.fullname" . }}
     secret: {{ include "cost-analyzer.fullname" . }}-traefik-auth
 ---
-apiVersion: traefik.containo.us/v1alpha1
+apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
   name: {{ include "cost-analyzer.fullname" . }}

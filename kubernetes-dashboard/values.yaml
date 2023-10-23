@@ -33,7 +33,7 @@ extraReadOnlyRoleRules:
       - list
       - watch
   - apiGroups:
-      - traefik.containo.us
+      - traefik.io
     resources:
       - ingressroute
     verbs:
