@@ -57,6 +57,6 @@ awsNodeTemplate:
   blockDeviceMappings:
     - deviceName: /dev/xvda
       ebs:
-        volumeSize: 60
+        volumeSize: 80Gi
         volumeType: gp3
         deleteOnTermination: true
