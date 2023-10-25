@@ -11,3 +11,4 @@ spec:
     karpenter.sh/discovery: {{ .Values.karpenter.settings.aws.clusterName }}
   tags:
     karpenter.sh/discovery: {{ .Values.karpenter.settings.aws.clusterName }}
+  {{- toYaml .Values.awsNodeTemplate | nindent 2 }}

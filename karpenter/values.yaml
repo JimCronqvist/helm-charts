@@ -31,7 +31,7 @@ provisioner:
   ttlSecondsAfterEmpty: 30
 
   # Define a lifetime on the provisioned nodes, to automatically force recreation with newer up-to-date AMIs with
-  # security updates and latest versions installed. Including allowing new Kubernetes versions to be rolled out to 
+  # security updates and latest versions installed. Including allowing new Kubernetes versions to be rolled out to
   # nodes automatically.
   ttlSecondsUntilExpired: 1209600 # 14 days = 14 * 24 * 3600 Seconds;
 
@@ -53,3 +53,10 @@ provisioner:
       operator: Gt
       values: ["2"]
 
+awsNodeTemplate:
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 60
+        volumeType: gp3
+        deleteOnTermination: true
