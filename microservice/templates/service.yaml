@@ -15,9 +15,9 @@ spec:
       {{- if .Values.service.appProtocol }}
       appProtocol: {{ .Values.service.appProtocol }}
       {{- end }}
-      targetPort: {{ .Values.service.name | default "http" }}
+      targetPort: {{ .Values.service.name }}
       protocol: TCP
-      name: {{ .Values.service.name | default "http" }}
+      name: {{ .Values.service.name }}
     {{- with .Values.service.extraPorts }}
     {{- range $extra := . }}
     {{- if $extra.portRange }}

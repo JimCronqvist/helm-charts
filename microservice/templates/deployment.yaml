@@ -67,24 +67,9 @@ spec:
           env:
             {{- include "helpers.list-env-variables" . | indent 12 }}
           ports:
-            - name: {{ .Values.service.name | default "http" }}
-              containerPort: {{ .Values.service.containerPort | default .Values.service.port }}
-              protocol: TCP
-            {{- with .Values.service.extraPorts }}
-            {{- range $extra := . }}
-            {{- if $extra.portRange }}
-            {{- range until (sub $extra.portRange.end $extra.portRange.start | add1 | int) }}
-            {{- $port := add $extra.portRange.start . }}
-            - name: {{ $extra.name }}-{{ $port }}
-              protocol: TCP
-              containerPort: {{ $port }}
-            {{- end }}
-            {{- else }}
-            - name: {{ $extra.name }}
-              protocol: TCP
-              containerPort: {{ $extra.port }}
-            {{- end }}
-            {{- end }}
+            {{- include "helpers.ports" (list .Values.service "primary") | indent 12 }}
+            {{- range $extra := .Values.service.extraPorts }}
+            {{- include "helpers.ports" (list $extra "primary") | indent 12 }}
             {{- end }}
           {{- if and .Values.service.enabled .Values.probes .Values.probes.livenessPath }}
           livenessProbe:
@@ -111,7 +96,13 @@ spec:
               readOnly: true
             {{- end }}
         {{- range .Values.deployment.sidecars }}
-        {{- toYaml (list .) | nindent 8 }}
+        {{- $sidecar := .}}
+        {{- toYaml (list $sidecar) | nindent 8 }}
+          ports:
+            {{- include "helpers.ports" (list $.Values.service .name) | indent 12 }}
+            {{- range $extra := $.Values.service.extraPorts }}
+            {{- include "helpers.ports" (list $extra $sidecar.name) | indent 12 }}
+            {{- end }}
         {{- end }}
       volumes:
         {{- with .Values.pvc }}

@@ -75,10 +75,6 @@ deployment:
     #- name: nginx
     #  image: nginx:latest
     #  imagePullPolicy: Always
-    #  ports:
-    #    - containerPort: 80
-    #      name: http
-    #      protocol: TCP
 
 service:
   enabled: true
@@ -87,13 +83,17 @@ service:
   appProtocol: http
   port: 80
 
+  # Which container is the port used by, defaults to the primary container. Mostly used for sidecars.
+  #container:
+
   # Set the primary container port if you need to use a different port for the exposed service
   #containerPort:
 
   # Configure extra ports if needed, either a static port or a port range
-  #extraPorts:
+  extraPorts: []
   #  - name: ftp-data
   #    port: 20
+  #    container: sidecar-name
   #  - name: ftp-passive
   #    portRange:
   #      start: 1000

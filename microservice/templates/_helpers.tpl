@@ -167,6 +167,31 @@ volumes:
 {{- end -}}
 
 {{/*
+Return the ports for a container
+{{- include "helpers.ports" (list .Values.service "primary") | indent 12 }}
+*/}}
+{{- define "helpers.ports" -}}
+{{- $container := index . 1 }}
+{{- with index . 0 }}
+{{- $section := . }}
+{{- if eq $container ($section.container | default "primary") }}
+{{- if $section.portRange }}
+{{- range until (sub $section.portRange.end $section.portRange.start | add1 | int) }}
+{{- $port := add $section.portRange.start . }}
+- name: {{ $section.name }}-{{ $port }}
+  protocol: TCP
+  containerPort: {{ $port }}
+{{- end }}
+{{- else }}
+- name: {{ $section.name }}
+  protocol: TCP
+  containerPort: {{ $section.containerPort | default $section.port }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
 Checksum pod annotations
 */}}
 {{- define "microservice.checksumPodAnnotations" -}}
