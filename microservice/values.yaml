@@ -66,11 +66,19 @@ deployment:
   # Leave empty to use the defaults set in the Docker image. command = ENTRYPOINT, args = CMD, in the docker world
   command: []
   args: []
-  initContainers: [ ]
+  initContainers: []
     #- name: volume-permissions
     #  image: busybox:latest
-  #  command: ["sh", "-c", "touch /data/acme.json; chmod -v 600 /data/acme.json"]
-  #  securityContext: {}
+    #  command: ["sh", "-c", "touch /data/acme.json; chmod -v 600 /data/acme.json"]
+    #  securityContext: {}
+  sidecars: []
+    #- name: nginx
+    #  image: nginx:latest
+    #  imagePullPolicy: Always
+    #  ports:
+    #    - containerPort: 80
+    #      name: http
+    #      protocol: TCP
 
 service:
   enabled: true

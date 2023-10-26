@@ -110,6 +110,9 @@ spec:
               subPath: "file.{{ $name | replace "/" "_" }}"
               readOnly: true
             {{- end }}
+        {{- range .Values.deployment.sidecars }}
+        {{- toYaml (list .) | nindent 8 }}
+        {{- end }}
       volumes:
         {{- with .Values.pvc }}
         {{- include "helpers.volumes" (list $ .) | indent 8 }}
