@@ -97,7 +97,7 @@ spec:
             {{- end }}
         {{- range .Values.deployment.sidecars }}
         {{- $sidecar := .}}
-        {{- toYaml (list $sidecar) | nindent 8 }}
+        {{- toYaml (list $sidecar) | replace "${IMAGE_TAG}" (include "helpers.image-tag" $) | nindent 8 }}
           ports:
             {{- include "helpers.ports" (list $.Values.service .name) | indent 12 }}
             {{- range $extra := $.Values.service.extraPorts }}

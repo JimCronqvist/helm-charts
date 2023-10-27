@@ -73,7 +73,7 @@ deployment:
     #  securityContext: {}
   sidecars: []
     #- name: nginx
-    #  image: nginx:latest
+    #  image: nginx:${IMAGE_TAG}
     #  imagePullPolicy: Always
 
 service:
