@@ -14,13 +14,13 @@ metadata:
   {{- if or $pvc.volumeType $pvc.iops $pvc.throughput }}
   annotations:
     {{- if $pvc.volumeType }}
-    ebs.csi.aws.com/volumeType: {{ $pvc.volumeType }}
+    ebs.csi.aws.com/volumeType: {{ $pvc.volumeType | quote }}
     {{- end }}
     {{- if $pvc.iops }}
-    ebs.csi.aws.com/iops: {{ $pvc.iops }}
+    ebs.csi.aws.com/iops: {{ $pvc.iops | quote }}
     {{- end }}
     {{- if $pvc.throughput }}
-    ebs.csi.aws.com/throughput: {{ $pvc.throughput }}
+    ebs.csi.aws.com/throughput: {{ $pvc.throughput | quote }}
     {{- end }}
   {{- end }}
 spec:
