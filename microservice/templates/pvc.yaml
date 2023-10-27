@@ -11,6 +11,18 @@ metadata:
   name: {{ $fullName }}-{{ $pvcName }}
   labels:
     {{- $labels | nindent 4 }}
+  {{- if or $pvc.volumeType $pvc.iops $pvc.throughput }}
+  annotations:
+    {{- if $pvc.volumeType }}
+    ebs.csi.aws.com/volumeType: {{ $pvc.volumeType }}
+    {{- end }}
+    {{- if $pvc.iops }}
+    ebs.csi.aws.com/iops: {{ $pvc.iops }}
+    {{- end }}
+    {{- if $pvc.throughput }}
+    ebs.csi.aws.com/throughput: {{ $pvc.throughput }}
+    {{- end }}
+  {{- end }}
 spec:
   accessModes:
     - {{ $pvc.accessMode | default "ReadWriteOnce" }}
