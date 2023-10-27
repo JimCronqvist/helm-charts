@@ -1,5 +1,9 @@
 aws-ebs-csi-driver:
   controller:
+    # Enable volume modification via annotations for ebs volumes.
+    volumeModificationFeature:
+      enabled: true
+
     serviceAccount:
       name: ebs-csi-controller-sa
       annotations:

@@ -1,9 +1,4 @@
 aws-load-balancer-controller:
-  # Enable volume modification via annotations for ebs volumes.
-  controller:
-    volumeModificationFeature:
-      enabled: true
-
   serviceAccount:
     # Override the name, as terraform will usually set the irsa to only allow 'kube-system:aws-load-balancer-controller' in the trust policy.
     name: aws-load-balancer-controller
