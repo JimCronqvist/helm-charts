@@ -1,11 +1,43 @@
 aws-ebs-csi-driver:
+  # Storage Classes to be created. Notes:
+  # - All storage classes are being set to be Deleted when no longer in use.
+  # - No volumes will be created until there is a pod that needs it.
+  storageClasses:
+    - name: ebs-gp3
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"
+      labels: {}
+      volumeBindingMode: WaitForFirstConsumer
+      reclaimPolicy: Delete
+      allowVolumeExpansion: true
+      parameters:
+        encrypted: "false"
+        type: "gp3"
+        tagSpecification_1: "Name={{ .PVCNamespace }}/{{ .PVCName }}/{{ .PVName }}"
+        tagSpecification_2: "namespace={{ .PVCNamespace }}"
+    - name: ebs-io2
+      annotations: {}
+      labels: {}
+      volumeBindingMode: WaitForFirstConsumer
+      reclaimPolicy: Delete
+      allowVolumeExpansion: true
+      parameters:
+        encrypted: "false"
+        type: "io2"
+        tagSpecification_1: "Name={{ .PVCNamespace }}/{{ .PVCName }}/{{ .PVName }}"
+        tagSpecification_2: "namespace={{ .PVCNamespace }}"
+
   controller:
     # Enable volume modification via annotations for ebs volumes.
     volumeModificationFeature:
       enabled: true
 
+    # EKS Cluster Name
+    k8sTagClusterId:
+
     serviceAccount:
       name: ebs-csi-controller-sa
       annotations:
         eks.amazonaws.com/role-arn:
+
     region:
