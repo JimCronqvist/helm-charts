@@ -21,8 +21,10 @@ aws-ebs-csi-driver:
       parameters:
         encrypted: "false"
         type: "gp3"
-        tagSpecification_1: "Name={{ .PVCNamespace }}/{{ .PVCName }}/{{ .PVName }}"
+        tagSpecification_1: "Name={{ .PVCNamespace }}/{{ .PVCName }}"
         tagSpecification_2: "namespace={{ .PVCNamespace }}"
+        tagSpecification_3: "pvcname={{ .PVCName }}"
+        tagSpecification_4: "pvname={{ .PVName }}"
     - name: ebs-io2
       annotations: {}
       labels: {}
@@ -32,8 +34,10 @@ aws-ebs-csi-driver:
       parameters:
         encrypted: "false"
         type: "io2"
-        tagSpecification_1: "Name={{ .PVCNamespace }}/{{ .PVCName }}/{{ .PVName }}"
+        tagSpecification_1: "Name={{ .PVCNamespace }}/{{ .PVCName }}"
         tagSpecification_2: "namespace={{ .PVCNamespace }}"
+        tagSpecification_3: "pvcname={{ .PVCName }}"
+        tagSpecification_4: "pvname={{ .PVName }}"
 
   controller:
     initContainers:
