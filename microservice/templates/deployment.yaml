@@ -52,6 +52,9 @@ spec:
       {{- end }}
       containers:
         - name: {{ .Chart.Name }}
+          {{- if .Values.deployment.debug }}
+          command: ["/bin/sh", "-c", "sleep infinity"]
+          {{- else }}
           {{- with .Values.deployment.command }}
           command:
             {{- toYaml . | nindent 12 }}
@@ -59,6 +62,7 @@ spec:
           {{- with .Values.deployment.args }}
           args:
             {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- end }}
           securityContext:
             {{- toYaml .Values.securityContext | nindent 12 }}
@@ -71,13 +75,13 @@ spec:
             {{- range $extra := .Values.service.extraPorts }}
             {{- include "helpers.ports" (list $extra "primary") | indent 12 }}
             {{- end }}
-          {{- if and .Values.service.enabled .Values.probes .Values.probes.livenessPath }}
+          {{- if and .Values.service.enabled .Values.probes .Values.probes.livenessPath (not .Values.deployment.debug) }}
           livenessProbe:
             httpGet:
               path: {{ .Values.probes.livenessPath }}
               port: http
           {{- end }}
-          {{- if and .Values.service.enabled .Values.probes .Values.probes.readinessPath }}
+          {{- if and .Values.service.enabled .Values.probes .Values.probes.readinessPath (not .Values.deployment.debug) }}
           readinessProbe:
             httpGet:
               path: {{ .Values.probes.readinessPath }}

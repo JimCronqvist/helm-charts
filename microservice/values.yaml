@@ -66,6 +66,8 @@ deployment:
   # Leave empty to use the defaults set in the Docker image. command = ENTRYPOINT, args = CMD, in the docker world
   command: []
   args: []
+  # Override the cmd and args with 'sleep infinity', useful for debugging by logging in to the container when it dies
+  debug: false
   initContainers: []
     #- name: volume-permissions
     #  image: busybox:latest
