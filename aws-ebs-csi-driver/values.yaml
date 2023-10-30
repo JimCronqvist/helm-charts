@@ -1,4 +1,12 @@
 aws-ebs-csi-driver:
+  # Use the provisioner cluster role as a workaround to patch the gp2 storageClass in the init container
+  sidecars:
+    provisioner:
+      additionalClusterRoleRules:
+        - apiGroups: ["storage.k8s.io"]
+          resources: ["storageclasses"]
+          verbs: ["patch"]
+
   # Storage Classes to be created. Notes:
   # - All storage classes are being set to be Deleted when no longer in use.
   # - No volumes will be created until there is a pod that needs it.
@@ -28,6 +36,11 @@ aws-ebs-csi-driver:
         tagSpecification_2: "namespace={{ .PVCNamespace }}"
 
   controller:
+    initContainers:
+      - name: disable-default-sc-gp2
+        image: bitnami/kubectl:latest
+        command: ["kubectl", "patch", "storageclass", "gp2", "-p", '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}']
+
     # Enable volume modification via annotations for ebs volumes.
     volumeModificationFeature:
       enabled: true
