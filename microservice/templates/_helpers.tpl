@@ -15,7 +15,7 @@ If release name contains chart name it will be used as a full name.
 {{- .Values.fullnameOverride | trunc 53 | trimSuffix "-" }}
 {{- else }}
 {{- $name := default .Chart.Name .Values.nameOverride }}
-{{- if contains $name .Release.Name }}
+{{- if or (contains $name .Release.Name) (ne "microservice" $name) }}
 {{- .Release.Name | trunc 53 | trimSuffix "-" }}
 {{- else }}
 {{- printf "%s-%s" .Release.Name $name | trunc 53 | trimSuffix "-" }}

@@ -30,6 +30,9 @@ spec:
         {{- end }}
       labels:
         {{- include "microservice.selectorLabels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       {{- with .Values.imagePullSecrets }}
       imagePullSecrets:
@@ -51,7 +54,7 @@ spec:
         {{- end }}
       {{- end }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ $fullName | default .Chart.Name }}
           {{- if .Values.deployment.debug }}
           command: ["/bin/sh", "-c", "sleep infinity"]
           {{- else }}
