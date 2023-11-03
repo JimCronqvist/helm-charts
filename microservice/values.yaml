@@ -20,7 +20,9 @@ image:
 imagePullSecrets:
   - name: docker-image-pull-secret
 
+# The name should always be overridden as this is a generic chart that is used by any application
 nameOverride: ""
+
 fullnameOverride: ""
 
 serviceAccount:
