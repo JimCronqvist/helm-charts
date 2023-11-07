@@ -147,13 +147,13 @@ volumes:
 - name: {{ $pvcName }}
   {{- if .hostPath }}
   hostPath:
-    {{- toYaml .hostPath | nindent 12 }}
-  {{- else if .nfs }}
+    {{- toYaml .hostPath | nindent 4 }}
+  {{- else if and .nfs (not .nfs.mountOptions) }}
   nfs:
-    {{- toYaml .nfs | nindent 12 }}
+    {{- toYaml .nfs | nindent 4 }}
   {{- else if .emptyDir }}
   emptyDir:
-    {{- toYaml .emptyDir | nindent 12 }}
+    {{- toYaml .emptyDir | nindent 4 }}
   {{- else if (dig "enabled" true $pvc) }}
   persistentVolumeClaim:
     claimName: {{ default (printf "%s-%s" $fullName $pvcName) .existingClaim }}

@@ -3,7 +3,7 @@
 {{- $labels := include "microservice.labels" . -}}
 {{- $global := .Values.global -}}
 {{- range $pvcName, $pvc := .Values.pvc }}
-{{- if and (dig "enabled" true $pvc) (not $pvc.existingClaim) (not .hostPath) (not .emptyDir) (not .nfs) -}}
+{{- if and (dig "enabled" true $pvc) (not $pvc.existingClaim) (not .hostPath) (not .emptyDir) (or .nfs.mountOptions (not .nfs)) -}}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -24,13 +24,44 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
+  {{- if .nfs }}
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Mi
+  storageClassName: ""
+  volumeName: {{ $fullName }}-{{ $pvcName }}-pv
+  {{- else }}
   accessModes:
     - {{ $pvc.accessMode | default "ReadWriteOnce" }}
   resources:
     requests:
       storage: {{ $pvc.size }}
   {{- include "helpers.storage-class" (dict "persistence" $pvc "global" $global) | nindent 2 }}
+  {{- end }}
 {{- printf "\n" }}
+{{- if .nfs }}
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ $fullName }}-{{ $pvcName }}-pv
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  storageClassName: ""
+  capacity:
+    storage: 1Mi
+  accessModes:
+    - ReadWriteMany
+  #persistentVolumeReclaimPolicy:
+  mountOptions:
+    {{- toYaml .nfs.mountOptions | nindent 4 }}
+  nfs:
+    {{- toYaml (omit .nfs "mountOptions") | nindent 4 }}
+{{- printf "\n" }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
