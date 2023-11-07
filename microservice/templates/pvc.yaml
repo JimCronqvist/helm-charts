@@ -55,7 +55,7 @@ spec:
     storage: 1Mi
   accessModes:
     - ReadWriteMany
-  #persistentVolumeReclaimPolicy:
+  persistentVolumeReclaimPolicy: Retain
   mountOptions:
     {{- toYaml .nfs.mountOptions | nindent 4 }}
   nfs:
