@@ -24,24 +24,29 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
-  {{- if .nfs }}
   accessModes:
+    {{- if $pvc.accessMode }}
+    - {{ $pvc.accessMode }}
+    {{- else if .nfs }}
     - ReadWriteMany
+    {{- else }}
+    - ReadWriteOnce
+    {{- end }}
   resources:
     requests:
+      {{- if or .nfs (contains "efs" $pvc.storageClass) }}
       storage: 1Mi
+      {{- else }}
+      storage: {{ $pvc.size }}
+      {{- end }}
+  {{- if or .nfs .csi }}
   storageClassName: ""
   volumeName: {{ $fullName }}-{{ $pvcName }}-pv
   {{- else }}
-  accessModes:
-    - {{ $pvc.accessMode | default "ReadWriteOnce" }}
-  resources:
-    requests:
-      storage: {{ $pvc.size }}
   {{- include "helpers.storage-class" (dict "persistence" $pvc "global" $global) | nindent 2 }}
   {{- end }}
 {{- printf "\n" }}
-{{- if .nfs }}
+{{- if or .nfs .csi }}
 ---
 apiVersion: v1
 kind: PersistentVolume
@@ -50,16 +55,35 @@ metadata:
   labels:
     {{- $labels | nindent 4 }}
 spec:
-  storageClassName: ""
-  capacity:
-    storage: 1Mi
   accessModes:
+    {{- if $pvc.accessMode }}
+    - {{ $pvc.accessMode }}
+    {{- else if .nfs }}
     - ReadWriteMany
+    {{- else }}
+    - ReadWriteOnce
+    {{- end }}
+  capacity:
+    {{- if or .nfs (contains "efs" $pvc.storageClass) }}
+    storage: 1Mi
+    {{- else }}
+    storage: {{ $pvc.size }}
+    {{- end }}
+  storageClassName: ""
   persistentVolumeReclaimPolicy: Retain
+  {{- if .nfs }}
   mountOptions:
     {{- toYaml .nfs.mountOptions | nindent 4 }}
   nfs:
     {{- toYaml (omit .nfs "mountOptions") | nindent 4 }}
+  {{- else if .csi }}
+  {{- with .csi.mountOptions }}
+  mountOptions:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+  csi:
+    {{- toYaml (omit .csi "mountOptions") | nindent 4 }}
+  {{- end }}
 {{- printf "\n" }}
 {{- end }}
 {{- end }}
