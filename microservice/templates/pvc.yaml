@@ -64,7 +64,7 @@ spec:
     - ReadWriteOnce
     {{- end }}
   capacity:
-    {{- if or .nfs (contains "efs" $pvc.storageClass) }}
+    {{- if or .nfs (contains "efs" ($pvc.storageClass | default "")) }}
     storage: 1Mi
     {{- else }}
     storage: {{ $pvc.size }}
