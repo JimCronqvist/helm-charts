@@ -34,7 +34,7 @@ spec:
     {{- end }}
   resources:
     requests:
-      {{- if or .nfs (contains "efs" ($pvc.storageClass | default "")) }}
+      {{- if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (eq "smb.csi.k8s.io" .csi.driver)) }}
       storage: 1Mi
       {{- else }}
       storage: {{ $pvc.size }}
@@ -64,7 +64,7 @@ spec:
     - ReadWriteOnce
     {{- end }}
   capacity:
-    {{- if or .nfs (contains "efs" ($pvc.storageClass | default "")) }}
+    {{- if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (eq "smb.csi.k8s.io" .csi.driver)) }}
     storage: 1Mi
     {{- else }}
     storage: {{ $pvc.size }}
