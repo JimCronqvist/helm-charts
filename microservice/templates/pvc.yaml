@@ -3,7 +3,7 @@
 {{- $labels := include "microservice.labels" . -}}
 {{- $global := .Values.global -}}
 {{- range $pvcName, $pvc := .Values.pvc }}
-{{- if and (dig "enabled" true $pvc) (not $pvc.existingClaim) (not .hostPath) (not .emptyDir) (or .nfs.mountOptions (not .nfs)) -}}
+{{- if and (dig "enabled" true $pvc) (not $pvc.existingClaim) (not .hostPath) (not .emptyDir) (or (not .nfs) .nfs.mountOptions) -}}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
