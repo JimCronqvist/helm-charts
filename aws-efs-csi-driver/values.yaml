@@ -1,7 +1,31 @@
 aws-efs-csi-driver:
   controller:
+    deleteAccessPointRootDir: false
+    tags: {}
     serviceAccount:
       create: true
+      name: efs-csi-controller-sa
+      annotations:
+        eks.amazonaws.com/role-arn:
   node:
     serviceAccount:
       create: true
+      name: efs-csi-node-sa
+      annotations:
+        eks.amazonaws.com/role-arn:
+
+  storageClasses: []
+    #- name: efs-sc
+    #  mountOptions:
+    #   - tls
+    #  parameters:
+    #    provisioningMode: efs-ap
+    #    fileSystemId:
+    #    directoryPerms: "700"
+    #    gidRangeStart: "1000"
+    #    gidRangeEnd: "2000"
+    #    basePath: "/dynamic_provisioning"
+    #    #subPathPattern: "/subPath"
+    #    ensureUniqueDirectory: true
+    #  reclaimPolicy: Delete
+    #  volumeBindingMode: Immediate
