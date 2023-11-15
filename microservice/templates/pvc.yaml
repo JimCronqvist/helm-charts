@@ -29,7 +29,7 @@ spec:
   accessModes:
     {{- if $pvc.accessMode }}
     - {{ $pvc.accessMode }}
-    {{- else if or .nfs (contains "efs" ($pvc.storageClass | default "")) }}
+    {{- else if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (has .csi.driver (list "smb.csi.k8s.io" "efs.csi.aws.com"))) }}
     - ReadWriteMany
     {{- else }}
     - ReadWriteOnce
@@ -60,7 +60,7 @@ spec:
   accessModes:
     {{- if $pvc.accessMode }}
     - {{ $pvc.accessMode }}
-    {{- else if or .nfs (contains "efs" ($pvc.storageClass | default "")) }}
+    {{- else if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (has .csi.driver (list "smb.csi.k8s.io" "efs.csi.aws.com"))) }}
     - ReadWriteMany
     {{- else }}
     - ReadWriteOnce
