@@ -1,6 +1,6 @@
 aws-efs-csi-driver:
   controller:
-    deleteAccessPointRootDir: false
+    deleteAccessPointRootDir: true
     tags: {}
     serviceAccount:
       create: true
