@@ -15,17 +15,17 @@ aws-efs-csi-driver:
         eks.amazonaws.com/role-arn:
 
   storageClasses: []
-    #- name: efs-sc
-    #  mountOptions:
-    #   - tls
+    #- name: efs-tmp
+    #  reclaimPolicy: Delete
+    #  volumeBindingMode: WaitForFirstConsumer
     #  parameters:
     #    provisioningMode: efs-ap
-    #    fileSystemId:
+    #    fileSystemId: fs-06827e90c60c3461d
     #    directoryPerms: "700"
-    #    gidRangeStart: "1000"
-    #    gidRangeEnd: "2000"
-    #    basePath: "/dynamic_provisioning"
-    #    #subPathPattern: "/subPath"
-    #    ensureUniqueDirectory: true
-    #  reclaimPolicy: Delete
-    #  volumeBindingMode: Immediate
+    #    # Optional parameters
+    #    uid: "1000"
+    #    gid: "1000"
+    #    basePath: "/dynamic"
+    #    subPathPattern: "/${.PVC.namespace}/${.PVC.name}"
+    #    ensureUniqueDirectory: "false" # Be careful when 'false', see warning in the official aws-efs-csi-drive docs.
+    #    reuseAccessPoint: "true"
