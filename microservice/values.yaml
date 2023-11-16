@@ -156,6 +156,8 @@ tolerations: []
 
 affinity: {}
 
+topologySpreadConstraints: {}
+
 hostAliases: []
 
 # Format: { volumeName1: { size, accessMode, storageClass, mounts: [{ mountPath, subPath, [readonly] }, ...], ... } }
