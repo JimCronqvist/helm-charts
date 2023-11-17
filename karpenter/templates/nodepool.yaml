@@ -1,0 +1,20 @@
+apiVersion: karpenter.sh/v1beta1
+kind: NodePool
+metadata:
+  name: {{ .Values.nodePool.name }}
+  labels:
+    {{- include "karpenter.labels" . | nindent 4 }}
+spec:
+  nodeClassRef:
+    name: {{ .Values.nodePool.name }}
+  requirements:
+    {{- toYaml .Values.nodePool.requirements | nindent 4 }}
+  limits:
+    cpu: 1000
+    memory: 1000Gi
+  disruption:
+    consolidationPolicy: {{ .Values.nodePool.consolidationPolicy }}
+    {{- if not .Values.nodePool.consolidationPolicy }}
+    consolidateAfter: {{ .Values.nodePool.consolidateAfter }}
+    {{- end }}
+    expireAfter: {{ .Values.nodePool.expireAfter }}

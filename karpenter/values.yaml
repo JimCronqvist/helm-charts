@@ -1,15 +1,12 @@
 
 karpenter:
   settings:
-    aws:
-      # The EKS cluster name
-      clusterName:
-      # The public EKS Cluster https endpoint
-      clusterEndpoint:
-      # The Karpenter node instance profile to use when launching nodes - which role to pass to the ec2 instances
-      defaultInstanceProfile:
-      # The Karpenter SQS queue name
-      interruptionQueueName:
+    # The EKS cluster name
+    clusterName:
+    # The public EKS Cluster https endpoint
+    clusterEndpoint:
+    # The Karpenter SQS queue name
+    interruptionQueueName:
   serviceAccount:
     # Override the name, as terraform will usually set the irsa to only allow 'karpenter:karpenter' in the trust policy.
     name: karpenter
@@ -17,23 +14,34 @@ karpenter:
       # Karpenter IAM role for service account (IRSA)
       eks.amazonaws.com/role-arn:
 
-provisioner:
+nodeClass:
+  role:
+  amiFamily: AL2
+  blockDeviceMappings:
+    - deviceName: /dev/xvda
+      ebs:
+        volumeSize: 80Gi
+        volumeType: gp3
+        deleteOnTermination: true
+
+nodePool:
   # EC2 instances are named containing the provisioner name
   name: default
 
   # Karpenter works to actively reduce cluster cost by identifying when:
   # - Nodes can be removed as their workloads will run on other nodes in the cluster.
   # - Nodes can be replaced with cheaper variants due to a change in the workloads.
-  consolidationEnabled: true
+  consolidationPolicy: WhenUnderutilized
 
   # Wait a number of seconds after a node has no provisioned pods running before Karpenter requests to delete the node.
-  # Ignored if consolidationEnabled is set to true.
-  ttlSecondsAfterEmpty: 30
+  # Ignored if consolidationPolicy is set.
+  consolidateAfter: 2m
+  #ttlSecondsAfterEmpty: 30
 
   # Define a lifetime on the provisioned nodes, to automatically force recreation with newer up-to-date AMIs with
   # security updates and latest versions installed. Including allowing new Kubernetes versions to be rolled out to
-  # nodes automatically.
-  ttlSecondsUntilExpired: 1209600 # 14 days = 14 * 24 * 3600 Seconds;
+  # nodes automatically. Defaults to 720h if not defined.
+  expireAfter: 336h # 14 days = 14 * 24 Hours
 
   # Specify requirements constraints
   requirements:
@@ -52,11 +60,3 @@ provisioner:
     - key: karpenter.k8s.aws/instance-generation
       operator: Gt
       values: ["2"]
-
-awsNodeTemplate:
-  blockDeviceMappings:
-    - deviceName: /dev/xvda
-      ebs:
-        volumeSize: 80Gi
-        volumeType: gp3
-        deleteOnTermination: true
