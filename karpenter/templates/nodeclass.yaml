@@ -7,10 +7,12 @@ metadata:
 spec:
   role: {{ .Values.nodeClass.role | default (printf "KarpenterNodeRole-%s" .Values.karpenter.settings.clusterName) }}
   amiFamily: {{ .Values.nodeClass.amiFamily }}
-  subnetSelector:
-    karpenter.sh/discovery: {{ .Values.karpenter.settings.clusterName }}
-  securityGroupSelector:
-    karpenter.sh/discovery: {{ .Values.karpenter.settings.clusterName }}
   tags:
     karpenter.sh/discovery: {{ .Values.karpenter.settings.clusterName }}
+  subnetSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: {{ .Values.karpenter.settings.clusterName }}
+  securityGroupSelectorTerms:
+    - tags:
+        karpenter.sh/discovery: {{ .Values.karpenter.settings.clusterName }}
   {{- toYaml (omit .Values.nodeClass "role" "amiFamily") | nindent 2 }}
