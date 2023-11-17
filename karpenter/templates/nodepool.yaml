@@ -5,10 +5,12 @@ metadata:
   labels:
     {{- include "karpenter.labels" . | nindent 4 }}
 spec:
-  nodeClassRef:
-    name: {{ .Values.nodePool.name }}
-  requirements:
-    {{- toYaml .Values.nodePool.requirements | nindent 4 }}
+  template:
+    spec:
+      nodeClassRef:
+        name: {{ .Values.nodePool.name }}
+      requirements:
+        {{- toYaml .Values.nodePool.requirements | nindent 4 }}
   limits:
     cpu: 1000
     memory: 1000Gi
