@@ -2,3 +2,20 @@ redis:
   architecture: standalone
   auth:
     enabled: false
+
+  # Override how pvc's are managed throughout the lifecycle of the Stateful Set for the different components of redis
+  master:
+    persistentVolumeClaimRetentionPolicy:
+      enabled: true
+      whenScaled: Retain
+      whenDeleted: Delete # default is 'Retain'
+  replica:
+    persistentVolumeClaimRetentionPolicy:
+      enabled: true
+      whenScaled: Retain
+      whenDeleted: Delete # default is 'Retain'
+  sentinel:
+    persistentVolumeClaimRetentionPolicy:
+      enabled: true
+      whenScaled: Retain
+      whenDeleted: Delete # default is 'Retain'
