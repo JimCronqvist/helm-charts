@@ -5,6 +5,7 @@ redis-cluster:
     type: ClusterIP
   cluster:
     nodes: 3 # defaults to 6
+    replicas: 0 # defaults to 1
   persistentVolumeClaimRetentionPolicy:
     enabled: true
     whenScaled: Retain # default is 'Retain'
