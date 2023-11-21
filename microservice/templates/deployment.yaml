@@ -81,13 +81,13 @@ spec:
           {{- if and .Values.service.enabled .Values.probes .Values.probes.livenessPath (not .Values.deployment.debug) }}
           livenessProbe:
             httpGet:
-              path: {{ .Values.probes.livenessPath }}
+              path: {{ eq .Values.probes.livenessPath "/" | ternary "" .Values.probes.livenessPath }}
               port: http
           {{- end }}
           {{- if and .Values.service.enabled .Values.probes .Values.probes.readinessPath (not .Values.deployment.debug) }}
           readinessProbe:
             httpGet:
-              path: {{ .Values.probes.readinessPath }}
+              path: {{ eq .Values.probes.readinessPath "/" | ternary "" .Values.probes.readinessPath }}
               port: http
           {{- end }}
           resources:

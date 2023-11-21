@@ -11,7 +11,7 @@ spec:
     - name: wget
       image: busybox
       command: ['wget']
-      {{- if and .Values.probes .Values.probes.readinessPath }}
+      {{- if and .Values.probes .Values.probes.readinessPath (ne .Values.probes.readinessPath "/") }}
       args: ['{{ include "microservice.fullname" . }}:{{ .Values.service.port }}{{ .Values.probes.readinessPath }}']
       {{- else }}
       args: ['{{ include "microservice.fullname" . }}:{{ .Values.service.port }}']
