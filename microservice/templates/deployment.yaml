@@ -127,6 +127,9 @@ spec:
       {{- end }}
       {{- if or .Values.affinity .Values.scheduler.sameHost }}
       affinity:
+        {{- with .Values.affinity }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
         {{- if .Values.scheduler.sameHost }}
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
@@ -135,7 +138,6 @@ spec:
                   app.kubernetes.io/instance: {{ .Release.Name }}
               topologyKey: kubernetes.io/hostname
         {{- end }}
-        {{- toYaml .Values.affinity | nindent 8 }}
       {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
@@ -143,6 +145,9 @@ spec:
       {{- end }}
       {{- if or .Values.topologySpreadConstraints .Values.scheduler.minZones }}
       topologySpreadConstraints:
+        {{- with .Values.topologySpreadConstraints }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
         {{- if .Values.scheduler.minZones }}
         - maxSkew: 1
           minDomains: {{ .Values.scheduler.minZones }}
@@ -154,7 +159,6 @@ spec:
           matchLabelKeys:
             - pod-template-hash # Makes it unique per ReplicaSet (does not work for StatefulSets)
         {{- end }}
-        {{- toYaml .Values.topologySpreadConstraints | nindent 8 }}
       {{- end }}
       {{- with .Values.hostAliases }}
       hostAliases:
