@@ -158,6 +158,11 @@ affinity: {}
 
 topologySpreadConstraints: {}
 
+# Provides some standard use cases to control the Kubernetes scheduler behavior, will be merged with affinity and topologySpreadConstraints rules.
+scheduler: {}
+  # sameHost: true
+  # minZones: 2
+
 hostAliases: []
 
 # Format: { volumeName1: { size, accessMode, storageClass, mounts: [{ mountPath, subPath, [readonly] }, ...], ... } }
