@@ -125,6 +125,7 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if or .Values.affinity .Values.scheduler.sameHost }}
       affinity:
         {{- if .Values.scheduler.sameHost }}
         podAffinity:
@@ -135,10 +136,12 @@ spec:
               topologyKey: kubernetes.io/hostname
         {{- end }}
         {{- toYaml .Values.affinity | nindent 8 }}
+      {{- end }}
       {{- with .Values.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      {{- if or .Values.topologySpreadConstraints .Values.scheduler.minZones }}
       topologySpreadConstraints:
         {{- if .Values.scheduler.minZones }}
         - maxSkew: 1
@@ -152,6 +155,7 @@ spec:
             - pod-template-hash # Makes it unique per ReplicaSet (does not work for StatefulSets)
         {{- end }}
         {{- toYaml .Values.topologySpreadConstraints | nindent 8 }}
+      {{- end }}
       {{- with .Values.hostAliases }}
       hostAliases:
         {{- toYaml . | nindent 8 }}
