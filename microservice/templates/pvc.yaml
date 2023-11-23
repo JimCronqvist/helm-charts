@@ -1,10 +1,10 @@
 {{- if .Values.pvc -}}
+{{- if eq .Values.deployment.kind "Deployment" }}
 {{- $fullName := include "microservice.fullname" . -}}
 {{- $labels := include "microservice.labels" . -}}
 {{- $global := .Values.global -}}
 {{- range $pvcName, $pvc := .Values.pvc }}
 {{- if and (dig "enabled" true $pvc) (not $pvc.existingClaim) (not .hostPath) (not .emptyDir) (or (not .nfs) .nfs.mountOptions) -}}
-{{- if eq .Values.deployment.kind "Deployment" }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
