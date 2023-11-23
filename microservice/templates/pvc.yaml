@@ -4,6 +4,7 @@
 {{- $global := .Values.global -}}
 {{- range $pvcName, $pvc := .Values.pvc }}
 {{- if and (dig "enabled" true $pvc) (not $pvc.existingClaim) (not .hostPath) (not .emptyDir) (or (not .nfs) .nfs.mountOptions) -}}
+{{- if eq .Values.deployment.kind "Deployment" }}
 ---
 apiVersion: v1
 kind: PersistentVolumeClaim
@@ -87,6 +88,7 @@ spec:
     {{- toYaml (omit .csi "mountOptions") | nindent 4 }}
   {{- end }}
 {{- printf "\n" }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
