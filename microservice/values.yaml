@@ -172,7 +172,7 @@ scheduler: {}
 hostAliases: []
 
 # Format: { volumeName1: { size, accessMode, storageClass, mounts: [{ mountPath, subPath, [readonly] }, ...], ... } }
-#pvc: {}
+pvc: {}
   # data:
   #   size: 8Gi
   #   accessMode: ReadWriteOnce

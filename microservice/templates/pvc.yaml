@@ -1,5 +1,5 @@
 {{- if .Values.pvc -}}
-{{- if eq .Values.deployment.kind "Deployment" }}
+{{- if or (eq .Values.deployment.kind "Deployment") (gt (len .Values.cronjobs) 0) (gt (len .Values.jobs) 0) }}
 {{- $fullName := include "microservice.fullname" . -}}
 {{- $labels := include "microservice.labels" . -}}
 {{- $global := .Values.global -}}
