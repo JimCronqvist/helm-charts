@@ -81,6 +81,12 @@ deployment:
     #  image: nginx:${IMAGE_TAG}
     #  imagePullPolicy: Always
 
+  # For advanced users: Control what Kind the deployment should have, Deployment or StatefulSet.
+  kind: Deployment
+  statefulSet:
+    updateStrategy:
+      type: RollingUpdate
+
 service:
   enabled: true
   type: ClusterIP
@@ -166,7 +172,7 @@ scheduler: {}
 hostAliases: []
 
 # Format: { volumeName1: { size, accessMode, storageClass, mounts: [{ mountPath, subPath, [readonly] }, ...], ... } }
-pvc: {}
+#pvc: {}
   # data:
   #   size: 8Gi
   #   accessMode: ReadWriteOnce

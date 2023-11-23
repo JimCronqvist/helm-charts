@@ -1,7 +1,7 @@
 {{- if and .Values.deployment (dig "enabled" true .Values.deployment) }}
 {{- $fullName := include "microservice.fullname" . -}}
 apiVersion: apps/v1
-kind: Deployment
+kind: {{ .Values.deployment.kind | default "Deployment" }}
 metadata:
   name: {{ $fullName }}
   labels:
@@ -13,12 +13,57 @@ spec:
   selector:
     matchLabels:
       {{- include "microservice.selectorLabels" . | nindent 6 }}
-  {{- if and .Values.strategy .Values.strategy.type }}
+  {{- if and .Values.strategy .Values.strategy.type (eq .Values.deployment.kind "Deployment") }}
   strategy:
     type: {{ .Values.strategy.type }}
     {{- if and .Values.strategy.rollingUpdate (eq .Values.strategy.type "RollingUpdate") }}
     rollingUpdate:
       {{- .Values.strategy.rollingUpdate | toYaml | nindent 6 }}
+    {{- end }}
+  {{- end }}
+  {{- if eq .Values.deployment.kind "StatefulSet" }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Delete
+    whenScaled: Delete
+  podManagementPolicy: {{ .Values.deployment.statefulSet.podManagementPolicy | default "Parallel" }}
+  UpdateStrategy:
+    type: RollingUpdate
+    {{- if and (eq .Values.deployment.statefulSet.updateStrategy.type "RollingUpdate") .Values.deployment.statefulSet.updateStrategy.rollingUpdate }}
+    rollingUpdate:
+      {{- toYaml .Values.deployment.statefulSet.updateStrategy.rollingUpdate | nindent 6 }}
+    {{- end }}
+  volumeClaimTemplates:
+    {{- $global := .Values.global -}}
+    {{- range $pvcName, $pvc := .Values.pvc }}
+    - metadata:
+        name: {{ $pvcName }}
+        annotations:
+          {{- if $pvc.volumeType }}
+          ebs.csi.aws.com/volumeType: {{ $pvc.volumeType | quote }}
+          {{- end }}
+          {{- if $pvc.iops }}
+          ebs.csi.aws.com/iops: {{ $pvc.iops | quote }}
+          {{- end }}
+          {{- if $pvc.throughput }}
+          ebs.csi.aws.com/throughput: {{ $pvc.throughput | quote }}
+          {{- end }}
+      spec:
+        accessModes:
+          {{- if $pvc.accessMode }}
+          - {{ $pvc.accessMode }}
+          {{- else if contains "efs" ($pvc.storageClass | default "") }}
+          - ReadWriteMany
+          {{- else }}
+          - ReadWriteOnce
+          {{- end }}
+        resources:
+          requests:
+            {{- if contains "efs" ($pvc.storageClass | default "") }}
+            storage: 1Mi
+            {{- else }}
+            storage: {{ $pvc.size }}
+            {{- end }}
+        {{- include "helpers.storage-class" (dict "persistence" $pvc "global" $global) | nindent 2 }}
     {{- end }}
   {{- end }}
   template:
@@ -112,8 +157,10 @@ spec:
             {{- end }}
         {{- end }}
       volumes:
+        {{- if eq .Values.deployment.kind "Deployment" }}
         {{- with .Values.pvc }}
         {{- include "helpers.volumes" (list $ .) | indent 8 }}
+        {{- end }}
         {{- end }}
         {{- if .Values.files }}
         - name: configmap-files-volume
