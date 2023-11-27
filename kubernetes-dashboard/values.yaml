@@ -20,8 +20,10 @@ kubernetes-dashboard:
       # A Traefik IngressRoute is utilized instead of the included Ingress
       enabled: false
 
-
 host: localhost
+
+# Retrieve read-only user token by:
+# kubectl -n {namespace} get secret kubernetes-dashboard-readonly-token -o jsonpath="{.data.token}" | base64 --decode
 createReadOnlyUser: true
 extraReadOnlyRoleRules:
   - apiGroups:
