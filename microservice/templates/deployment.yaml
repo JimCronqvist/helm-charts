@@ -35,7 +35,9 @@ spec:
   volumeClaimTemplates:
     {{- $global := .Values.global -}}
     {{- range $pvcName, $pvc := .Values.pvc }}
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: {{ $pvcName }}
         annotations:
           {{- if $pvc.volumeType }}
