@@ -22,6 +22,8 @@ nodeClass:
       ebs:
         volumeSize: 80Gi
         volumeType: gp3
+        iops: 3000
+        throughput: 125
         deleteOnTermination: true
 
 nodePool:
