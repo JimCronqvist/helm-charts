@@ -80,6 +80,7 @@ deployment:
     #- name: nginx
     #  image: nginx:${IMAGE_TAG}
     #  imagePullPolicy: Always
+    #  mounts: false
 
   # For advanced users: Control what Kind the deployment should have, Deployment or StatefulSet.
   kind: Deployment
