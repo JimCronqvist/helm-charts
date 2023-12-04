@@ -73,7 +73,7 @@ Create a helper to map environment variables, both for sensitive (secrets) and n
 {{- end }}
 {{- range $key, $val := .Values.env }}
 - name: {{ $key }}
-  value: {{ $val | quote }}
+  value: {{ ternary "''" ($val | quote) (eq $val nil) }}
 {{- end }}
 {{- end }}
 
