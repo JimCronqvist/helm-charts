@@ -111,7 +111,6 @@ service:
   #      start: 1000
   #      end: 1100
 
-
 ingressroute:
   enabled: true
   responseHeaderMicroservice: false
@@ -143,11 +142,17 @@ resources: {}
   # choice for the user. This also increases chances charts run on environments with little
   # resources, such as Minikube. If you do want to specify resources, uncomment the following
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  #
+  # Recommendation notes:
+  # 1. Set a cpu request to guarantee that there is enough reserved for the application, kind of wild west without it.
+  # 2. Avoid setting a cpu limit unless you definitely need it
+  # 3. Also, you can use krr to get recommendations for cpu and memory requests and limits.
+  #
   # limits:
-  #   cpu: 100m
+  #   cpu: '100m'
   #   memory: 128Mi
   # requests:
-  #   cpu: 100m
+  #   cpu: '100m'
   #   memory: 128Mi
 
 autoscaling:
