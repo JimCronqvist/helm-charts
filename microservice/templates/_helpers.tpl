@@ -110,14 +110,15 @@ Useage: {{ include "helpers.image-tag" }}
 Return the Volume Mounts
 {{- with .Values.pvc }}
 volumeMounts:
-  {{- include "helpers.volume-mounts" (list . "Deployment") | indent 12 }}
+  {{- include "helpers.volume-mounts" (list $ . "Deployment") | indent 12 }}
 {{- end }}
 */}}
 {{- define "helpers.volume-mounts" -}}
-{{- $kind := index . 1 }}
-{{- with index . 0 }}
+{{- $ := index . 0 }}
 {{- $fullName := include (printf "%s.fullname" $.Chart.Name) $ }}
-{{- range $pvcName, $pvc := index . 0 }}
+{{- $kind := index . 2 }}
+{{- with index . 1 }}
+{{- range $pvcName, $pvc := . }}
 {{- $mountToKind := dig (printf "mountTo%s" $kind) true $pvc }}
 {{- if $mountToKind }}
 {{- range $mount := $pvc.mounts }}

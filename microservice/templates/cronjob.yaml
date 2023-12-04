@@ -52,7 +52,7 @@ spec:
                 {{- toYaml $.Values.resources | nindent 16 }}
               {{- with $.Values.pvc }}
               volumeMounts:
-                {{- include "helpers.volume-mounts" (. "CronJob") | indent 16 }}
+                {{- include "helpers.volume-mounts" (list $ . "CronJob") | indent 16 }}
               {{- end }}
           {{- with $.Values.pvc }}
           volumes:
