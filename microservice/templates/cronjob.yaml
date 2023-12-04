@@ -44,12 +44,16 @@ spec:
                 - {{ $cronjob.command }}
               securityContext:
                 {{- toYaml $.Values.securityContext | nindent 16 }}
+              {{- if $cronjob.image }}
+              image: "{{ $cronjob.image | replace "${IMAGE_TAG}" (include "helpers.image-tag" $) }}"
+              {{- else }}
               image: "{{ $.Values.image.repository }}:{{ include "helpers.image-tag" $ }}"
+              {{- end }}
               imagePullPolicy: {{ $.Values.image.pullPolicy }}
               env:
                 {{- include "helpers.list-env-variables" $ | indent 16 }}
               resources:
-                {{- toYaml $.Values.resources | nindent 16 }}
+                {{- include "helpers.wrapResourcesWithQuotes" ($cronjob.resources | default dict) | indent 16 }}
               {{- with $.Values.pvc }}
               volumeMounts:
                 {{- include "helpers.volume-mounts" (list $ . "CronJob") | indent 16 }}

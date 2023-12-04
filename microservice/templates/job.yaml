@@ -39,12 +39,16 @@ spec:
             - {{ $job.command }}
           securityContext:
             {{- toYaml $.Values.securityContext | nindent 12 }}
+          {{- if $job.image }}
+          image: "{{ $job.image | replace "${IMAGE_TAG}" (include "helpers.image-tag" $) }}"
+          {{- else }}
           image: "{{ $.Values.image.repository }}:{{ include "helpers.image-tag" $ }}"
+          {{- end }}
           imagePullPolicy: {{ $.Values.image.pullPolicy }}
           env:
             {{- include "helpers.list-env-variables" $ | indent 12 }}
           resources:
-            {{- toYaml $.Values.resources | nindent 12 }}
+            {{- include "helpers.wrapResourcesWithQuotes" ($job.resources | default dict) | indent 12 }}
           {{- with $.Values.pvc }}
           volumeMounts:
             {{- include "helpers.volume-mounts" (list $ . "Job") | indent 12 }}

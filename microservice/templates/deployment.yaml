@@ -138,7 +138,7 @@ spec:
               port: http
           {{- end }}
           resources:
-            {{- toYaml .Values.resources | nindent 12 }}
+            {{- include "helpers.wrapResourcesWithQuotes" .Values.resources | indent 12 }}
           volumeMounts:
             {{- with .Values.pvc }}
             {{- include "helpers.volume-mounts" (list $ . $.Values.deployment.kind) | indent 12 }}

@@ -107,6 +107,36 @@ Useage: {{ include "helpers.image-tag" }}
 {{- end -}}
 
 {{/*
+Wrap the resources cpu parts with single quotes:
+Useage: {{- include "helpers.wrapResourcesWithQuotes" .Values.resources | indent 12 }}
+*/}}
+{{- define "helpers.wrapResourcesWithQuotes" -}}
+{{- $resources := . -}}
+{{- if and (not $resources.requests) (not $resources.limits) }}
+{}
+{{- else }}
+{{- with $resources.requests }}
+requests:
+  {{- with .cpu }}
+  cpu: {{ printf "'%s'" (. | toString) }}
+  {{- end }}
+  {{- with .memory }}
+  memory: {{ . }}
+  {{- end }}
+{{- end }}
+{{- with $resources.limits }}
+limits:
+  {{- with .cpu }}
+  cpu: {{ printf "'%s'" (. | toString) }}
+  {{- end }}
+  {{- with .memory }}
+  memory: {{ . }}
+  {{- end }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
 Return the Volume Mounts
 {{- with .Values.pvc }}
 volumeMounts:
