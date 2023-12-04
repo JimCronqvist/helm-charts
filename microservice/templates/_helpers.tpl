@@ -144,14 +144,17 @@ volumeMounts:
 Return the Volumes
 {{- with .Values.pvc }}
 volumes:
-  {{- include "helpers.volumes" (list $ .) | indent 8 }}
+  {{- include "helpers.volumes" (list $ . "Deployment") | indent 8 }}
 {{- end }}
 */}}
 {{- define "helpers.volumes" -}}
 {{- $ := index . 0 }}
 {{- $fullName := include (printf "%s.fullname" $.Chart.Name) $ }}
+{{- $kind := index . 2 }}
 {{- with index . 1 }}
 {{- range $pvcName, $pvc := . }}
+{{- $mountToKind := dig (printf "mountTo%s" $kind) true $pvc }}
+{{- if $mountToKind }}
 - name: {{ $pvcName }}
   {{- if .hostPath }}
   hostPath:
@@ -168,6 +171,7 @@ volumes:
   {{- else }}
   emptyDir: {}
   {{- end }}
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end -}}

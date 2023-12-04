@@ -56,7 +56,7 @@ spec:
               {{- end }}
           {{- with $.Values.pvc }}
           volumes:
-            {{- include "helpers.volumes" (list $ .) | indent 12 }}
+            {{- include "helpers.volumes" (list $ . "CronJob") | indent 12 }}
           {{- end }}
           {{- with $.Values.nodeSelector }}
           nodeSelector:

@@ -167,7 +167,7 @@ spec:
       volumes:
         {{- if eq .Values.deployment.kind "Deployment" }}
         {{- with .Values.pvc }}
-        {{- include "helpers.volumes" (list $ .) | indent 8 }}
+        {{- include "helpers.volumes" (list $ . $.Values.deployment.kind) | indent 8 }}
         {{- end }}
         {{- end }}
         {{- if .Values.files }}
