@@ -26,7 +26,7 @@ spec:
     whenDeleted: Delete
     whenScaled: Delete
   podManagementPolicy: {{ .Values.deployment.statefulSet.podManagementPolicy | default "Parallel" }}
-  UpdateStrategy:
+  updateStrategy:
     type: RollingUpdate
     {{- if and (eq .Values.deployment.statefulSet.updateStrategy.type "RollingUpdate") .Values.deployment.statefulSet.updateStrategy.rollingUpdate }}
     rollingUpdate:
