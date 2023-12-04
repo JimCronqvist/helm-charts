@@ -96,7 +96,7 @@ spec:
             {{- include "helpers.list-env-variables" $ | indent 12 }}
           {{- with $.Values.pvc }}
           volumeMounts:
-            {{- include "helpers.volume-mounts" . | indent 12 }}
+            {{- include "helpers.volume-mounts" (. $.Values.deployment.kind) | indent 12 }}
           {{- end }}
         {{- end }}
       {{- end }}
@@ -141,7 +141,7 @@ spec:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
             {{- with .Values.pvc }}
-            {{- include "helpers.volume-mounts" . | indent 12 }}
+            {{- include "helpers.volume-mounts" (. $.Values.deployment.kind) | indent 12 }}
             {{- end }}
             {{- range $name, $val := .Values.files }}
             - name: configmap-files-volume
@@ -160,7 +160,7 @@ spec:
           {{- if $sidecar.mounts }}
           volumeMounts:
             {{- with $.Values.pvc }}
-            {{- include "helpers.volume-mounts" . | indent 12 }}
+            {{- include "helpers.volume-mounts" (. $.Values.deployment.kind) | indent 12 }}
             {{- end }}
           {{- end }}
         {{- end }}
