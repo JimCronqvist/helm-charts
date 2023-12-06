@@ -205,7 +205,7 @@ spec:
         {{- end }}
         {{- if .Values.scheduler.minZones }}
         - maxSkew: 1
-          minDomains: {{ .Values.scheduler.minZones }}
+          minDomains: {{ min .Values.scheduler.minZones .Values.replicaCount }}
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
