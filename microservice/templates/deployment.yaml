@@ -8,7 +8,7 @@ metadata:
     {{- include "microservice.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
-  replicas: {{ .Values.replicaCount }}
+  replicas: {{ max .Values.replicaCount (dig "minZones" 0 .Values.scheduler) }}
   {{- end }}
   selector:
     matchLabels:
@@ -205,7 +205,7 @@ spec:
         {{- end }}
         {{- if .Values.scheduler.minZones }}
         - maxSkew: 1
-          minDomains: {{ min .Values.scheduler.minZones .Values.replicaCount }}
+          minDomains: {{ .Values.scheduler.minZones }}
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
