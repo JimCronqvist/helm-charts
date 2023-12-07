@@ -1,22 +1,31 @@
+{{- $labels := include "karpenter.labels" . -}}
+{{- range $provisioner := .Values.provisioners }}
+{{- if dig ($provisioner.nodePool) "enabled" true $.Values.nodePool }}
+{{- if gt (len (dig ($provisioner.nodePool) "requirements" (list) $.Values.nodePool)) 0 }}
+---
 apiVersion: karpenter.sh/v1beta1
 kind: NodePool
 metadata:
-  name: {{ .Values.nodePool.name }}
+  name: {{ $provisioner.name }}
   labels:
-    {{- include "karpenter.labels" . | nindent 4 }}
+    {{- $labels | nindent 4 }}
 spec:
   template:
     spec:
       nodeClassRef:
-        name: {{ .Values.nodePool.name }}
+        name: {{ $provisioner.nodeClass }}
       requirements:
-        {{- toYaml .Values.nodePool.requirements | nindent 8 }}
+        {{- dig ($provisioner.nodePool) "requirements" (list) $.Values.nodePool | toYaml | nindent 8 }}
   limits:
-    cpu: 1000
-    memory: 1000Gi
+    cpu: {{ dig ($provisioner.nodePool) "limits" "cpu" 0 $.Values.nodePool | quote }}
+    memory: {{ dig ($provisioner.nodePool) "limits" "memory" "0Gi" $.Values.nodePool }}
   disruption:
-    consolidationPolicy: {{ .Values.nodePool.consolidationPolicy }}
-    {{- if not .Values.nodePool.consolidationPolicy }}
-    consolidateAfter: {{ .Values.nodePool.consolidateAfter }}
+    consolidationPolicy: {{ dig ($provisioner.nodePool) "consolidationPolicy" "WhenUnderutilized" $.Values.nodePool }}
+    {{- if not (dig ($provisioner.nodePool) "consolidationPolicy" false $.Values.nodePool) }}
+    consolidateAfter: {{ dig ($provisioner.nodePool) "consolidateAfter" "2m" $.Values.nodePool }}
     {{- end }}
-    expireAfter: {{ .Values.nodePool.expireAfter }}
+    expireAfter: {{ dig ($provisioner.nodePool) "expireAfter" "336h" $.Values.nodePool }}
+  weight: {{ dig ($provisioner.nodePool) "weight" 0 $.Values.nodePool }}
+{{- end }}
+{{- end }}
+{{- end }}

@@ -1,18 +1,22 @@
+{{- $labels := include "karpenter.labels" . -}}
+{{- range $name, $class := .Values.nodeClass }}
+---
 apiVersion: karpenter.k8s.aws/v1beta1
 kind: EC2NodeClass
 metadata:
-  name: {{ .Values.nodePool.name }}
+  name: {{ $name }}
   labels:
-    {{- include "karpenter.labels" . | nindent 4 }}
+    {{- $labels | nindent 4 }}
 spec:
-  role: {{ .Values.nodeClass.role | default (printf "KarpenterNodeRole-%s" .Values.karpenter.settings.clusterName) }}
-  amiFamily: {{ .Values.nodeClass.amiFamily }}
+  role: {{ default $.Values.nodeClassDefaultRole $class.role | default (printf "KarpenterNodeRole-%s" $.Values.karpenter.settings.clusterName) }}
+  amiFamily: {{ $class.amiFamily }}
   tags:
-    karpenter.sh/discovery: {{ .Values.karpenter.settings.clusterName }}
+    karpenter.sh/discovery: {{ $.Values.karpenter.settings.clusterName }}
   subnetSelectorTerms:
     - tags:
-        karpenter.sh/discovery: {{ .Values.karpenter.settings.clusterName }}
+        karpenter.sh/discovery: {{ $.Values.karpenter.settings.clusterName }}
   securityGroupSelectorTerms:
     - tags:
-        karpenter.sh/discovery: {{ .Values.karpenter.settings.clusterName }}
-  {{- toYaml (omit .Values.nodeClass "role" "amiFamily") | nindent 2 }}
+        karpenter.sh/discovery: {{ $.Values.karpenter.settings.clusterName }}
+  {{- toYaml (omit $class "role" "amiFamily") | nindent 2 }}
+{{- end }}
