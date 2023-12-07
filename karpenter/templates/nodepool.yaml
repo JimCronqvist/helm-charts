@@ -25,7 +25,7 @@ spec:
     consolidateAfter: {{ dig ($provisioner.nodePool) "consolidateAfter" "2m" $.Values.nodePool }}
     {{- end }}
     expireAfter: {{ dig ($provisioner.nodePool) "expireAfter" "336h" $.Values.nodePool }}
-  weight: {{ dig ($provisioner.nodePool) "weight" 0 $.Values.nodePool }}
+  weight: {{ dig ($provisioner.nodePool) "weight" 1 $.Values.nodePool }}
 {{- end }}
 {{- end }}
 {{- end }}

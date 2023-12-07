@@ -91,7 +91,7 @@ nodePool:
     consolidationPolicy: WhenUnderutilized
     consolidateAfter: 2m
     expireAfter: 336h # 14 days = 14 * 24 Hours
-    weight: 0
+    weight: 1
     limits:
       cpu: 100
       memory: 1000Gi
