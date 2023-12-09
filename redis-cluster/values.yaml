@@ -1,12 +1,13 @@
 redis-cluster:
   usePassword: false
-  service:
-    # Supported types are 'ClusterID' and 'LoadBalancer'
-    type: ClusterIP
   cluster:
-    nodes: 3 # defaults to 6
-    replicas: 0 # defaults to 1
+    nodes: 3 # defaults to 6, minimum required is 3.
+    replicas: 1 # 1 replica per master node
+    externalAccess:
+      enabled: false
   persistentVolumeClaimRetentionPolicy:
     enabled: true
     whenScaled: Retain # default is 'Retain'
     whenDeleted: Delete # default is 'Retain'
+  redis:
+    topologySpreadConstraints: []
