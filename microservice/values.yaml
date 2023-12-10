@@ -176,7 +176,7 @@ tolerations: []
 
 affinity: {}
 
-topologySpreadConstraints: {}
+topologySpreadConstraints: []
 
 # Provides some standard use cases to control the Kubernetes scheduler behavior, will be merged with affinity and topologySpreadConstraints rules.
 scheduler: {}

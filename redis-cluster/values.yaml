@@ -9,5 +9,8 @@ redis-cluster:
     enabled: true
     whenScaled: Retain # default is 'Retain'
     whenDeleted: Delete # default is 'Retain'
+  persistence:
+    enabled: true
   redis:
+    affinity: {}
     topologySpreadConstraints: []

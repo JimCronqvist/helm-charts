@@ -9,13 +9,19 @@ redis:
       enabled: true
       whenScaled: Retain
       whenDeleted: Delete # default is 'Retain'
+    persistence:
+      enabled: true
   replica:
     persistentVolumeClaimRetentionPolicy:
       enabled: true
       whenScaled: Retain
       whenDeleted: Delete # default is 'Retain'
+    persistence:
+      enabled: true
   sentinel:
     persistentVolumeClaimRetentionPolicy:
       enabled: true
       whenScaled: Retain
       whenDeleted: Delete # default is 'Retain'
+    persistence:
+      enabled: true
