@@ -224,3 +224,6 @@ secrets: {}
 
 # Add configuration files to the container
 files: {}
+
+# Extra custom manifests
+extraManifests: []
