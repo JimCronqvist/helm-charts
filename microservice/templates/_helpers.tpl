@@ -99,13 +99,14 @@ Return the Storage Class
 
 {{/*
 Return the Image Tag by using the following order:
-  1. .Values.global.versions.{chartName},
-  2. .Values.image.tag,
-  3. .Chart.AppVersion
+  1. .Values.image.overrideTag
+  2. .Values.global.versions.{chartName}
+  3. .Values.image.tag
+  4. .Chart.AppVersion
 Useage: {{ include "helpers.image-tag" }}
 */}}
 {{- define "helpers.image-tag" -}}
-{{- dig (.Chart.Name) (.Values.image.tag | default .Chart.AppVersion) ((.Values.global).versions | default dict) }}
+{{- .Values.image.overrideTag | default (dig (.Chart.Name) (.Values.image.tag | default .Chart.AppVersion) ((.Values.global).versions | default dict)) }}
 {{- end -}}
 
 {{/*
