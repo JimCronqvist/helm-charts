@@ -31,6 +31,7 @@ spec:
       serviceAccountName: {{ $serviceAccountName }}
       securityContext:
         {{- toYaml $.Values.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: {{ $.Values.terminationGracePeriodSeconds | default 30 }}
       containers:
         - name: {{ $job.name | replace " " "-" | lower }}
           command:

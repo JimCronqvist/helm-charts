@@ -64,6 +64,8 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
+terminationGracePeriodSeconds: 30
+
 deployment:
   enabled: true
   # Leave empty to use the defaults set in the Docker image. command = ENTRYPOINT, args = CMD, in the docker world

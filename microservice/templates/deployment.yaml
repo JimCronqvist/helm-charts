@@ -88,6 +88,7 @@ spec:
       serviceAccountName: {{ include "microservice.serviceAccountName" . }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 30 }}
       {{- with .Values.deployment.initContainers }}
       initContainers:
         {{- range . }}
