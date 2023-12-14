@@ -50,6 +50,16 @@ rbac:
   #       - list
   rules: []
 
+datadog:
+  enabled: false
+  annotations: {}
+  # Optional: Defaults to env.APP_ENV with a fallback of 'production' if left empty
+  env: ""
+  # Optional: Defaults to the chat name if left empty
+  service: ""
+  # Optional: Defaults to the same tag as for the container if left empty
+  version: ""
+
 podAnnotations: {}
 podLabels: {}
 

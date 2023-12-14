@@ -6,6 +6,7 @@ metadata:
   name: {{ $fullName }}
   labels:
     {{- include "microservice.labels" . | nindent 4 }}
+    {{- include "helpers.datadog-service-labels" . | indent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ max .Values.replicaCount (dig "minZones" 0 .Values.scheduler) }}
@@ -71,11 +72,13 @@ spec:
   template:
     metadata:
       annotations:
+        {{- include "helpers.datadog-annotations" . | indent 8 }}
         {{- include "microservice.checksumPodAnnotations" . | indent 8 }}
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
       labels:
+        {{- include "helpers.datadog-service-labels" . | indent 8 }}
         {{- include "microservice.selectorLabels" . | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}

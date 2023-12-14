@@ -60,6 +60,26 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
+Datadog Unified Service Tags labels
+*/}}
+{{- define "helpers.datadog-service-labels" -}}
+{{- if .Values.datadog.enabled }}
+tags.datadoghq.com/env: {{ .Values.datadog.env | default "production" .Values.env.APP_ENV | quote }}
+tags.datadoghq.com/service: {{ include "microservice.name" . | quote }}
+tags.datadoghq.com/version: {{ include "helpers.image-tag" . | quote }}
+{{- end }}
+{{- end }}
+
+{{/*
+Datadog Annotations, for example for logs, checks, etc.
+*/}}
+{{- define "helpers.datadog-annotations" -}}
+{{- if .Values.datadog.enabled }}
+{{ toYaml .Values.datadog.annotations }}
+{{- end }}
+{{- end }}
+
+{{/*
 Create a helper to map environment variables, both for sensitive (secrets) and non-sensitive (env vars).
 */}}
 {{- define "helpers.list-env-variables"}}
