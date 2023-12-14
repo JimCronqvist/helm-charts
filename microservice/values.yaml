@@ -60,6 +60,12 @@ datadog:
   # Optional: Defaults to the same tag as for the container if left empty
   version: ""
 
+tailscale:
+  enabled: false
+  hostname: ""
+  tags: ""
+  prefix: ""
+
 podAnnotations: {}
 podLabels: {}
 

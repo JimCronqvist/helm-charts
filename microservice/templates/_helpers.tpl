@@ -80,6 +80,17 @@ Datadog Annotations, for example for logs, checks, etc.
 {{- end }}
 
 {{/*
+Tailscale Operator Service labels
+*/}}
+{{- define "helpers.tailscale-labels" -}}
+{{- if and .Values.tailscale .Values.tailscale.enabled }}
+tailscale.com/expose: "true"
+tailscale.com/hostname: "{{ printf "%s-" .Values.tailscale.prefix | trimPrefix "-" }}{{ .Values.tailscale.hostname | default (printf "%s-%s" .Release.Namespace (include "microservice.fullname" .)) }}"
+tailscale.com/tags: {{ .Values.tailscale.tags | default "tag:k8s" | quote }}
+{{- end }}
+{{- end }}
+
+{{/*
 Create a helper to map environment variables, both for sensitive (secrets) and non-sensitive (env vars).
 */}}
 {{- define "helpers.list-env-variables"}}
