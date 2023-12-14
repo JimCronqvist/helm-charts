@@ -3,4 +3,3 @@ tailscale-operator:
   oauth:
     clientId: ""
     clientSecret: ""
-

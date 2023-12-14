@@ -80,9 +80,9 @@ Datadog Annotations, for example for logs, checks, etc.
 {{- end }}
 
 {{/*
-Tailscale Operator Service labels
+Tailscale Operator Service annotations
 */}}
-{{- define "helpers.tailscale-labels" -}}
+{{- define "helpers.tailscale-annotations" -}}
 {{- if and .Values.tailscale .Values.tailscale.enabled }}
 tailscale.com/expose: "true"
 tailscale.com/hostname: "{{ printf "%s-" .Values.tailscale.prefix | trimPrefix "-" }}{{ .Values.tailscale.hostname | default (printf "%s-%s" .Release.Namespace (include "microservice.fullname" .)) }}"

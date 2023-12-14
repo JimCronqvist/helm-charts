@@ -5,7 +5,11 @@ metadata:
   name: {{ include "microservice.fullname" . }}
   labels:
     {{- include "microservice.labels" . | nindent 4 }}
-    {{- include "helpers.tailscale-labels" . | indent 4 }}
+  annotations:
+    {{- with .Values.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- include "helpers.tailscale-annotations" . | indent 4 }}
 spec:
   type: {{ .Values.service.type }}
   {{- if list "LoadBalancer" "NodePort" | has .Values.service.type }}

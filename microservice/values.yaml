@@ -112,6 +112,7 @@ service:
   name: http
   appProtocol: http
   port: 80
+  annotations: {}
 
   # Which container is the port used by, defaults to the primary container. Mostly used for sidecars.
   #container:
