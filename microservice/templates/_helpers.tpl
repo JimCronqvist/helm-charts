@@ -74,7 +74,7 @@ tags.datadoghq.com/version: {{ include "helpers.image-tag" . | quote }}
 Datadog Annotations, for example for logs, checks, etc.
 */}}
 {{- define "helpers.datadog-annotations" -}}
-{{- if .Values.datadog.enabled }}
+{{- if and .Values.datadog.enabled .Values.datadog.annotations }}
 {{ toYaml .Values.datadog.annotations }}
 {{- end }}
 {{- end }}
