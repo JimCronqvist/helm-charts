@@ -64,7 +64,7 @@ Datadog Unified Service Tags labels
 */}}
 {{- define "helpers.datadog-service-labels" -}}
 {{- if .Values.datadog.enabled }}
-tags.datadoghq.com/env: {{ .Values.datadog.env | default "production" .Values.env.APP_ENV | quote }}
+tags.datadoghq.com/env: {{ .Values.datadog.env | default (default "production" .Values.env.APP_ENV) | quote }}
 tags.datadoghq.com/service: {{ include "microservice.name" . | quote }}
 tags.datadoghq.com/version: {{ include "helpers.image-tag" . | quote }}
 {{- end }}

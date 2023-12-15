@@ -9,7 +9,9 @@ datadog-operator:
   appKeyExistingSecret: datadog-secret
   apiKeyExistingSecret: datadog-secret
 
-  watchNamespaces: []
+  watchNamespaces:
+    - datadog
+    - monitoring
 
 secrets:
   secrets:
