@@ -31,7 +31,9 @@ datadogAgent:
   # Configuration options available here:
   # https://github.com/DataDog/datadog-operator/blob/main/docs/configuration.v2alpha1.md
   global: {}
-  override: {}
+  override:
+    nodeAgent:
+      priorityClassName: "system-node-critical"
   features:
     #admissionController:
     #  enabled: true
