@@ -216,8 +216,27 @@ pvc: {}
 
 # Paths for the probes to do http health checkups against. Set to empty or false to disable the probe.
 probes:
+  # Use to check if the container is alive, the pod will be restarted if this fails. Best practice:
+  # - Only include basic checks, never include checks on connections to other services (e.g. database, redis, etc.)
+  # - Do not put a too strict failureThreshold, as you want to avoid a restart if the container is under heavy load, but not dead.
   livenessPath: /health
+  # Use to check if the container is ready to receive traffic, the pod will be removed from the service if this fails. Best practice:
+  # - Include checks on connections to all vital services (e.g. database, redis, etc.), but keep it light and fast.
+  # - Always specify a readiness probe to make sure that the pod only gets traffic if it can properly handle incoming requests
   readinessPath: /health
+  # Use to check if the container has initialized all bootstrap tasks and is ready to receive liveness checks. Best practice:
+  # - Only needed if the pod requires initializing time, e.g. has warmup tasks or longer booting up time.
+  # - Could take longer to complete, because they are only called when the pod is initializing.
+  # - Often uses the same endpoint as livenessPath, but with a less strict failure threshold.
+  # - Better to use this than an initialDelaySeconds on the liveness probe, as this will be used as "up to x seconds"
+  #   instead of "no matter what, wait for x seconds before checking anything else". Resulting in faster startup times
+  #   when the boot time can be dynamic.
+  startupPath:
+
+  # Or specify a full custom config for the probes
+  # livenessProbe:
+  # readinessProbe:
+  # startupProbe:
 
 jobs: []
   # - name: Bootstrap task

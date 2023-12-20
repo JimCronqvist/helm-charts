@@ -129,17 +129,35 @@ spec:
             {{- range $extra := .Values.service.extraPorts }}
             {{- include "helpers.ports" (list $extra "primary") | indent 12 }}
             {{- end }}
-          {{- if and .Values.service.enabled .Values.probes .Values.probes.livenessPath (not .Values.deployment.debug) }}
+          {{- if and .Values.service.enabled .Values.probes (or .Values.probes.livenessPath .Values.probes.livenessProbe) (not .Values.deployment.debug) }}
           livenessProbe:
+            {{- if .Values.probes.livenessProbe }}
+            {{- toYaml .Values.probes.livenessProbe | nindent 12 }}
+            {{- else }}
             httpGet:
               path: {{ eq .Values.probes.livenessPath "/" | ternary "" .Values.probes.livenessPath }}
               port: http
+            {{- end }}
           {{- end }}
-          {{- if and .Values.service.enabled .Values.probes .Values.probes.readinessPath (not .Values.deployment.debug) }}
+          {{- if and .Values.service.enabled .Values.probes (or .Values.probes.readinessPath .Values.probes.readinessProbe) (not .Values.deployment.debug) }}
           readinessProbe:
+            {{- if .Values.probes.readinessProbe }}
+            {{- toYaml .Values.probes.readinessProbe | nindent 12 }}
+            {{- else }}
             httpGet:
               path: {{ eq .Values.probes.readinessPath "/" | ternary "" .Values.probes.readinessPath }}
               port: http
+            {{- end }}
+          {{- end }}
+          {{- if and .Values.service.enabled .Values.probes (or .Values.probes.startupPath .Values.probes.startupProbe) (not .Values.deployment.debug) }}
+          startupProbe:
+            {{- if .Values.probes.startupProbe }}
+            {{- toYaml .Values.probes.startupProbe | nindent 12 }}
+            {{- else }}
+            httpGet:
+              path: {{ eq .Values.probes.startupPath "/" | ternary "" .Values.probes.startupPath }}
+              port: http
+            {{- end }}
           {{- end }}
           resources:
             {{- include "helpers.wrapResourcesWithQuotes" .Values.resources | indent 12 }}
