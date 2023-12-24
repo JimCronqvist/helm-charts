@@ -1,12 +1,32 @@
 
 karpenter:
+  logLevel: info
+  podDisruptionBudget:
+    name: karpenter
+    maxUnavailable: 1
+  controller:
+    resources:
+      requests:
+          cpu: "1"
+          memory: 1Gi
+      limits:
+          cpu: "1"
+          memory: 1Gi
+  additionalLabels:
+    tags.datadoghq.com/service: karpenter
+  podLabels:
+    tags.datadoghq.com/service: karpenter
+
   settings:
     # The EKS cluster name
     clusterName:
     # The public EKS Cluster https endpoint
     clusterEndpoint:
     # The Karpenter SQS queue name
-    interruptionQueueName:
+    interruptionQueue:
+
+    featureGates:
+      drift: true
   serviceAccount:
     # Override the name, as terraform will usually set the irsa to only allow 'karpenter:karpenter' in the trust policy.
     name: karpenter
