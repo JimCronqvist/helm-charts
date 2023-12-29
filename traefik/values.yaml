@@ -2,9 +2,15 @@ traefik:
   rbac:
     enabled: true
 
+  ingressRoute:
+    healthcheck:
+      enabled: true
+      entryPoints:
+        - web
+        - websecure
   # Enable dashboard - don't keep it publicly open on production environments without appropriate protection (fw, security groups, auth, ip filtering, etc.)
-  dashboard:
-    enabled: true
+    dashboard:
+      enabled: true
   ports:
     traefik:
       expose: true
@@ -54,6 +60,10 @@ traefik:
 
   deployment:
     replicas: 3
+    labels:
+      tags.datadoghq.com/service: traefik
+    podLabels:
+      tags.datadoghq.com/service: traefik
 
   #  # Letsencrypt permissions
   #  initContainers:
