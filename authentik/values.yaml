@@ -1,0 +1,26 @@
+authentik:
+  service:
+    annotations: {}
+      #tailscale.com/expose: "true"
+
+  authentik:
+    secret_key: "Please_Generate_A_50_Char_Key"
+    postgresql:
+      #host: ""
+      name: "authentik"
+      user: "authentik"
+      password: ""
+      port: 5432
+    redis:
+      #host: ""
+      password: ""
+
+  ingress:
+    enabled: false
+
+  postgresql:
+    enabled: false
+    postgresqlPassword: ""
+
+  redis:
+    enabled: false

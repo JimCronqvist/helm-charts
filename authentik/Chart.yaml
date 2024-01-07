@@ -1,0 +1,13 @@
+apiVersion: v2
+name: authentik
+description: A Helm chart for Authentik
+type: application
+
+# The chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: 0.1.0
+
+dependencies:
+  - name: authentik
+    version: 2023.10.5
+    repository: https://charts.goauthentik.io/
