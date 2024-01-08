@@ -1,0 +1,26 @@
+enabled: false
+responseHeaderMicroservice: false
+tls:
+  enabled: true
+  forceHttps: true
+  #certResolver: letsencrypt
+  #domains:
+  #  - main: domain.com
+  #    sans:
+  #      - test.domain.com
+routes:
+# Path is required, and will match against PathPrefix(`...`), with an optional Host() or HostRegexp() match (multiple with commas)
+# priority: 0, means the priority will be ignored, and the default traefik rules length sorting is applied.
+# stripPrefix: {path}, use to remove a base path when the container does not expect it, such as nginx with static files
+#
+# - path: /
+#   host: test.local
+#   serviceName: authentik
+#   servicePort: 80
+#   priority: 0
+#   stripPrefix:
+#
+# - path: /{path:([0-9]{6,}}
+#   host: test(.*).local
+#   priority: 0
+#   stripPrefix: /base-path

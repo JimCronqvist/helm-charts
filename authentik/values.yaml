@@ -1,4 +1,15 @@
+ingressroute:
+  enabled: true
+  # Override the host for all routes defined routes, example: auth.example.com
+  overrideHost: ""
+  routes:
+    - path: /
+      host: authentik
+      serviceName: authentik
+      servicePort: 80
+
 authentik:
+  # First time access: go to path "/if/flow/initial-setup/" to create the first default user.
   service:
     annotations: {}
       #tailscale.com/expose: "true"

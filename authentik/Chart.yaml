@@ -8,6 +8,10 @@ type: application
 version: 0.1.0
 
 dependencies:
+  - name: ingressroute
+    version: 0.1.x
+    repository: file://../ingressroute
+    condition: ingressroute.enabled
   - name: authentik
     version: 2023.10.5
     repository: https://charts.goauthentik.io/

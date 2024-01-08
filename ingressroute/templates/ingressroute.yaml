@@ -1,4 +1,4 @@
-{{- $ingressroute := .Values.ingressroute -}}
+{{- $ingressroute := .Values -}}
 {{- if $ingressroute.enabled -}}
 {{- $fullName := include "microservice.fullname" . -}}
 {{- $labels := include "microservice.labels" . -}}
