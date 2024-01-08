@@ -1,5 +1,5 @@
 ingressroute:
-  enabled: true
+  enabled: false
   # Override the host for all routes defined routes, example: auth.example.com
   overrideHost: ""
   routes:

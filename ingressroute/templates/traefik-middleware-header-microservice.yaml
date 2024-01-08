@@ -1,4 +1,4 @@
-{{- $ingressroute := .Values.ingressroute -}}
+{{- $ingressroute := .Values -}}
 {{- if and $ingressroute.enabled $ingressroute.responseHeaderMicroservice }}
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
