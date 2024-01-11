@@ -47,6 +47,52 @@ spec:
 {{- end }}
 {{- end }}
 {{/*
+Rate Limit middleware (and real-ip-header sometimes)
+*/}}
+{{- range $index, $route := $ingressroute.routes }}
+{{- if and .rateLimit .rateLimit.average }}
+{{- if and (not .rateLimit.ipStrategy) (not .rateLimit.requestHeaderName) }}
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ $fullName }}-route{{ $index }}-header-x-real-ip
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  headers:
+    customRequestHeaders:
+      X-Real-IP: "{client.ip}"
+    customResponseHeaders:
+      X-Real-IP: "{client.ip}"
+---
+{{- end }}
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ $fullName }}-route{{ $index }}-rate-limit
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  rateLimit:
+    average: {{ .rateLimit.average | default 0 }}
+    burst: {{ .rateLimit.burst | default 1 }}
+    period: {{ .rateLimit.period | default "1m" | quote }}
+    sourceCriterion:
+      {{- with .rateLimit.ipStrategy }}
+      ipStrategy:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .rateLimit.requestHeaderName }}
+      requestHeaderName: {{ .rateLimit.requestHeaderName | quote }}
+      {{- else if .rateLimit.ipStrategy }}
+      requestHeaderName: "X-Forwarded-For"
+      {{- else }}
+      requestHeaderName: "X-Real-IP"
+      {{- end }}
+---
+{{- end }}
+{{- end }}
+{{/*
 Redirect middleware
 */}}
 {{- range $index, $route := $ingressroute.routes }}
@@ -61,6 +107,48 @@ spec:
   redirectRegex:
     regex: {{ .redirect.regex }}
     replacement: {{ .redirect.replacement }}
+---
+{{- end }}
+{{- end }}
+{{/*
+ForwardAuth middleware
+*/}}
+{{- range $index, $route := $ingressroute.routes }}
+{{- if and .forwardAuth .forwardAuth.address }}
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ $fullName }}-route{{ $index }}-forward-auth
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  forwardAuth:
+    address: {{ .forwardAuth.address | quote }}
+    {{- toYaml (omit .forwardAuth "address") | nindent 4 }}
+---
+{{- end }}
+{{- end }}
+{{/*
+Headers middleware
+*/}}
+{{- range $index, $route := $ingressroute.routes }}
+{{- if and .headers (or .headers.response .headers.request) }}
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ $fullName }}-route{{ $index }}-headers
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  headers:
+    {{- with .headers.request }}
+    customRequestHeaders:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
+    {{- with .headers.response }}
+    customResponseHeaders:
+      {{- toYaml . | nindent 6 }}
+    {{- end }}
 ---
 {{- end }}
 {{- end }}
@@ -116,7 +204,19 @@ spec:
         - name: {{ $fullName }}-redirect-https
         {{- end }}
         {{- if $ingressroute.responseHeaderMicroservice }}
-        - name: {{ $fullName }}-header
+        - name: {{ $fullName }}-header-x-microservice
+        {{- end }}
+        {{- if .rateLimit }}
+        {{- if and (not .rateLimit.ipStrategy) (not .rateLimit.requestHeaderName) }}
+        - name: {{ $fullName }}-route{{ $index }}-header-x-real-ip
+        {{- end }}
+        - name: {{ $fullName }}-route{{ $index }}-rate-limit
+        {{- end }}
+        {{- if .forwardAuth }}
+        - name: {{ $fullName }}-route{{ $index }}-forward-auth
+        {{- end }}
+        {{- if .headers }}
+        - name: {{ $fullName }}-route{{ $index }}-headers
         {{- end }}
         {{- if .rewrite }}
         - name: {{ $fullName }}-route{{ $index }}-rewrite
