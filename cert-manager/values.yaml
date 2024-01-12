@@ -8,6 +8,10 @@ cert-manager:
   serviceAccount:
     create: true
     name: cert-manager
+    annotations:
+      eks.amazonaws.com/role-arn:
+  securityContext:
+    fsGroup: 1001
   webhook:
     # Default port is 10250, which is also used for kubelet on Fargate. Changing it to 10260 to avoid conflict.
     securePort: 10260
