@@ -82,6 +82,8 @@ securityContext: {}
 
 terminationGracePeriodSeconds: 30
 
+priorityClassName:
+
 deployment:
   enabled: true
   # Leave empty to use the defaults set in the Docker image. command = ENTRYPOINT, args = CMD, in the docker world
