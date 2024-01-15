@@ -18,13 +18,6 @@ traefik:
     websecure:
       tls: {}
 
-  #      # Letsencrypt example with DNSMadeEasy
-  #      certResolver: letsencrypt-dnsmadeeasy
-  #      domains:
-  #        - main: ${DOMAIN}
-  #          sans:
-  #            - "*.${DOMAIN}"
-
   # Enable access logs
   logs:
     general:
@@ -52,11 +45,19 @@ traefik:
   persistence:
     enabled: false
 
+  providers:
+    kubernetesCRD:
+      allowExternalNameServices: true
+
   ## Use an existing tls cert and set as default, for example when you use cert-manager for certificate management
   #tlsStore:
   #  default:
   #    defaultCertificate:
   #      secretName: wildcard-example-com-tls
+
+  #
+  # High Availability Configuration below
+  #
 
   deployment:
     replicas: 3
@@ -65,31 +66,36 @@ traefik:
     podLabels:
       tags.datadoghq.com/service: traefik
 
-  #  # Letsencrypt permissions
-  #  initContainers:
-  #    - name: volume-permissions
-  #      image: busybox:latest
-  #      command: [ "sh", "-c", "chmod -Rv 600 /data/* || true" ]
-  #      volumeMounts:
-  #        - name: data
-  #          mountPath: /data
-  #
-  # Letsencrypt example with DNSMadeEasy
-  #certResolvers:
-  #  letsencrypt-dnsmadeeasy:
-  #    #caServer: "https://acme-staging-v02.api.letsencrypt.org/directory"
-  #    dnsChallenge:
-  #      provider: dnsmadeeasy
-  #      delaybeforecheck: 60
-  #    storage: /data/letsencrypt-dnsmadeeasy.json
-  #env:
-  #  - name: DNSMADEEASY_API_KEY
-  #    valueFrom:
-  #      secretKeyRef:
-  #        name: dnsmadeeasy
-  #        key: apiKey
-  #  - name: DNSMADEEASY_API_SECRET
-  #    valueFrom:
-  #      secretKeyRef:
-  #        name: dnsmadeeasy
-  #        key: apiSecret
+  priorityClassName: "system-cluster-critical"
+
+  topologySpreadConstraints:
+    # This example topologySpreadConstraints forces the scheduler to put traefik pods on nodes where no other traefik pods are scheduled.
+    - maxSkew: 1
+      topologyKey: kubernetes.io/hostname
+      whenUnsatisfiable: DoNotSchedule
+      labelSelector:
+        matchLabels:
+          app.kubernetes.io/instance: '{{ .Release.Name }}-{{ .Release.Namespace }}'
+      matchLabelKeys:
+        - pod-template-hash
+    - maxSkew: 2
+      topologyKey: topology.kubernetes.io/zone
+      whenUnsatisfiable: ScheduleAnyway
+      labelSelector:
+        matchLabels:
+          app.kubernetes.io/instance: '{{ .Release.Name }}-{{ .Release.Namespace }}'
+      matchLabelKeys:
+        - pod-template-hash
+
+  # Termination grace period should be set higher than the "grace period" of the LB you are using
+  terminationGracePeriodSeconds: 60
+
+  # Recycle pods one by one
+  podDisruptionBudget:
+    enabled: true
+    maxUnavailable: 1
+  updateStrategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
