@@ -82,6 +82,9 @@ securityContext: {}
 
 terminationGracePeriodSeconds: 30
 
+# Set the priority class, or give set a value directly via priorityClassValue and a priority class will be generated.
+# If both are specified, priorityClassValue will be used.
+priorityClassValue:
 priorityClassName:
 
 deployment:
@@ -192,6 +195,7 @@ autoscaling:
   # targetMemoryUtilizationPercentage: 80
 
 nodeSelector: {}
+  # karpenter.sh/nodepool: on-demand
 
 tolerations: []
 

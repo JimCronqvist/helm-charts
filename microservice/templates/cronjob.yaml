@@ -71,8 +71,8 @@ spec:
           affinity:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- with $.Values.tolerations }}
+          {{- if or $.Values.tolerations $.Values.nodeSelector }}
           tolerations:
-            {{- toYaml . | nindent 12 }}
+            {{- include "microservice.tolerations" $ | nindent 12 }}
           {{- end }}
 {{- end }}

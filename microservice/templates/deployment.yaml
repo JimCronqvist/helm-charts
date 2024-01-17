@@ -84,7 +84,9 @@ spec:
         {{- toYaml . | nindent 8 }}
         {{- end }}
     spec:
-      {{- if .Values.priorityClassName }}
+      {{- if .Values.priorityClassValue }}
+      priorityClassName: {{ $fullName }}
+      {{- else if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
       {{- with .Values.imagePullSecrets }}
@@ -208,7 +210,7 @@ spec:
       {{- if or .Values.affinity .Values.scheduler.sameHost }}
       affinity:
         {{- with .Values.affinity }}
-        {{- toYaml . | nindent 8 }}
+        {{- tpl (toYaml .) $ | nindent 8 }}
         {{- end }}
         {{- if .Values.scheduler.sameHost }}
         podAffinity:
@@ -219,14 +221,14 @@ spec:
               topologyKey: kubernetes.io/hostname
         {{- end }}
       {{- end }}
-      {{- with .Values.tolerations }}
+      {{- if or .Values.tolerations .Values.nodeSelector }}
       tolerations:
-        {{- toYaml . | nindent 8 }}
+        {{- include "microservice.tolerations" . | nindent 8 }}
       {{- end }}
       {{- if or .Values.topologySpreadConstraints .Values.scheduler.minZones }}
       topologySpreadConstraints:
         {{- with .Values.topologySpreadConstraints }}
-        {{- toYaml . | nindent 8 }}
+        {{- tpl (toYaml .) $ | nindent 8 }}
         {{- end }}
         {{- if .Values.scheduler.minZones }}
         - maxSkew: 1

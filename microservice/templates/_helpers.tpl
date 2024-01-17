@@ -60,6 +60,27 @@ Create the name of the service account to use
 {{- end }}
 
 {{/*
+Generate tolerations based on karpenter.sh/nodepool nodeSelector and merge them with .Values.tolerations
+*/}}
+{{- define "microservice.tolerations" -}}
+{{- $exists := false -}}
+{{- if gt (len .Values.tolerations) 0 }}
+{{- $exists = true }}
+{{- toYaml .Values.tolerations }}
+{{- end }}
+{{- if hasKey .Values.nodeSelector "karpenter.sh/nodepool" }}
+{{- $exists = true }}
+- key: "karpenter.sh/nodepool"
+  operator: "Equal"
+  value: {{ dig "karpenter.sh/nodepool" "default" .Values.nodeSelector | quote }}
+  effect: ""
+{{- end }}
+{{- if not $exists }}
+{{- toYaml (list) }}
+{{- end }}
+{{- end }}
+
+{{/*
 Datadog Unified Service Tags labels
 */}}
 {{- define "helpers.datadog-service-labels" -}}
