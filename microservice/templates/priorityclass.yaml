@@ -2,7 +2,7 @@
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
-  name: {{ include "microservice.fullname" . }}
+  name: {{ .Release.Namespace }}-{{ include "microservice.fullname" . }}
   labels:
     {{- include "microservice.labels" . | nindent 4 }}
 value: {{ .Values.priorityClassValue | default 0 }}

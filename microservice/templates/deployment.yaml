@@ -85,7 +85,7 @@ spec:
         {{- end }}
     spec:
       {{- if .Values.priorityClassValue }}
-      priorityClassName: {{ $fullName }}
+      priorityClassName: {{ .Release.Namespace }}-{{ $fullName }}
       {{- else if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName }}
       {{- end }}
