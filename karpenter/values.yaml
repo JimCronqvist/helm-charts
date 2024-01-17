@@ -40,6 +40,7 @@ provisioners:
     nodeClass: al2
   - name: on-demand
     nodePool: onDemand
+    nodePoolTaint: NoSchedule
     nodeClass: al2
   - name: reserved-instances
     nodePool: reservedInstances
@@ -77,6 +78,7 @@ nodePool:
     # Define a lifetime on the provisioned nodes, to automatically force recreation with newer up-to-date AMIs with
     # security updates and latest versions installed. Including allowing new Kubernetes versions to be rolled out to
     # nodes automatically. Defaults to 720h if not defined.
+    # Note: Drift detection will also force recreation of nodes when a new version exist, when detected.
     expireAfter: 336h # 14 days = 14 * 24 Hours
 
     # Priority given to the NodePool when the scheduler considers which NodePool
@@ -115,6 +117,10 @@ nodePool:
     limits:
       cpu: 100
       memory: 1000Gi
+
+    #taints:
+    #  - key: karpenter.sh/nodepool
+    #    effect: NoSchedule
 
     requirements:
       - key: kubernetes.io/arch

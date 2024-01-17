@@ -12,10 +12,32 @@ metadata:
 spec:
   template:
     spec:
+      kubelet: {}
       nodeClassRef:
         name: {{ $provisioner.nodeClass }}
       requirements:
         {{- dig ($provisioner.nodePool) "requirements" (list) $.Values.nodePool | toYaml | nindent 8 }}
+      {{- if or $provisioner.nodePoolTaint (gt (len (dig ($provisioner.nodePool) "taints" (list) $.Values.nodePool)) 0) }}
+      taints:
+        {{- if $provisioner.nodePoolTaint }}
+        - key: "karpenter.sh/nodepool"
+          value: {{ $provisioner.name | quote }}
+          effect: {{ $provisioner.nodePoolTaint | quote }}
+        {{- end }}
+        {{- with dig ($provisioner.nodePool) "taints" (list) $.Values.nodePool }}
+        {{- range . }}
+        - key: {{ .key | quote }}
+          {{- if eq .key "karpenter.sh/nodepool" }}
+          value: {{ $provisioner.name | quote }}
+          {{- else if .value }}
+          value: {{ .value | quote }}
+          {{- end }}
+          {{- if .effect }}
+          effect: {{ .effect | quote }}
+          {{- end }}
+        {{ end }}
+        {{- end }}
+      {{- end }}
   limits:
     cpu: {{ dig ($provisioner.nodePool) "limits" "cpu" 0 $.Values.nodePool | quote }}
     memory: {{ dig ($provisioner.nodePool) "limits" "memory" "0Gi" $.Values.nodePool }}
