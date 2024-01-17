@@ -1,0 +1,42 @@
+microservice:
+  replicaCount: 3
+
+  nameOverride: inflate
+
+  image:
+    repository: public.ecr.aws/eks-distro/kubernetes/pause
+    tag: "latest"
+
+  # Disable everything not required
+  imagePullSecrets: []
+  serviceAccount:
+    create: false
+  service:
+    enabled: false
+  ingressroute:
+    enabled: false
+  probes:
+    livenessPath:
+    readinessPath:
+
+  # Priority class value to use for the pods
+  priorityClassValue: -1
+
+  # Define some scheduling constraints
+  scheduler:
+    minZones: 3
+
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        - labelSelector:
+            matchLabels:
+              app.kubernetes.io/name: '{{ template "microservice.name" . }}'
+              app.kubernetes.io/instance: '{{ .Release.Name }}-{{ .Release.Namespace }}'
+          topologyKey: kubernetes.io/hostname
+
+  # Define the amount of resources we will have over-provisioned, to allow quick pod preemption when there is not enough nodes
+  resources:
+    requests:
+      cpu: 1
+      memory: 2Gi
