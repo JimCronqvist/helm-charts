@@ -104,6 +104,10 @@ deployment:
     #  image: nginx:${IMAGE_TAG}
     #  imagePullPolicy: Always
     #  mounts: false
+  lifecycle: {}
+    # preStop:
+    #   exec:
+    #     command: ["/bin/bash","-c","/bin/sleep 1; kill -QUIT 1"]
 
   # For advanced users: Control what Kind the deployment should have, Deployment or StatefulSet.
   kind: Deployment
