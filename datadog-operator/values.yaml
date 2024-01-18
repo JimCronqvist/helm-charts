@@ -37,6 +37,8 @@ datadogAgent:
   override:
     nodeAgent:
       priorityClassName: "system-node-critical"
+      tolerations:
+        - operator: Exists
   features:
     #admissionController:
     #  enabled: true
