@@ -1,4 +1,6 @@
 external-dns:
+  podLabels:
+    tags.datadoghq.com/service: external-dns
   serviceAccount:
     create: true
     name: "external-dns-sa"

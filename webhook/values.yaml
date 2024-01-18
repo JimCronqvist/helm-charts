@@ -48,6 +48,8 @@ rbac:
   rules: []
 
 podAnnotations: {}
+podLabels:
+  tags.datadoghq.com/service: webhook
 
 podSecurityContext: {}
   # fsGroup: 2000

@@ -18,6 +18,9 @@ postgresql:
   primary:
     name: master
 
+    podLabels:
+      tags.datadoghq.com/service: postgresql
+
     resources:
       requests:
         memory: 256Mi

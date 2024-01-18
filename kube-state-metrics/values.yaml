@@ -1,4 +1,7 @@
 kube-state-metrics:
+  customLabels:
+    tags.datadoghq.com/service: kube-state-metrics
+
   serviceAccount:
     create: true
 

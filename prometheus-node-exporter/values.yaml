@@ -1,3 +1,5 @@
 prometheus-node-exporter:
+  podLabels:
+    tags.datadoghq.com/service: prometheus-node-exporter
   serviceAccount:
     create: true

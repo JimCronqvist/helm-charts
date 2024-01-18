@@ -40,6 +40,8 @@ aws-ebs-csi-driver:
         tagSpecification_4: "pvname={{ .PVName }}"
 
   controller:
+    podLabels:
+      tags.datadoghq.com/service: aws-ebs-csi-driver
     initContainers:
       - name: disable-default-sc-gp2
         image: bitnami/kubectl:latest

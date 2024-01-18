@@ -1,4 +1,7 @@
 kube-prometheus-stack:
+  commonLabels:
+    tags.datadoghq.com/service: kube-prometheus-stack
+
   ## Create default rules for monitoring the cluster
   ## Disable rules for unreachable components
   ##
@@ -34,6 +37,9 @@ kube-prometheus-stack:
 
   prometheusOperator:
     admissionWebhooks:
+      #deployment:
+      #  podLabels:
+      #    tags.datadoghq.com/service: kube-prometheus-stack
       failurePolicy: Ignore
 
   ## additional configuration options available here: https://github.com/prometheus-community/helm-charts/blob/main/charts/kube-prometheus-stack/values.yaml

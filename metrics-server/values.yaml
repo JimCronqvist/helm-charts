@@ -1,5 +1,7 @@
 metrics-server:
   replicas: 2
+  podLabels:
+    tags.datadoghq.com/service: metrics-server
   serviceAccount:
     create: true
     name: metrics-server

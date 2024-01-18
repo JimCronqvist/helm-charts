@@ -1,3 +1,5 @@
 keda:
+  podLabels:
+    tags.datadoghq.com/service: keda
   crds:
     install: true

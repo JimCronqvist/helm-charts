@@ -1,4 +1,7 @@
 gha-runner-scale-set:
+  podLabels:
+    tags.datadoghq.com/service: github-actions-runner
+
   # GitHub url for where you want to configure runners
   # - For a repo: https://github.com/org/repo
   # - For an org: https://github.com/org

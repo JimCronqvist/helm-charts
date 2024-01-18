@@ -18,6 +18,9 @@ mysql:
   primary:
     name: master
 
+    podLabels:
+      tags.datadoghq.com/service: mysql
+
     resources:
       requests:
         memory: 256Mi

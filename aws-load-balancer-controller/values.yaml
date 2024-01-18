@@ -1,4 +1,6 @@
 aws-load-balancer-controller:
+  podLabels:
+    tags.datadoghq.com/service: aws-load-balancer-controller
   serviceAccount:
     # Override the name, as terraform will usually set the irsa to only allow 'kube-system:aws-load-balancer-controller' in the trust policy.
     name: aws-load-balancer-controller

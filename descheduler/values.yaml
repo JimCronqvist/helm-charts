@@ -1,0 +1,3 @@
+descheduler:
+  podLabels:
+    tags.datadoghq.com/service: descheduler

@@ -11,6 +11,9 @@ image: ghcr.io/jimcronqvist/node-octokit:master
 
 pullPolicy: Always
 
+podLabels:
+  tags.datadoghq.com/service: argocd-plugin-generator
+
 # Command to execute to start the web server
 command: node
 args:

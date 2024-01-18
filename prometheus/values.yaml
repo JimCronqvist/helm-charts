@@ -1,10 +1,14 @@
-server:
-  retention: 1h
+prometheus:
+  server:
+    podLabels:
+      tags.datadoghq.com/service: prometheus
 
-  resources:
-    requests:
-      cpu: 500m
-      memory: 512Mi
+    retention: 1h
 
-  global:
-    scrape_interval: 15s
+    resources:
+      requests:
+        cpu: 500m
+        memory: 512Mi
+
+    global:
+      scrape_interval: 15s

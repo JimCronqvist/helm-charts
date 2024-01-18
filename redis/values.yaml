@@ -5,6 +5,8 @@ redis:
 
   # Override how pvc's are managed throughout the lifecycle of the Stateful Set for the different components of redis
   master:
+    podLabels:
+      tags.datadoghq.com/service: redis
     persistentVolumeClaimRetentionPolicy:
       enabled: true
       whenScaled: Retain
@@ -12,6 +14,8 @@ redis:
     persistence:
       enabled: true
   replica:
+    podLabels:
+      tags.datadoghq.com/service: redis
     persistentVolumeClaimRetentionPolicy:
       enabled: true
       whenScaled: Retain

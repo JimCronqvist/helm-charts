@@ -1,7 +1,14 @@
 microservice:
+  replicaCount: 1
+
+  nameOverride: "speedtest"
+
   image:
     repository: openspeedtest/latest
     tag: "latest"
+
+  datadog:
+    enabled: true
 
   imagePullSecrets: []
 

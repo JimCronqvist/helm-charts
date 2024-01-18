@@ -16,6 +16,8 @@ kubernetes-dashboard:
     enabled: false
 
   app:
+    labels:
+      tags.datadoghq.com/service: kubernetes-dashboard
     ingress:
       # A Traefik IngressRoute is utilized instead of the included Ingress
       enabled: false

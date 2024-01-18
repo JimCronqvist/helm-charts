@@ -1,0 +1,7 @@
+harbor:
+  core:
+    podLabels:
+      tags.datadoghq.com/service: harbor
+  portal:
+    podLabels:
+      tags.datadoghq.com/service: harbor

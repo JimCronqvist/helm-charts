@@ -7,6 +7,9 @@ microservice:
     repository: public.ecr.aws/eks-distro/kubernetes/pause
     tag: "latest"
 
+  datadog:
+    enabled: true
+
   # Disable everything not required
   imagePullSecrets: []
   serviceAccount:

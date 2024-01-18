@@ -12,5 +12,7 @@ redis-cluster:
   persistence:
     enabled: true
   redis:
+    podLabels:
+      tags.datadoghq.com/service: redis-cluster
     affinity: {}
     topologySpreadConstraints: []

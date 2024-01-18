@@ -1,4 +1,6 @@
 cilium:
+  podLabels:
+    tags.datadoghq.com/service: cilium
   cni:
     chainingMode: aws-cni
   enableIPv4Masquerade: false

@@ -1,2 +1,4 @@
-smb-csi-driver:
+csi-driver-smb:
+  podLabels:
+    tags.datadoghq.com/service: smb-csi-driver
 

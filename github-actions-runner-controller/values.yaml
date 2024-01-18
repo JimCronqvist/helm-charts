@@ -1,4 +1,6 @@
 gha-runner-scale-set-controller:
+  labels:
+    tags.datadoghq.com/service: github-actions-runner-controller
   flags:
     # Log level can be set here with one of the following values: "debug", "info", "warn", "error".
     # Defaults to "debug" in GitHubs helm chart used as the dependency.

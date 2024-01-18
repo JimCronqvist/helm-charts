@@ -2,6 +2,9 @@ datadog-operator:
   enabled: true
   installCRDs: true
 
+  podLabels:
+    tags.datadoghq.com/service: datadog-operator
+
   # Intake site
   site: datadoghq.eu
 

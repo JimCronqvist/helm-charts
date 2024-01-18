@@ -4,6 +4,8 @@ password: <password>
 
 kubecost:
   global:
+    additionalLabels:
+      tags.datadoghq.com/service: kubecost
     grafana:
       enabled: false
       proxy: false
