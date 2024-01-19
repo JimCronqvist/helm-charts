@@ -2,9 +2,10 @@ cert-manager:
   # The chart is a bit buggy with the CRDs installation if the releaseName is provided, lets override the name to avoid issues
   fullnameOverride: cert-manager
   #namespace: cert-manager
-  extraArgs:
-    - --enable-certificate-owner-ref=true
   installCRDs: true
+  dns01RecursiveNameservers: 8.8.8.8:53,8.8.4.4:53
+  dns01RecursiveNameserversOnly: true
+  enableCertificateOwnerRef: false
   serviceAccount:
     create: true
     name: cert-manager
