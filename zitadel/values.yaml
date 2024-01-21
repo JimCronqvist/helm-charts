@@ -1,0 +1,26 @@
+ingressroute:
+  enabled: false
+  # Override the host for all routes defined routes, example: auth.example.com
+  overrideHost: ""
+  routes:
+    - path: /
+      host: zitadel
+      serviceName: zitadel
+      servicePort: 8080
+
+zitadel:
+  zitadel:
+    # ZITADEL uses the masterkey for symmetric encryption.
+    # You can generate it for example with tr -dc A-Za-z0-9 </dev/urandom | head -c 32
+    masterkey: ""
+
+  replicaCount: 3
+
+  initJob:
+    # Once ZITADEL is installed, the initJob can be disabled.
+    enabled: true
+
+  topologySpreadConstraints: []
+
+  pdb:
+    enabled: false
