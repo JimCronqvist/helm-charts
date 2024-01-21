@@ -3,8 +3,11 @@ cert-manager:
   fullnameOverride: cert-manager
   #namespace: cert-manager
   installCRDs: true
-  dns01RecursiveNameservers: 8.8.8.8:53,8.8.4.4:53
+  dns01RecursiveNameservers: 8.8.8.8:53,1.1.1.1:53
   dns01RecursiveNameserversOnly: true
+  # Whether to set the certificate resource as an owner of secret where the tls certificate is stored.
+  # When this flag is enabled, the secret will be automatically removed when the certificate resource is deleted.
+  # In other words, if you want automatic deletion/clean-up, set this flag to true. If you want to retain the secret, keep as false.
   enableCertificateOwnerRef: false
   serviceAccount:
     create: true
