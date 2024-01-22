@@ -43,7 +43,7 @@ spec:
     memory: {{ dig ($provisioner.nodePool) "limits" "memory" "0Gi" $.Values.nodePool }}
   disruption:
     consolidationPolicy: {{ dig ($provisioner.nodePool) "consolidationPolicy" "WhenUnderutilized" $.Values.nodePool }}
-    {{- if not (dig ($provisioner.nodePool) "consolidationPolicy" false $.Values.nodePool) }}
+    {{- if eq "WhenEmpty" (dig ($provisioner.nodePool) "consolidationPolicy" false $.Values.nodePool) }}
     consolidateAfter: {{ dig ($provisioner.nodePool) "consolidateAfter" "2m" $.Values.nodePool }}
     {{- end }}
     expireAfter: {{ dig ($provisioner.nodePool) "expireAfter" "336h" $.Values.nodePool }}
