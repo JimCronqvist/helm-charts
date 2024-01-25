@@ -11,7 +11,7 @@ ingressroute:
 zitadel:
   zitadel:
     # ZITADEL uses the masterkey for symmetric encryption.
-    # You can generate it for example with tr -dc A-Za-z0-9 </dev/urandom | head -c 32
+    # You can generate it for example with:  tr -dc A-Za-z0-9 </dev/urandom | head -c 32
     masterkey: ""
 
   replicaCount: 3

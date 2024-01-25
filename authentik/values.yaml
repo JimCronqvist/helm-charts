@@ -15,7 +15,8 @@ authentik:
       #tailscale.com/expose: "true"
 
   authentik:
-    secret_key: "Please_Generate_A_50_Char_Key"
+    # Generate a 50 character key, do not change after the initial install:  tr -dc A-Za-z0-9 </dev/urandom | head -c 50
+    secret_key: ""
     postgresql:
       #host: ""
       name: "authentik"
