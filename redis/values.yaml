@@ -2,6 +2,7 @@ redis:
   architecture: standalone
   auth:
     enabled: false
+    password: ""
 
   # Override how pvc's are managed throughout the lifecycle of the Stateful Set for the different components of redis
   master:

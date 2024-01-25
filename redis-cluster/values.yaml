@@ -1,5 +1,6 @@
 redis-cluster:
   usePassword: false
+  password: ""
   cluster:
     nodes: 6 # 6 for redundancy. 6 'nodes' & 1 'replicas' gives 3 masters and 3 replicas in total
     replicas: 1 # 1 replica per master node
