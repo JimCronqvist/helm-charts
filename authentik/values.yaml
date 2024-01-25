@@ -34,6 +34,10 @@ authentik:
     enabled: false
     #host: ""
     postgresqlPassword: ""
+    primary:
+      service:
+        annotations: {}
+          # tailscale.com/expose: "true"
 
   # Warning! The redis chart is not up-to-date from Authentik. Consider using an external redis instance.
   redis:
