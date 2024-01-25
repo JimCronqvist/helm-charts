@@ -42,6 +42,10 @@ provisioners:
     nodePool: onDemand
     nodePoolTaint: NoSchedule
     nodeClass: al2
+  - name: unmanaged
+    nodePool: unmanaged
+    nodePoolTaint: NoSchedule
+    nodeClass: al2
   - name: reserved-instances
     nodePool: reservedInstances
     nodeClass: al2
@@ -113,10 +117,45 @@ nodePool:
     consolidationPolicy: WhenUnderutilized
     consolidateAfter: 2m
     expireAfter: 336h # 14 days = 14 * 24 Hours
-    weight: 1
+    weight: 2
     limits:
       cpu: 100
       memory: 1000Gi
+
+    #taints:
+    #  - key: karpenter.sh/nodepool
+    #    effect: NoSchedule
+
+    requirements:
+      - key: kubernetes.io/arch
+        operator: In
+        values: [ "amd64" ]
+      - key: kubernetes.io/os
+        operator: In
+        values: [ "linux" ]
+      - key: karpenter.sh/capacity-type
+        operator: In
+        values: [ "on-demand" ]
+      - key: karpenter.k8s.aws/instance-category
+        operator: In
+        values: [ "c", "m", "r" ]
+      - key: karpenter.k8s.aws/instance-generation
+        operator: Gt
+        values: [ "2" ]
+
+  unmanaged:
+    consolidationPolicy: WhenEmpty
+    consolidateAfter: Never
+    expireAfter: 2160h # 3 months expire, expects to be managed by something else (before the 3 month expire).
+    #budgets:
+    #  - nodes: "1"
+    #  - nodes: "0"
+    #    schedule: "@daily" # Set a schedule for when to block disruptions
+    #    duration: 10m      # Block disruptions for the specified duration from the start of the schedule
+    weight: 1
+    limits:
+      cpu: 50
+      memory: 250Gi
 
     #taints:
     #  - key: karpenter.sh/nodepool
