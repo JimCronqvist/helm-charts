@@ -14,3 +14,7 @@ dependencies:
   - name: harbor
     version: 1.13.0
     repository: https://helm.goharbor.io/
+  - name: ingressroute
+    version: 0.1.x
+    repository: file://../ingressroute
+    condition: ingressroute.enabled

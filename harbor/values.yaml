@@ -1,3 +1,33 @@
+ingressroute:
+  enabled: false
+  # Override the host for all routes defined routes, example: harbor.example.com
+  overrideHost: ""
+  routes:
+    - path: /api/
+      host: core.harbor.domain
+      serviceName: harbor-core
+      servicePort: 80
+    - path: /service/
+      host: core.harbor.domain
+      serviceName: harbor-core
+      servicePort: 80
+    - path: /v2/
+      host: core.harbor.domain
+      serviceName: harbor-core
+      servicePort: 80
+    - path: /chartrepo/
+      host: core.harbor.domain
+      serviceName: harbor-core
+      servicePort: 80
+    - path: /c/
+      host: core.harbor.domain
+      serviceName: harbor-core
+      servicePort: 80
+    - path: /
+      host: core.harbor.domain
+      serviceName: harbor-portal
+      servicePort: 80
+
 harbor:
   core:
     podLabels:
@@ -5,3 +35,22 @@ harbor:
   portal:
     podLabels:
       tags.datadoghq.com/service: harbor
+
+  # Effectively disables the default ingress for harbor, in favor of the ingressroute
+  expose:
+    type: clusterIP
+    tls:
+      enabled: false
+
+  harborAdminPassword: "Harbor123456"
+  externalURL: https://core.harbor.domain
+
+  persistence:
+    resourcePolicy: "keep"
+    persistentVolumeClaim:
+      registry:
+        size: 100Gi
+    database:
+      size: 8Gi
+    redis:
+      size: 4Gi
