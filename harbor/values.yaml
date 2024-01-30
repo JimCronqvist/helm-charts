@@ -36,4 +36,4 @@ harbor:
       size: 4Gi
 
     trivy:
-      enabled: false
+      enabled: true
