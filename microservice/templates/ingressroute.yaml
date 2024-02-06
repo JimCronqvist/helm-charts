@@ -149,6 +149,9 @@ spec:
     customResponseHeaders:
       {{- toYaml . | nindent 6 }}
     {{- end }}
+    {{- with (omit .headers "request" "response") }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
 ---
 {{- end }}
 {{- end }}
