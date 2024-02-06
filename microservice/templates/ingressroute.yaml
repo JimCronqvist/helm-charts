@@ -132,7 +132,7 @@ spec:
 Headers middleware
 */}}
 {{- range $index, $route := $ingressroute.routes }}
-{{- if and .headers (or .headers.response .headers.request) }}
+{{- if .headers }}
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
