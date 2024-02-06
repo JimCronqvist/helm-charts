@@ -37,8 +37,19 @@ datadogAgent:
   override:
     nodeAgent:
       priorityClassName: "system-node-critical"
+      # Allow to schedule on tainted nodes
       tolerations:
         - operator: Exists
+      # Do not try to schedule on fargate nodes
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                  - key: eks.amazonaws.com/compute-type
+                    operator: NotIn
+                    values:
+                      - fargate
   features:
     #admissionController:
     #  enabled: true
