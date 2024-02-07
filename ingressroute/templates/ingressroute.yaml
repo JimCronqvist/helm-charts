@@ -47,25 +47,10 @@ spec:
 {{- end }}
 {{- end }}
 {{/*
-Rate Limit middleware (and real-ip-header sometimes)
+Rate Limit middleware
 */}}
 {{- range $index, $route := $ingressroute.routes }}
 {{- if and .rateLimit .rateLimit.average }}
-{{- if and (not .rateLimit.ipStrategy) (not .rateLimit.requestHeaderName) }}
-apiVersion: traefik.containo.us/v1alpha1
-kind: Middleware
-metadata:
-  name: {{ $fullName }}-route{{ $index }}-header-x-real-ip
-  labels:
-    {{- $labels | nindent 4 }}
-spec:
-  headers:
-    customRequestHeaders:
-      X-Real-IP: "{client.ip}"
-    customResponseHeaders:
-      X-Real-IP: "{client.ip}"
----
-{{- end }}
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
@@ -210,9 +195,6 @@ spec:
         - name: {{ $fullName }}-header-x-microservice
         {{- end }}
         {{- if .rateLimit }}
-        {{- if and (not .rateLimit.ipStrategy) (not .rateLimit.requestHeaderName) }}
-        - name: {{ $fullName }}-route{{ $index }}-header-x-real-ip
-        {{- end }}
         - name: {{ $fullName }}-route{{ $index }}-rate-limit
         {{- end }}
         {{- if .forwardAuth }}
