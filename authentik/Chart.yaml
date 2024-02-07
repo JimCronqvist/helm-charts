@@ -13,5 +13,5 @@ dependencies:
     repository: file://../ingressroute
     condition: ingressroute.enabled
   - name: authentik
-    version: 2023.10.6
+    version: 2023.10.7
     repository: https://charts.goauthentik.io/
