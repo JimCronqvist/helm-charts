@@ -9,11 +9,6 @@ ingressroute:
       servicePort: 8080
 
 zitadel:
-  zitadel:
-    # ZITADEL uses the masterkey for symmetric encryption.
-    # You can generate it for example with:  tr -dc A-Za-z0-9 </dev/urandom | head -c 32
-    masterkey: ""
-
   replicaCount: 3
 
   initJob:
@@ -23,4 +18,53 @@ zitadel:
   topologySpreadConstraints: []
 
   pdb:
-    enabled: false
+    enabled: true
+
+  zitadel:
+    # ZITADEL uses the masterkey for symmetric encryption.
+    # You can generate it for example with:  tr -dc A-Za-z0-9 </dev/urandom | head -c 32
+    masterkey: ""
+
+    configmapConfig:
+      ExternalPort: 443
+      ExternalDomain: "sso.example.com"
+      ExternalSecure: true
+      TLS:
+        Enabled: false # We use the TLS termination of the Ingress instead
+      DefaultInstance:
+        DomainPolicy:
+          # Set to false if the host of the sender is different from ExternalDomain
+          SMTPSenderAddressMatchesInstanceDomain: true
+        SMTPConfiguration:
+          # Configuration of the host
+          SMTP:
+            # Must include the port, like smtp.mailtrap.io:2525
+            Host:
+            User:
+            Password:
+          TLS:
+          From:
+          FromName:
+          ReplyToAddress:
+
+      Database:
+        postgres:
+          Host:
+          Port: 5432
+          Database: "zitadel"
+          User:
+            # If the user doesn't exist already, it is created
+            Username: "zitadel"
+            SSL:
+              Mode: disable
+          Admin:
+            Username: "root"
+            SSL:
+              Mode: disable
+    secretConfig:
+      Database:
+        postgres:
+          User:
+            Password: ""
+          Admin:
+            Password: ""
