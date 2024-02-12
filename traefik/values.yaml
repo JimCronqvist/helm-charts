@@ -99,3 +99,10 @@ traefik:
     rollingUpdate:
       maxUnavailable: 0
       maxSurge: 1
+
+  # Enable the experimental plugins
+  experimental:
+    plugins: {}
+      # traefik-api-key-auth:
+      #   moduleName: github.com/JimCronqvist/traefik-api-key-auth
+      #   version: v0.0.2
