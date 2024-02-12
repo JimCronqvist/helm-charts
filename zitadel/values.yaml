@@ -26,11 +26,22 @@ zitadel:
     masterkey: ""
 
     configmapConfig:
+      Log:
+        Level: 'info'
+        Formatter:
+          Format: text
+
       ExternalPort: 443
       ExternalDomain: "sso.example.com"
       ExternalSecure: true
       TLS:
         Enabled: false # We use the TLS termination of the Ingress instead
+      FirstInstance:
+        Org:
+          Human:
+            # Use the username: root@zitadel.<ExternalDomain>
+            UserName: "root"
+            Password: "RootPassword1!"
       DefaultInstance:
         DomainPolicy:
           # Set to false if the host of the sender is different from ExternalDomain
@@ -46,6 +57,11 @@ zitadel:
           From:
           FromName:
           ReplyToAddress:
+        PrivacyPolicy:
+          TOSLink: ""
+          PrivacyLink: ""
+        LabelPolicy:
+          DisableWatermark: true
 
       Database:
         postgres:
