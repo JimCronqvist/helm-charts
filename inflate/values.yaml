@@ -7,6 +7,12 @@ microservice:
     repository: registry.k8s.io/pause
     tag: "3.6"
 
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 0
+      maxUnavailable: 1
+
   datadog:
     enabled: true
 
@@ -37,6 +43,9 @@ microservice:
               app.kubernetes.io/name: '{{ template "microservice.name" . }}'
               app.kubernetes.io/instance: '{{ .Release.Name }}-{{ .Release.Namespace }}'
           topologyKey: kubernetes.io/hostname
+          # Requires feature gate: MatchLabelKeysInPodAffinity
+          #matchLabelKeys:
+          #  - pod-template-hash
 
   # Define the amount of resources we will have over-provisioned, to allow quick pod preemption when there is not enough nodes
   resources:

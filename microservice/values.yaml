@@ -8,7 +8,7 @@ strategy:
   # Allowed values: 'RollingUpdate' or 'Recreate'.
   type: RollingUpdate
   rollingUpdate:
-    maxSurge: 25%
+    maxSurge: 1
     maxUnavailable: 25%
 
 image:
