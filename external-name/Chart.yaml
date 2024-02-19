@@ -1,0 +1,8 @@
+apiVersion: v2
+name: external-name
+description: A Helm chart to create a set of external names for primarily external services, such as a database.
+type: application
+
+# The chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: 0.1.0

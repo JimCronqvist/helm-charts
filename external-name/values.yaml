@@ -1,0 +1,9 @@
+
+# Define external names for things like databases. This is useful for services that are not running in the cluster,
+# but are required by the applications running in the cluster. Allows you to switch out the external service without
+# changing the application or its configuration.
+externalNames:
+  - name: db01-prod
+    externalName: db01.prod.example.com
+    # Optional to specify the namespace, default is .Release.Namespace
+    namespace: production
