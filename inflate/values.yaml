@@ -4,8 +4,8 @@ microservice:
   nameOverride: inflate
 
   image:
-    repository: public.ecr.aws/eks-distro/kubernetes/pause
-    tag: "latest"
+    repository: registry.k8s.io/pause
+    tag: "3.6"
 
   datadog:
     enabled: true
