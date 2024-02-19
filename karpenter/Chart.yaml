@@ -5,9 +5,9 @@ type: application
 
 # The chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
-version: 0.2.0
+version: 0.3.0
 
 dependencies:
   - name: karpenter
-    version: v0.33.1
+    version: v0.34.0
     repository: oci://public.ecr.aws/karpenter
