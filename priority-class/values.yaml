@@ -1,0 +1,32 @@
+
+# Define custom priority classes, the only built-in priority classes in Kubernetes are
+# - system-cluster-critical (2000000000)
+# - system-node-critical (2000001000)
+# if no priority class is defined, the default priority class is used. If no custom one is created, the value is 0.
+# https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
+priorityClasses:
+  - name: priority-critical
+    description: "Critical priority pods that preempt all other priority classes. The critical components of a production environment."
+    globalDefault: false
+    preemptionPolicy: PreemptLowerPriority
+    value: 1000000
+  - name: priority-high
+    description: "High priority pods that preempt medium, low and lowest tier priority classes. Typically important production environments."
+    globalDefault: false
+    preemptionPolicy: PreemptLowerPriority
+    value: 900000
+  - name: priority-medium
+    description: "Medium priority pods that preempt low and lowest tier priority classes. (Default)"
+    globalDefault: true
+    preemptionPolicy: PreemptLowerPriority
+    value: 500000
+  - name: priority-low
+    description: "Low priority pods. Preempts only the lowest priority classes."
+    globalDefault: false
+    preemptionPolicy: PreemptLowerPriority
+    value: 100000
+  - name: priority-lowest
+    description: "Lowest priority pods. No preemption."
+    globalDefault: false
+    preemptionPolicy: Never
+    value: 1000
