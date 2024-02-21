@@ -270,4 +270,5 @@ spec:
       hostAliases:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      enableServiceLinks: false
 {{- end }}

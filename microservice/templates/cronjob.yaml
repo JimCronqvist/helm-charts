@@ -75,4 +75,9 @@ spec:
           tolerations:
             {{- include "microservice.tolerations" $ | nindent 12 }}
           {{- end }}
+          {{- with $.Values.hostAliases }}
+          hostAliases:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          enableServiceLinks: false
 {{- end }}
