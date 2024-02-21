@@ -16,6 +16,7 @@ routes:
 # - path: /
 #   host: test.local
 #   serviceName: authentik
+#   #serviceNamespace: different-namespace
 #   servicePort: 80
 #   priority: 0
 #   stripPrefix:

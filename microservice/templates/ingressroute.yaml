@@ -185,6 +185,9 @@ spec:
       {{- end }}
       services:
         - name: {{ .serviceName | default $svcName }}
+          {{- with .serviceNamespace }}
+          namespace: {{ . }}
+          {{- end }}
           port: {{ .servicePort | default $svcPort }}
           nativeLB: {{ .nativeLB | default false }}
       middlewares:
