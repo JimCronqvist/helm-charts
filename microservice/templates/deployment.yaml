@@ -211,12 +211,12 @@ spec:
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if or .Values.affinity .Values.scheduler.sameHost }}
+      {{- if or .Values.affinity .Values.scheduler.sameNode }}
       affinity:
         {{- with .Values.affinity }}
         {{- tpl (toYaml .) $ | nindent 8 }}
         {{- end }}
-        {{- if .Values.scheduler.sameHost }}
+        {{- if .Values.scheduler.sameNode }}
         podAffinity:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
@@ -239,6 +239,26 @@ spec:
           minDomains: {{ .Values.scheduler.minZones }}
           topologyKey: topology.kubernetes.io/zone
           whenUnsatisfiable: DoNotSchedule
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ .Release.Name }}
+          matchLabelKeys:
+            - pod-template-hash # Makes it unique per ReplicaSet (does not work for StatefulSets)
+        {{- end }}
+        {{- if .Values.scheduler.preferDifferentZones }}
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/zone
+          whenUnsatisfiable: ScheduleAnyway
+          labelSelector:
+            matchLabels:
+              app.kubernetes.io/instance: {{ .Release.Name }}
+          matchLabelKeys:
+            - pod-template-hash # Makes it unique per ReplicaSet (does not work for StatefulSets)
+        {{- end }}
+        {{- if .Values.scheduler.preferDifferentNodes }}
+        - maxSkew: 1
+          topologyKey: topology.kubernetes.io/hostname
+          whenUnsatisfiable: ScheduleAnyway
           labelSelector:
             matchLabels:
               app.kubernetes.io/instance: {{ .Release.Name }}

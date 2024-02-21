@@ -209,8 +209,10 @@ topologySpreadConstraints: []
 
 # Provides some standard use cases to control the Kubernetes scheduler behavior, will be merged with affinity and topologySpreadConstraints rules.
 scheduler: {}
-  # sameHost: true
+  # sameNode: true
   # minZones: 2
+  # preferDifferentZones: true
+  # preferDifferentNodes: true
 
 hostAliases: []
 
