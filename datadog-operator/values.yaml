@@ -1,6 +1,16 @@
 datadog-operator:
   enabled: true
   installCRDs: true
+  datadogMonitor:
+    enabled: true
+
+  resources:
+    requests:
+      cpu: 200m
+      memory: 200Mi
+    limits:
+      cpu: 200m
+      memory: 200Mi
 
   podLabels:
     tags.datadoghq.com/service: datadog-operator
@@ -50,6 +60,17 @@ datadogAgent:
                     operator: NotIn
                     values:
                       - fargate
+    clusterAgent:
+      containers:
+        cluster-agent:
+          resources:
+            requests:
+              cpu: 200m
+              memory: 200Mi
+            limits:
+              cpu: 200m
+              memory: 200Mi
+
   features:
     #admissionController:
     #  enabled: true
