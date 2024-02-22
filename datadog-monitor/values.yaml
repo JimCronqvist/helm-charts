@@ -1,0 +1,152 @@
+# User defined monitors
+monitors: {}
+
+# Chart defined default monitors - can be disabled
+defaultMonitors:
+  enabled: true
+  monitors:
+    pods-imagepullbackoff:
+      query: "max(last_10m):max:kubernetes_state.container.status_report.count.waiting{reason:imagepullbackoff} by {kube_cluster_name,kube_namespace,pod_name} >= 1"
+      type: "query alert"
+      name: "[kubernetes] Pod {{pod_name.name}} is ImagePullBackOff on namespace {{kube_namespace.name}}"
+      message: "pod {{pod_name.name}} is ImagePullBackOff on {{kube_namespace.name}} \nThis could happen for several reasons, for example a bad image path or tag or if the credentials for pulling images are not configured properly."
+      tags: ["integration:kubernetes"]
+    pods-failed:
+      query: "change(avg(last_5m),last_5m):sum:kubernetes_state.pod.status_phase{phase:failed} by {kube_cluster_name,kube_namespace} > 10"
+      type: "query alert"
+      name: "[kubernetes] Monitor Kubernetes Failed Pods in Namespaces"
+      message: "More than ten pods are failing in ({{kube_cluster_name.name}} cluster). \n The threshold of ten pods varies depending on your infrastructure. Change the threshold to suit your needs."
+      tags: ["integration:kubernetes"]
+    pods-restarting:
+      query: "change(sum(last_5m),last_5m):exclude_null(avg:kubernetes.containers.restarts{*} by {pod_name}) > 5"
+      type: "query alert"
+      name: "[kubernetes] Monitor Kubernetes Pods Restarting"
+      message: "Pods are restarting multiple times in the last five minutes."
+      tags: ["integration:kubernetes"]
+    statefulset-replicas:
+      query: "max(last_15m):sum:kubernetes_state.statefulset.replicas_desired{*} by {kube_stateful_set} - sum:kubernetes_state.statefulset.replicas_ready{*} by {kube_stateful_set} >= 2"
+      type: "query alert"
+      name: "[kubernetes] Monitor Kubernetes Statefulset Replicas"
+      message: "More than one Statefulset Replica's pods are down. This might present an unsafe situation for any further manual operations, such as killing other pods."
+      tags: ["integration:kubernetes"]
+
+    # Copilot written monitors below, to be confirmed.
+    pods-crashloopbackoff:
+      enabled: false
+      query: "max(last_10m):max:kubernetes_state.container.status_report.count.waiting{reason:crashloopbackoff} by {kube_cluster_name,kube_namespace,pod_name} >= 1"
+      type: "query alert"
+      name: "[kubernetes] Pod {{pod_name.name}} is CrashloopBackOff on namespace {{kube_namespace.name}}"
+      message: "pod {{pod_name.name}} is in CrashloopBackOff on {{kube_namespace.name}} \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]
+    pods-oomkilled:
+      enabled: false
+      query: "max(last_10m):max:kubernetes_state.container.status_report.count.waiting{reason:oomkilled} by {kube_cluster_name,kube_namespace,pod_name} >= 1"
+      type: "query alert"
+      name: "[kubernetes] Pod {{pod_name.name}} is OOMKilled on namespace {{kube_namespace.name}}"
+      message: "pod {{pod_name.name}} is OOMKilled on {{kube_namespace.name}} \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]
+    pods-restarts:
+      enabled: false
+      query: "max(last_10m):max:kubernetes_state.container.restarts{reason!=} by {kube_cluster_name,kube_namespace,pod_name} >= 1"
+      type: "query alert"
+      name: "[kubernetes] Pod {{pod_name.name}} has restarted on namespace {{kube_namespace.name}}"
+      message: "pod {{pod_name.name}} has restarted on {{kube_namespace.name}} \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]
+    pods-terminated:
+      enabled: false
+      query: "max(last_10m):max:kubernetes_state.container.status_report.count.terminated{reason!=} by {kube_cluster_name,kube_namespace,pod_name} >= 1"
+      type: "query alert"
+      name: "[kubernetes] Pod {{pod_name.name}} has been terminated on namespace {{kube_namespace.name}}"
+      message: "pod {{pod_name.name}} has been terminated on {{kube_namespace.name}} \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]
+    pods-pending:
+      enabled: false
+      query: "max(last_10m):max:kubernetes_state.container.status_report.count.waiting{reason:pod} by {kube_cluster_name,kube_namespace,pod_name} >= 1"
+      type: "query alert"
+      name: "[kubernetes] Pod {{pod_name.name}} is Pending on namespace {{kube_namespace.name}}"
+      message: "pod {{pod_name.name}} is Pending on {{kube_namespace.name}} \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]
+    pods-unknown:
+      enabled: false
+      query: "max(last_10m):max:kubernetes_state.container.status_report.count.waiting{reason:unknown} by {kube_cluster_name,kube_namespace,pod_name} >= 1"
+      type: "query alert"
+      name: "[kubernetes] Pod {{pod_name.name}} is in an unknown state on namespace {{kube_namespace.name}}"
+      message: "pod {{pod_name.name}} is in an unknown state on {{kube_namespace.name}} \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]
+    pods-unschedulable:
+      enabled: false
+      query: "max(last_10m):max:kubernetes_state.container.status_report.count.waiting{reason:unschedulable} by {kube_cluster_name,kube_namespace,pod_name} >= 1"
+      type: "query alert"
+      name: "[kubernetes] Pod {{pod_name.name}} is Unschedulable on namespace {{kube_namespace.name}}"
+      message: "pod {{pod_name.name}} is Unschedulable on {{kube_namespace.name}} \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]
+    nodes-unavailable:
+      enabled: false
+      query: "max(last_15m):sum:kubernetes_state.node.status{status:schedulable} by {kube_cluster_name} * 100 / sum:kubernetes_state.node.status{*} by {kube_cluster_name} < 80"
+      type: "query alert"
+      name: "[kubernetes] Monitor Unschedulable Kubernetes Nodes"
+      message: "More than 20% of nodes are unschedulable on ({{kube_cluster_name.name}} cluster). \n Keep in mind that this might be expected based on your infrastructure."
+      tags: ["integration:kubernetes"]
+    nodes-outofdisk:
+      enabled: false
+      query: "max(last_15m):max:kubernetes_state.node.status{condition=outofdisk} by {kube_cluster_name} >= 1"
+      type: "query alert"
+      name: "[kubernetes] Monitor Out of Disk Kubernetes Nodes"
+      message: "A node is out of disk on ({{kube_cluster_name.name}} cluster). \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]
+    nodes-memorypressure:
+      enabled: false
+      query: "max(last_15m):max:kubernetes_state.node.status{condition=memorypressure} by {kube_cluster_name} >= 1"
+      type: "query alert"
+      name: "[kubernetes] Monitor Memory Pressure Kubernetes Nodes"
+      message: "A node is under memory pressure on ({{kube_cluster_name.name}} cluster). \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]
+    nodes-diskpressure:
+      enabled: false
+      query: "max(last_15m):max:kubernetes_state.node.status{condition=diskpressure} by {kube_cluster_name} >= 1"
+      type: "query alert"
+      name: "[kubernetes] Monitor Disk Pressure Kubernetes Nodes"
+      message: "A node is under disk pressure on ({{kube_cluster_name.name}} cluster). \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]
+    nodes-networkunavailable:
+      enabled: false
+      query: "max(last_15m):max:kubernetes_state.node.status{condition=networkunavailable} by {kube_cluster_name} >= 1"
+      type: "query alert"
+      name: "[kubernetes] Monitor Network Unavailable Kubernetes Nodes"
+      message: "A node is under network unavailable on ({{kube_cluster_name.name}} cluster). \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]
+    nodes-unschedulable:
+      enabled: false
+      query: "max(last_15m):max:kubernetes_state.node.status{condition=unschedulable} by {kube_cluster_name} >= 1"
+      type: "query alert"
+      name: "[kubernetes] Monitor Unschedulable Kubernetes Nodes"
+      message: "A node is unschedulable on ({{kube_cluster_name.name}} cluster). \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]
+    nodes-unknown:
+      enabled: false
+      query: "max(last_15m):max:kubernetes_state.node.status{condition=unknown} by {kube_cluster_name} >= 1"
+      type: "query alert"
+      name: "[kubernetes] Monitor Unknown Kubernetes Nodes"
+      message: "A node is in an unknown state on ({{kube_cluster_name.name}} cluster). \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]
+    nodes-ready:
+      enabled: false
+      query: "max(last_15m):max:kubernetes_state.node.status{condition=ready} by {kube_cluster_name} < 1"
+      type: "query alert"
+      name: "[kubernetes] Monitor Not Ready Kubernetes Nodes"
+      message: "A node is not ready on ({{kube_cluster_name.name}} cluster). \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]
+    nodes-notready:
+      enabled: false
+      query: "max(last_15m):max:kubernetes_state.node.status{condition=notready} by {kube_cluster_name} >= 1"
+      type: "query alert"
+      name: "[kubernetes] Monitor Not Ready Kubernetes Nodes"
+      message: "A node is not ready on ({{kube_cluster_name.name}} cluster). \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]
+    nodes-allocatable:
+      enabled: false
+      query: "max(last_15m):max:kubernetes_state.node.status{condition=allocatable} by {kube_cluster_name} < 1"
+      type: "query alert"
+      name: "[kubernetes] Monitor Not Allocatable Kubernetes Nodes"
+      message: "A node is not allocatable on ({{kube_cluster_name.name}} cluster). \n This alert could generate several alerts for a bad deployment. Adjust the thresholds of the query to suit your infrastructure."
+      tags: ["integration:kubernetes"]

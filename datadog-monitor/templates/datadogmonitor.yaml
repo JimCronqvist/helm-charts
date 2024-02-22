@@ -1,0 +1,31 @@
+{{- $labels := include "datadog-monitor.labels" . -}}
+{{- if .Values.defaultMonitors.enabled -}}
+{{- $monitors := merge .Values.monitors .Values.defaultMonitors.monitors -}}
+{{- else -}}
+{{- $monitors := .Values.monitors -}}
+{{- end -}}
+{{- range $name, $monitor := .Values.monitors }}
+{{- if (dig "enabled" true $monitor) }}
+apiVersion: datadoghq.com/v1alpha1
+kind: DatadogMonitor
+metadata:
+  name: {{ $name }}
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  query: {{ $monitor.query | quote }}
+  type: {{ $monitor.type | quote }}
+  name: {{ $monitor.name | quote }}
+  message: {{ $monitor.message | quote }}
+  tags:
+    {{- toYaml $monitor.tags | nindent 4 }}
+  {{- with $monitor.priority }}
+  priority: {{ . }}
+  {{- end }}
+  {{- with $monitor.options }}
+  options:
+    {{- toYaml $monitor.options | nindent 4 }}
+  {{- end }}
+---
+{{- end }}
+{{- end }}

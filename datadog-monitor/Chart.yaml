@@ -1,0 +1,8 @@
+apiVersion: v2
+name: datadog-monitor
+description: A Helm chart to create Datadog Monitor manifests for the operator
+type: application
+
+# The chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: 0.1.0
