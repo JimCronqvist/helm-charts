@@ -18,7 +18,7 @@ spec:
   name: {{ $monitor.name | quote }}
   message: {{ $monitor.message | quote }}
   tags:
-    {{- toYaml $monitor.tags | nindent 4 }}
+    {{- toYaml (concat $monitor.tags (list "generated:kubernetes")) | nindent 4 }}
   {{- with $monitor.priority }}
   priority: {{ . }}
   {{- end }}
