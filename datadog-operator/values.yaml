@@ -4,13 +4,16 @@ datadog-operator:
   datadogMonitor:
     enabled: true
 
+  # Set Datadog Operator log level: debug, info (default), error, panic, fatal
+  logLevel: "debug"
+
   resources:
     requests:
-      cpu: 200m
-      memory: 200Mi
+      cpu: 100m
+      memory: 128Mi
     limits:
-      cpu: 200m
-      memory: 200Mi
+      cpu: 100m
+      memory: 128Mi
 
   podLabels:
     tags.datadoghq.com/service: datadog-operator
