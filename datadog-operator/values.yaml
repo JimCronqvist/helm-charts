@@ -5,7 +5,7 @@ datadog-operator:
     enabled: true
 
   # Set Datadog Operator log level: debug, info (default), error, panic, fatal
-  logLevel: "debug"
+  logLevel: "info"
 
   resources:
     requests:
