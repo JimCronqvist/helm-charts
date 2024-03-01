@@ -66,9 +66,9 @@ datadogAgent:
       extraConfd:
         configMap:
           name: datadog-agent-confd-config
-        extraChecksd:
-          configMap:
-            name: datadog-agent-checksd-config
+      extraChecksd:
+        configMap:
+          name: datadog-agent-checksd-config
     clusterAgent:
       containers:
         cluster-agent:
