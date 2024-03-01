@@ -30,6 +30,7 @@ data:
     {{- if $check.script }}
     {{- $check.script | nindent 4 }}
     {{- else if $check.cmd }}
+    from datadog_checks.base import AgentCheck
     from datadog_checks.base.utils.subprocess_output import get_subprocess_output
     class {{ $name | camelcase }}Check(AgentCheck):
       def check(self, instance):
