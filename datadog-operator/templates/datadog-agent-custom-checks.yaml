@@ -33,8 +33,13 @@ data:
     from datadog_checks.base import AgentCheck
     from datadog_checks.base.utils.subprocess_output import get_subprocess_output
     class {{ $name | camelcase }}Check(AgentCheck):
+      def script(self):
+        return """#!/usr/bin/env bash
+        {{ $check.cmd | nindent 8 }}
+        """
+
       def check(self, instance):
-        out, err, code = get_subprocess_output(["bash", "-c", "custom_{{ $name | snakecase }}.sh"], self.log, raise_on_empty_output=True)
+        out, err, code = get_subprocess_output(["bash", "-c", self.script()], self.log, raise_on_empty_output=True)
         if out.replace(".", "").isnumeric():
           out = float(out)
         elif out.isnumeric():
@@ -42,9 +47,6 @@ data:
         else:
           out = -1 # Unexpected output
         self.gauge('custom.{{ $name | snakecase }}', out)
-  custom_{{ $name | snakecase }}.sh: |
-    #!/usr/bin/env bash
-    {{ $check.cmd | nindent 4 }}
     {{- else }}
     # No script or command provided for custom check {{ $name }}.
     # Use either `script` or `cmd` to define the check.
