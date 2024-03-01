@@ -34,12 +34,13 @@ data:
     from datadog_checks.base.utils.subprocess_output import get_subprocess_output
     class {{ $name | camelcase }}Check(AgentCheck):
       def script(self):
-        return """#!/usr/bin/env bash
-        {{ $check.cmd | nindent 8 }}
+        return """
+        {{ $check.cmd | indent 8 }}
         """
 
       def check(self, instance):
         out, err, code = get_subprocess_output(["bash", "-c", self.script()], self.log, raise_on_empty_output=True)
+        out = out.strip()
         if out.replace(".", "").isnumeric():
           out = float(out)
         elif out.isnumeric():
