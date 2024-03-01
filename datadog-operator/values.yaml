@@ -122,4 +122,4 @@ datadogAgent:
   customChecks:
     hello:
       enabled: true
-      cmd: "ls | wc -l"
+      cmd: "ls | wc -l "
