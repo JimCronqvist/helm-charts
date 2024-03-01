@@ -38,7 +38,7 @@ data:
           out = float(out)
         elif out.isnumeric():
           out = int(out)
-        else
+        else:
           out = -1 # Unexpected output
         self.gauge('custom.{{ $name | snakecase }}', out)
   custom_{{ $name | snakecase }}.sh: |
