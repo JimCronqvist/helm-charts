@@ -63,6 +63,12 @@ datadogAgent:
                     operator: NotIn
                     values:
                       - fargate
+      extraConfd:
+        configMap:
+          name: datadog-agent-confd-config
+        extraChecksd:
+          configMap:
+            name: datadog-agent-checksd-config
     clusterAgent:
       containers:
         cluster-agent:
@@ -111,3 +117,9 @@ datadogAgent:
     #usm:
     #  enabled: false
 
+  # Add custom checks that is run from the agent on each node
+  # https://docs.datadoghq.com/developers/custom_checks/write_agent_check/
+  customChecks:
+    hello:
+      enabled: true
+      cmd: "ls | wc -l"

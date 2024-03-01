@@ -1,7 +1,7 @@
 apiVersion: datadoghq.com/v2alpha1
 kind: DatadogAgent
 metadata:
-  name: datadog
+  name: datadog-agent
   labels:
     {{- include "datadog-operator.labels" . | nindent 4 }}
 spec:
