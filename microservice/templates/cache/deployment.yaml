@@ -1,0 +1,164 @@
+{{- if .Values.cache.enabled }}
+{{- $fullName := include "microservice.fullname" . -}}
+apiVersion: apps/v1
+kind: {{ .Values.deployment.kind | default "Deployment" }}
+metadata:
+  name: {{ $fullName }}
+  labels:
+    {{- include "microservice.labels" (dict "context" $ "component" "varnish") | nindent 4 }}
+    {{- include "helpers.datadog-service-labels" . | indent 4 }}
+spec:
+  {{- if not .Values.cache.autoscaling.enabled }}
+  replicas: {{ .Values.cache.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "microservice.selectorLabels" (dict "context" $ "component" "varnish") | nindent 6 }}
+  {{- if and .Values.strategy .Values.strategy.type (eq .Values.deployment.kind "Deployment") }}
+  strategy:
+    type: {{ .Values.strategy.type }}
+    {{- if and .Values.strategy.rollingUpdate (eq .Values.strategy.type "RollingUpdate") }}
+    rollingUpdate:
+      {{- .Values.strategy.rollingUpdate | toYaml | nindent 6 }}
+    {{- end }}
+  {{- end }}
+  {{- if eq .Values.deployment.kind "StatefulSet" }}
+  persistentVolumeClaimRetentionPolicy:
+    whenDeleted: Delete
+    whenScaled: Delete
+  podManagementPolicy: {{ .Values.deployment.statefulSet.podManagementPolicy | default "Parallel" }}
+  updateStrategy:
+    type: RollingUpdate
+    {{- if and (eq .Values.deployment.statefulSet.updateStrategy.type "RollingUpdate") .Values.deployment.statefulSet.updateStrategy.rollingUpdate }}
+    rollingUpdate:
+      {{- toYaml .Values.deployment.statefulSet.updateStrategy.rollingUpdate | nindent 6 }}
+    {{- end }}
+  volumeClaimTemplates:
+    {{- $global := .Values.global -}}
+    {{- range $pvcName, $pvc := .Values.pvc }}
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        name: {{ $pvcName }}
+        annotations:
+          {{- if $pvc.volumeType }}
+          ebs.csi.aws.com/volumeType: {{ $pvc.volumeType | quote }}
+          {{- end }}
+          {{- if $pvc.iops }}
+          ebs.csi.aws.com/iops: {{ $pvc.iops | quote }}
+          {{- end }}
+          {{- if $pvc.throughput }}
+          ebs.csi.aws.com/throughput: {{ $pvc.throughput | quote }}
+          {{- end }}
+      spec:
+        accessModes:
+          {{- if $pvc.accessMode }}
+          - {{ $pvc.accessMode }}
+          {{- else if contains "efs" ($pvc.storageClass | default "") }}
+          - ReadWriteMany
+          {{- else }}
+          - ReadWriteOnce
+          {{- end }}
+        resources:
+          requests:
+            {{- if contains "efs" ($pvc.storageClass | default "") }}
+            storage: 1Mi
+            {{- else }}
+            storage: {{ $pvc.size }}
+            {{- end }}
+        {{- include "helpers.storage-class" (dict "persistence" $pvc "global" $global) | nindent 2 }}
+    {{- end }}
+  {{- end }}
+  template:
+    metadata:
+      annotations:
+        {{- include "helpers.datadog-annotations" . | indent 8 }}
+        {{- include "microservice.checksumPodAnnotations" . | indent 8 }}
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "helpers.datadog-service-labels" . | indent 8 }}
+        {{- include "microservice.selectorLabels" (dict "context" $ "component" "varnish") | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.priorityClassValue }}
+      priorityClassName: {{ .Release.Namespace }}-{{ $fullName }}
+      {{- else if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 30 }}
+      containers:
+        - name: {{ $fullName | default .Chart.Name }}-varnish
+          image: "varnish:{{ .Values.cache.varnishVersion }}"
+          imagePullPolicy: {{ .Values.cache.varnishPullPolicy }}
+          command:
+            - varnishd
+            - -F
+            - -a :80,HTTP
+            - -a :8443,PROXY
+            - -f /etc/varnish/default.vcl
+            - -s malloc,100m
+          ports:
+            - containerPort: 80
+              name: varnish-http
+              protocol: TCP
+            - containerPort: 8443
+              name: varnish-proxy
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /varnish/health
+              port: http
+          readinessProbe:
+            httpGet:
+              path: /varnish/health
+              port: http
+          startupProbe:
+            httpGet:
+              path: /varnish/health
+              port: http
+          resources:
+            {{- include "helpers.wrapResourcesWithQuotes" .Values.cache.resources | indent 12 }}
+          volumeMounts:
+            {{- with .Values.pvc }}
+            {{- include "helpers.volume-mounts" (list $ . $.Values.deployment.kind) | indent 12 }}
+            {{- end }}
+            - name: varnish-vcl
+              mountPath: "/etc/varnish/default.vcl"
+              subPath: "default.vcl"
+              readOnly: true
+      volumes:
+        {{- if eq .Values.deployment.kind "Deployment" }}
+        {{- with .Values.pvc }}
+        {{- include "helpers.volumes" (list $ . $.Values.deployment.kind) | indent 8 }}
+        {{- end }}
+        {{- end }}
+        - name: varnish-vcl
+          configMap:
+            name: {{ include "microservice.fullname" . }}-varnish-vcl
+            defaultMode: 0644
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+        {{- with .Values.affinity }}
+        {{- tpl (toYaml .) $ | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      {{- if or .Values.tolerations .Values.nodeSelector }}
+      tolerations:
+        {{- include "microservice.tolerations" . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- with .Values.topologySpreadConstraints }}
+        {{- tpl (toYaml .) $ | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      enableServiceLinks: false
+{{- end }}

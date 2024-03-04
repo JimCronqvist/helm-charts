@@ -1,0 +1,28 @@
+{{- if .Values.cache.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "microservice.fullname" . }}-varnish
+  labels:
+    {{- include "microservice.labels" (dict "context" $ "component" "varnish") | nindent 4 }}
+  annotations:
+    {{- with .Values.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- include "helpers.tailscale-annotations" . | indent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  externalTrafficPolicy: Cluster
+  ports:
+    - port: 80
+      appProtocol: http
+      targetPort: varnish-http
+      protocol: TCP
+      name: varnish-http
+    - port: 8443
+      targetPort: varnish-proxy
+      protocol: TCP
+      name: varnish-proxy
+  selector:
+    {{- include "microservice.selectorLabels" (dict "context" $ "component" "varnish") | nindent 4 }}
+{{- end }}

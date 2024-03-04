@@ -266,6 +266,18 @@ cronjobs: []
   #   #suspend: true
   #   #backoffLimit: 6
 
+cache:
+  enabled: false
+  replicaCount: 1
+  varnishVersion: 7.4-alpine
+  varnishPullPolicy: IfNotPresent
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+  rules: []
+
 # Set both normal and secret environment variables
 env: {}
   # NODE_ENV: production
