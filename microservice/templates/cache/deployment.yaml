@@ -97,12 +97,14 @@ spec:
           command:
             - varnishd
             - -F
-            - -a :80,HTTP
+            - -a :8080,HTTP # 6081
             - -a :8443,PROXY
             - -f /etc/varnish/default.vcl
             - -s malloc,100m
+            #- -T localhost:6082
+            #- -p workspace_client=256k
           ports:
-            - containerPort: 80
+            - containerPort: 8080
               name: varnish-http
               protocol: TCP
             - containerPort: 8443
