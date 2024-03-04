@@ -5,7 +5,7 @@ kind: {{ .Values.deployment.kind | default "Deployment" }}
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "microservice.labels" (dict "context" $) | nindent 4 }}
+    {{- include "microservice.labels" (dict "context" $ "component" "app") | nindent 4 }}
     {{- include "helpers.datadog-service-labels" . | indent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
