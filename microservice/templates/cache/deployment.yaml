@@ -3,7 +3,7 @@
 apiVersion: apps/v1
 kind: {{ .Values.deployment.kind | default "Deployment" }}
 metadata:
-  name: {{ $fullName }}
+  name: {{ $fullName }}-varnish
   labels:
     {{- include "microservice.labels" (dict "context" $ "component" "varnish") | nindent 4 }}
     {{- include "helpers.datadog-service-labels" . | indent 4 }}
