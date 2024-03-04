@@ -94,6 +94,9 @@ spec:
         - name: {{ $fullName | default .Chart.Name }}-varnish
           image: "varnish:{{ .Values.cache.varnishVersion }}"
           imagePullPolicy: {{ .Values.cache.varnishPullPolicy }}
+          {{- if .Values.cache.deploymentDebug }}
+          command: [ "/bin/sh", "-c", "sleep infinity" ]
+          {{- else }}
           command:
             - varnishd
             - -F
@@ -103,6 +106,7 @@ spec:
             - -s malloc,100m
             #- -T localhost:6082
             #- -p workspace_client=256k
+          {{- end }}
           ports:
             - containerPort: 8080
               name: varnish-http
