@@ -97,13 +97,10 @@ spec:
           {{- if .Values.cache.deploymentDebug }}
           command: [ "/bin/sh", "-c", "sleep infinity" ]
           {{- else }}
-          command:
-            - varnishd
-            - -F
-            - -a :8080,HTTP # 6081
-            - -a :8443,PROXY
-            - -f /etc/varnish/default.vcl
-            - -s malloc,100m
+          command: ["varnishd", "-F", "-a", ":8080,HTTP", "-a", ":8443,PROXY", "-f", "/etc/varnish/default.vcl"]
+          args:
+            - -s
+            - malloc,100m
             #- -T localhost:6082
             #- -p workspace_client=256k
           {{- end }}
