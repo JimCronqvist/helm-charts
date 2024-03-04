@@ -165,6 +165,27 @@ ingressroute:
     #   priority: 0
     #   stripPrefix: /base-path
 
+cache:
+  enabled: false
+  replicaCount: 1
+  varnishVersion: 7.4-alpine
+  varnishPullPolicy: IfNotPresent
+  deploymentKind: Deployment
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 5
+    targetCPUUtilizationPercentage: 80
+  resources: {}
+  pvc:
+    workdir:
+      emptyDir:
+        medium: Memory
+        #sizeLimit: 2Gi
+      mounts:
+        - mountPath: "/var/lib/varnish/varnishd"
+  rules: []
+
 resources: {}
   # We usually recommend not to specify default resources and to leave this as a conscious
   # choice for the user. This also increases chances charts run on environments with little
@@ -265,18 +286,6 @@ cronjobs: []
   #   #concurrencyPolicy: Forbid
   #   #suspend: true
   #   #backoffLimit: 6
-
-cache:
-  enabled: false
-  replicaCount: 1
-  varnishVersion: 7.4-alpine
-  varnishPullPolicy: IfNotPresent
-  autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 5
-    targetCPUUtilizationPercentage: 80
-  rules: []
 
 # Set both normal and secret environment variables
 env: {}

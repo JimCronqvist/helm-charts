@@ -1,7 +1,7 @@
 {{- if .Values.cache.enabled }}
 {{- $fullName := include "microservice.fullname" . -}}
 apiVersion: apps/v1
-kind: {{ .Values.deployment.kind | default "Deployment" }}
+kind: {{ .Values.cache.deploymentKind | default "Deployment" }}
 metadata:
   name: {{ $fullName }}-varnish
   labels:
@@ -14,7 +14,7 @@ spec:
   selector:
     matchLabels:
       {{- include "microservice.selectorLabels" (dict "context" $ "component" "varnish") | nindent 6 }}
-  {{- if and .Values.strategy .Values.strategy.type (eq .Values.deployment.kind "Deployment") }}
+  {{- if and .Values.strategy .Values.strategy.type (eq .Values.cache.deploymentKind "Deployment") }}
   strategy:
     type: {{ .Values.strategy.type }}
     {{- if and .Values.strategy.rollingUpdate (eq .Values.strategy.type "RollingUpdate") }}
@@ -22,7 +22,7 @@ spec:
       {{- .Values.strategy.rollingUpdate | toYaml | nindent 6 }}
     {{- end }}
   {{- end }}
-  {{- if eq .Values.deployment.kind "StatefulSet" }}
+  {{- if eq .Values.cache.deploymentKind "StatefulSet" }}
   persistentVolumeClaimRetentionPolicy:
     whenDeleted: Delete
     whenScaled: Delete
@@ -35,7 +35,7 @@ spec:
     {{- end }}
   volumeClaimTemplates:
     {{- $global := .Values.global -}}
-    {{- range $pvcName, $pvc := .Values.pvc }}
+    {{- range $pvcName, $pvc := .Values.cache.pvc }}
     - apiVersion: v1
       kind: PersistentVolumeClaim
       metadata:
@@ -123,17 +123,17 @@ spec:
           resources:
             {{- include "helpers.wrapResourcesWithQuotes" .Values.cache.resources | indent 12 }}
           volumeMounts:
-            {{- with .Values.pvc }}
-            {{- include "helpers.volume-mounts" (list $ . $.Values.deployment.kind) | indent 12 }}
+            {{- with .Values.cache.pvc }}
+            {{- include "helpers.volume-mounts" (list $ . $.Values.cache.deploymentKind) | indent 12 }}
             {{- end }}
             - name: varnish-vcl
               mountPath: "/etc/varnish/default.vcl"
               subPath: "default.vcl"
               readOnly: true
       volumes:
-        {{- if eq .Values.deployment.kind "Deployment" }}
-        {{- with .Values.pvc }}
-        {{- include "helpers.volumes" (list $ . $.Values.deployment.kind) | indent 8 }}
+        {{- if eq .Values.cache.deploymentKind "Deployment" }}
+        {{- with .Values.cache.pvc }}
+        {{- include "helpers.volumes" (list $ . $.Values.cache.deploymentKind) | indent 8 }}
         {{- end }}
         {{- end }}
         - name: varnish-vcl
