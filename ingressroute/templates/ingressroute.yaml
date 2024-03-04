@@ -1,7 +1,7 @@
 {{- $ingressroute := .Values -}}
 {{- if $ingressroute.enabled -}}
 {{- $fullName := include "microservice.fullname" . -}}
-{{- $labels := include "microservice.labels" . -}}
+{{- $labels := include "microservice.labels" (dict "context" $) -}}
 {{- $svcPort := dig "port" 80 (default (dict) .Values.service) -}}
 {{- $svcName := $fullName -}}
 {{/*

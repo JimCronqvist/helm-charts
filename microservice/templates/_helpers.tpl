@@ -34,18 +34,21 @@ Create chart name and version as used by the chart label.
 Common labels
 */}}
 {{- define "microservice.labels" -}}
-helm.sh/chart: {{ include "microservice.chart" . }}
-{{ include "microservice.selectorLabels" . }}
-app.kubernetes.io/version: {{ include "helpers.image-tag" . | quote }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
+helm.sh/chart: {{ include "microservice.chart" .context }}
+{{ include "microservice.selectorLabels" (dict "context" .context "component" .component ) }}
+app.kubernetes.io/version: {{ include "helpers.image-tag" .context | quote }}
+app.kubernetes.io/managed-by: {{ .context.Release.Service }}
 {{- end }}
 
 {{/*
 Selector labels
 */}}
 {{- define "microservice.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "microservice.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/name: {{ include "microservice.name" .context }}
+app.kubernetes.io/instance: {{ .context.Release.Name }}
+{{- if .component }}
+app.kubernetes.io/component: {{ .component }}
+{{- end }}
 {{- end }}
 
 {{/*

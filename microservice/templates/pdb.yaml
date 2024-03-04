@@ -4,7 +4,7 @@ kind: PodDisruptionBudget
 metadata:
   name: {{ include "microservice.fullname" . }}
   labels:
-    {{- include "microservice.labels" . | nindent 4 }}
+    {{- include "microservice.labels" (dict "context" $) | nindent 4 }}
 spec:
   {{- with .Values.pdb.minAvailable }}
   minAvailable: {{ . }}
@@ -14,5 +14,5 @@ spec:
   {{- end  }}
   selector:
     matchLabels:
-      {{- include "microservice.selectorLabels" . | nindent 6 }}
+      {{- include "microservice.selectorLabels" (dict "context" $ "component" "app") | nindent 6 }}
 {{- end }}

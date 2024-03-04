@@ -4,7 +4,7 @@ kind: PriorityClass
 metadata:
   name: {{ .Release.Namespace }}-{{ include "microservice.fullname" . }}
   labels:
-    {{- include "microservice.labels" . | nindent 4 }}
+    {{- include "microservice.labels" (dict "context" $) | nindent 4 }}
 value: {{ .Values.priorityClassValue | default 0 }}
 globalDefault: false
 {{- end }}

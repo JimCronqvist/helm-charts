@@ -4,7 +4,7 @@ kind: {{ .Values.rbac.kind | default "Role" }}Binding
 metadata:
   name: {{ include "microservice.fullname" . }}
   labels:
-    {{- include "microservice.labels" . | nindent 4 }}
+    {{- include "microservice.labels" (dict "context" $ "component" "app") | nindent 4 }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: {{ .Values.rbac.kind }}

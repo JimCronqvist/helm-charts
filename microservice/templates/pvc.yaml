@@ -1,7 +1,7 @@
 {{- if .Values.pvc -}}
 {{- if or (eq .Values.deployment.kind "Deployment") (gt (len .Values.cronjobs) 0) (gt (len .Values.jobs) 0) }}
 {{- $fullName := include "microservice.fullname" . -}}
-{{- $labels := include "microservice.labels" . -}}
+{{- $labels := include "microservice.labels" (dict "context" $) -}}
 {{- $global := .Values.global -}}
 {{- range $pvcName, $pvc := .Values.pvc }}
 {{- if and (dig "enabled" true $pvc) (not $pvc.existingClaim) (not .hostPath) (not .emptyDir) (or (not .nfs) .nfs.mountOptions) -}}

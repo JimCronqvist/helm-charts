@@ -1,5 +1,5 @@
 {{- $fullName := include "microservice.fullname" . -}}
-{{- $labels := include "microservice.labels" . -}}
+{{- $labels := include "microservice.labels" (dict "context" $ "component" "job") -}}
 {{- $serviceAccountName := include "microservice.serviceAccountName" . -}}
 {{- range $job := .Values.jobs }}
 ---

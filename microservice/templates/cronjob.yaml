@@ -1,5 +1,5 @@
 {{- $fullName := include "microservice.fullname" . -}}
-{{- $labels := include "microservice.labels" . -}}
+{{- $labels := include "microservice.labels" (dict "context" $ "component" "cronjob") -}}
 {{- $serviceAccountName := include "microservice.serviceAccountName" . -}}
 {{- range $cronjob := .Values.cronjobs }}
 ---

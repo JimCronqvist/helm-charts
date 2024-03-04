@@ -5,7 +5,7 @@ kind: {{ .Values.deployment.kind | default "Deployment" }}
 metadata:
   name: {{ $fullName }}
   labels:
-    {{- include "microservice.labels" . | nindent 4 }}
+    {{- include "microservice.labels" (dict "context" $) | nindent 4 }}
     {{- include "helpers.datadog-service-labels" . | indent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
@@ -13,7 +13,7 @@ spec:
   {{- end }}
   selector:
     matchLabels:
-      {{- include "microservice.selectorLabels" . | nindent 6 }}
+      {{- include "microservice.selectorLabels" (dict "context" $ "component" "app") | nindent 6 }}
   {{- if and .Values.strategy .Values.strategy.type (eq .Values.deployment.kind "Deployment") }}
   strategy:
     type: {{ .Values.strategy.type }}
@@ -79,7 +79,7 @@ spec:
         {{- end }}
       labels:
         {{- include "helpers.datadog-service-labels" . | indent 8 }}
-        {{- include "microservice.selectorLabels" . | nindent 8 }}
+        {{- include "microservice.selectorLabels" (dict "context" $ "component" "app") | nindent 8 }}
         {{- with .Values.podLabels }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -221,7 +221,7 @@ spec:
           requiredDuringSchedulingIgnoredDuringExecution:
             - labelSelector:
                 matchLabels:
-                  app.kubernetes.io/instance: {{ .Release.Name }}
+                  {{- include "microservice.selectorLabels" (dict "context" $ "component" "app") | nindent 18 }}
               topologyKey: kubernetes.io/hostname
         {{- end }}
       {{- end }}
@@ -241,7 +241,7 @@ spec:
           whenUnsatisfiable: DoNotSchedule
           labelSelector:
             matchLabels:
-              app.kubernetes.io/instance: {{ .Release.Name }}
+              {{- include "microservice.selectorLabels" (dict "context" $ "component" "app") | nindent 14 }}
           matchLabelKeys:
             - pod-template-hash # Makes it unique per ReplicaSet (does not work for StatefulSets)
         {{- end }}
@@ -251,7 +251,7 @@ spec:
           whenUnsatisfiable: ScheduleAnyway
           labelSelector:
             matchLabels:
-              app.kubernetes.io/instance: {{ .Release.Name }}
+              {{- include "microservice.selectorLabels" (dict "context" $ "component" "app") | nindent 14 }}
           matchLabelKeys:
             - pod-template-hash # Makes it unique per ReplicaSet (does not work for StatefulSets)
         {{- end }}
@@ -261,7 +261,7 @@ spec:
           whenUnsatisfiable: ScheduleAnyway
           labelSelector:
             matchLabels:
-              app.kubernetes.io/instance: {{ .Release.Name }}
+              {{- include "microservice.selectorLabels" (dict "context" $ "component" "app") | nindent 14 }}
           matchLabelKeys:
             - pod-template-hash # Makes it unique per ReplicaSet (does not work for StatefulSets)
         {{- end }}

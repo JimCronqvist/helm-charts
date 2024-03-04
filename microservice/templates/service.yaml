@@ -4,7 +4,7 @@ kind: Service
 metadata:
   name: {{ include "microservice.fullname" . }}
   labels:
-    {{- include "microservice.labels" . | nindent 4 }}
+    {{- include "microservice.labels" (dict "context" $ "component" "app") | nindent 4 }}
   annotations:
     {{- with .Values.service.annotations }}
     {{- toYaml . | nindent 4 }}
@@ -46,5 +46,5 @@ spec:
     {{- end }}
     {{- end }}
   selector:
-    {{- include "microservice.selectorLabels" . | nindent 4 }}
+    {{- include "microservice.selectorLabels" (dict "context" $ "component" "app") | nindent 4 }}
 {{- end }}
