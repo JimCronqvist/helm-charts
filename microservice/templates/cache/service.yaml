@@ -12,7 +12,6 @@ metadata:
     {{- include "helpers.tailscale-annotations" . | indent 4 }}
 spec:
   type: {{ .Values.service.type }}
-  externalTrafficPolicy: Cluster
   ports:
     - port: 80
       appProtocol: http
