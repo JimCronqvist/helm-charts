@@ -97,7 +97,7 @@ spec:
           {{- if .Values.cache.deploymentDebug }}
           command: [ "/bin/sh", "-c", "sleep infinity" ]
           {{- else }}
-          command: ["varnishd", "-F", "-a", ":8080,HTTP", "-a", ":8443,PROXY", "-f", "/etc/varnish/default.vcl"]
+          command: ["varnishd", "-F", "-a", "http=:8080,HTTP", "-a", "proxy=:8443,PROXY", "-f", "/etc/varnish/default.vcl"]
           args:
             - -s
             - malloc,100m
