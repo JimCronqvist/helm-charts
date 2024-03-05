@@ -72,8 +72,7 @@ spec:
   template:
     metadata:
       annotations:
-        {{- include "helpers.datadog-annotations" . | indent 8 }}
-        {{- include "microservice.checksumPodAnnotations" . | indent 8 }}
+        checksum/varnish-vcl.yaml: {{ include (print $.Template.BasePath "/cache/varnish-vcl.yaml") $ | sha256sum }}
         {{- with .Values.podAnnotations }}
         {{- toYaml . | nindent 8 }}
         {{- end }}
