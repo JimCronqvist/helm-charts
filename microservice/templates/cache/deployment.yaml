@@ -113,15 +113,15 @@ spec:
           livenessProbe:
             httpGet:
               path: /varnish/health
-              port: http
+              port: varnish-http
           readinessProbe:
             httpGet:
               path: /varnish/health
-              port: http
+              port: varnish-http
           startupProbe:
             httpGet:
               path: /varnish/health
-              port: http
+              port: varnish-http
           resources:
             {{- include "helpers.wrapResourcesWithQuotes" .Values.cache.resources | indent 12 }}
           volumeMounts:
