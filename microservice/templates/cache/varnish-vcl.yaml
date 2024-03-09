@@ -2,7 +2,7 @@
 {{- $fullName := include "microservice.fullname" . -}}
 {{- $labels := include "microservice.labels" (dict "context" $) -}}
 {{- $svcPort := dig "port" 80 (default (dict) .Values.service) -}}
-{{- $healthEndpoint := .Values.probes.livenessPath -}}
+{{- $healthEndpoint := .Values.cache.healthEndpoint -}}
 {{- $svcName := $fullName -}}
 apiVersion: v1
 kind: ConfigMap

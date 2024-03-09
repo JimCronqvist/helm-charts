@@ -185,6 +185,7 @@ cache:
         #sizeLimit: 2Gi
       mounts:
         - mountPath: "/var/lib/varnish/varnishd"
+  healthEndpoint: /health
   rules: []
   customVcl: ""
 
