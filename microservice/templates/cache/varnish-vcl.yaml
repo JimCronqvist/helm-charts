@@ -2,6 +2,7 @@
 {{- $fullName := include "microservice.fullname" . -}}
 {{- $labels := include "microservice.labels" (dict "context" $) -}}
 {{- $svcPort := dig "port" 80 (default (dict) .Values.service) -}}
+{{- $healthEndpoint := .Values.probes.livenessPath -}}
 {{- $svcName := $fullName -}}
 apiVersion: v1
 kind: ConfigMap
@@ -12,7 +13,7 @@ metadata:
 data:
   {{- if .Values.cache.customVcl }}
   default.vcl: |
-    {{- .Values.cache.customVcl | replace "${BACKEND_HOST}" $svcName | replace "${BACKEND_PORT}" ($svcPort | squote | replace "'" "") | nindent 4 }}
+    {{- .Values.cache.customVcl | replace "${BACKEND_HOST}" $svcName | replace "${BACKEND_HEALTH_ENDPOINT}" $healthEndpoint | replace "${BACKEND_PORT}" ($svcPort | squote | replace "'" "") | nindent 4 }}
   {{- else }}
   default.vcl: |
     vcl 4.1;
