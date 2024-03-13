@@ -170,6 +170,9 @@ cache:
   replicaCount: 1
   varnishVersion: 7.4-alpine
   varnishPullPolicy: IfNotPresent
+  livenessProbe: true
+  readinessProbe: true
+  startupProbe: true
   deploymentDebug: false
   deploymentKind: Deployment
   autoscaling:

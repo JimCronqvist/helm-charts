@@ -15,6 +15,7 @@ spec:
     matchLabels:
       {{- include "microservice.selectorLabels" (dict "context" $ "component" "app") | nindent 6 }}
   {{- if and .Values.strategy .Values.strategy.type (eq .Values.deployment.kind "Deployment") }}
+  revisionHistoryLimit: 5
   strategy:
     type: {{ .Values.strategy.type }}
     {{- if and .Values.strategy.rollingUpdate (eq .Values.strategy.type "RollingUpdate") }}

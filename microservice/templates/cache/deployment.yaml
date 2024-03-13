@@ -110,18 +110,24 @@ spec:
             - containerPort: 8443
               name: varnish-proxy
               protocol: TCP
+          {{- if .Values.cache.livenessProbe }}
           livenessProbe:
             httpGet:
               path: /varnish/health
               port: varnish-http
+          {{- end }}
+          {{- if .Values.cache.readinessProbe }}
           readinessProbe:
             httpGet:
               path: /varnish/health
               port: varnish-http
+          {{- end }}
+          {{- if .Values.cache.startupProbe }}
           startupProbe:
             httpGet:
               path: /varnish/health
               port: varnish-http
+          {{- end }}
           resources:
             {{- include "helpers.wrapResourcesWithQuotes" .Values.cache.resources | indent 12 }}
           volumeMounts:
