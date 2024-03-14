@@ -190,6 +190,14 @@ spec:
           {{- end }}
           port: {{ .servicePort | default $svcPort }}
           nativeLB: {{ .nativeLB | default false }}
+        {{- if and .fallbackServiceName }}
+        - name: {{ .fallbackServiceName }}
+          {{- with .serviceNamespace }}
+          namespace: {{ . }}
+          {{- end }}
+          port: {{ .fallbackServicePort | default $svcPort }}
+          nativeLB: {{ .nativeLB | default false }}
+        {{- end }}
       middlewares:
         {{- if and $ingressroute.tls.enabled $ingressroute.tls.forceHttps }}
         - name: {{ $fullName }}-redirect-https

@@ -172,9 +172,13 @@ cache:
   varnishPullPolicy: IfNotPresent
   livenessProbe: true
   readinessProbe: true
-  startupProbe: true
   deploymentDebug: false
   deploymentKind: Deployment
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 25%
   autoscaling:
     enabled: false
     minReplicas: 1

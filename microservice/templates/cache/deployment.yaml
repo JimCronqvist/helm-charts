@@ -14,12 +14,13 @@ spec:
   selector:
     matchLabels:
       {{- include "microservice.selectorLabels" (dict "context" $ "component" "varnish") | nindent 6 }}
-  {{- if and .Values.strategy .Values.strategy.type (eq .Values.cache.deploymentKind "Deployment") }}
+  {{- if and .Values.cache.strategy .Values.cache.strategy.type (eq .Values.cache.deploymentKind "Deployment") }}
+  revisionHistoryLimit: 5
   strategy:
-    type: {{ .Values.strategy.type }}
-    {{- if and .Values.strategy.rollingUpdate (eq .Values.strategy.type "RollingUpdate") }}
+    type: {{ .Values.cache.strategy.type }}
+    {{- if and .Values.cache.strategy.rollingUpdate (eq .Values.cache.strategy.type "RollingUpdate") }}
     rollingUpdate:
-      {{- .Values.strategy.rollingUpdate | toYaml | nindent 6 }}
+      {{- .Values.cache.strategy.rollingUpdate | toYaml | nindent 6 }}
     {{- end }}
   {{- end }}
   {{- if eq .Values.cache.deploymentKind "StatefulSet" }}
@@ -118,12 +119,6 @@ spec:
           {{- end }}
           {{- if .Values.cache.readinessProbe }}
           readinessProbe:
-            httpGet:
-              path: /varnish/health
-              port: varnish-http
-          {{- end }}
-          {{- if .Values.cache.startupProbe }}
-          startupProbe:
             httpGet:
               path: /varnish/health
               port: varnish-http
