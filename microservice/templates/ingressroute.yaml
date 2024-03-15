@@ -190,6 +190,9 @@ spec:
           {{- end }}
           port: {{ .servicePort | default $svcPort }}
           nativeLB: {{ .nativeLB | default false }}
+          {{- with .weight }}
+          weight: {{ . }}
+          {{- end }}
         {{- if and .fallbackServiceName }}
         - name: {{ .fallbackServiceName }}
           {{- with .serviceNamespace }}
@@ -197,6 +200,9 @@ spec:
           {{- end }}
           port: {{ .fallbackServicePort | default $svcPort }}
           nativeLB: {{ .nativeLB | default false }}
+          {{- with .falllbackServiceWeight }}
+          weight: {{ . }}
+          {{- end }}
         {{- end }}
       middlewares:
         {{- if and $ingressroute.tls.enabled $ingressroute.tls.forceHttps }}
