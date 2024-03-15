@@ -35,7 +35,7 @@ Common labels
 */}}
 {{- define "microservice.labels" -}}
 helm.sh/chart: {{ include "microservice.chart" .context }}
-{{ include "microservice.selectorLabels" (dict "context" .context "component" .component ) }}
+{{ include "microservice.selectorLabels" (dict "context" .context "component" .component) }}
 app.kubernetes.io/version: {{ include "helpers.image-tag" .context | quote }}
 app.kubernetes.io/managed-by: {{ .context.Release.Service }}
 {{- end }}

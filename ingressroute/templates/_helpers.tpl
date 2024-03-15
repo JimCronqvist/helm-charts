@@ -46,8 +46,8 @@ app.kubernetes.io/managed-by: {{ .context.Release.Service }}
 Selector labels
 */}}
 {{- define "microservice.selectorLabels" -}}
-app.kubernetes.io/name: {{ include "microservice.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/name: {{ include "microservice.name" .context }}
+app.kubernetes.io/instance: {{ .context.Release.Name }}
 {{- if .component }}
 app.kubernetes.io/component: {{ .component }}
 {{- end }}
