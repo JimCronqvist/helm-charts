@@ -104,6 +104,10 @@ spec:
             #- -T localhost:6082
             #- -p workspace_client=256k
           {{- end }}
+          {{- with .Values.cache.lifecycle }}
+          lifecycle:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           ports:
             - containerPort: 8080
               name: varnish-http

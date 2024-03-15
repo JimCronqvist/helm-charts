@@ -178,7 +178,11 @@ cache:
     type: RollingUpdate
     rollingUpdate:
       maxSurge: 1
-      maxUnavailable: 25%
+      maxUnavailable: 0
+  lifecycle:
+    preStop:
+     exec:
+       command: ["sleep", "5"]
   autoscaling:
     enabled: false
     minReplicas: 1
