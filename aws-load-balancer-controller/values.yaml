@@ -8,6 +8,11 @@ aws-load-balancer-controller:
       # AWS Load Balancer Controller IAM role for service account (IRSA)
       eks.amazonaws.com/role-arn:
 
+  # If enabled, cert-manager issues the webhook certificates instead of the helm template, requires cert-manager and it's CRDs to be installed
+  enableCertManager: false
+  # If false, disable the Service Mutator webhook which makes all new services of type LoadBalancer reconciled by the lb controller
+  enableServiceMutatorWebhook: false
+
   # Specify details about the EKS environment, if all is provided it will also run on Fargate.
   clusterName:
   region:
