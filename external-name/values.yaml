@@ -5,7 +5,6 @@
 externalNames:
   # - name: db01-prod
   #   externalName: db01.prod.example.com
-  #   # Optional to specify ports, but is still a good idea to do so.
   #   ports:
   #     - port: 3306
   #       name: mysql

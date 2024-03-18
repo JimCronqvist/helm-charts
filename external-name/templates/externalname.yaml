@@ -10,10 +10,8 @@ metadata:
 spec:
   type: ExternalName
   externalName: {{ .externalName }}
-  {{- with .ports }}
   ports:
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- toYaml .ports | nindent 4 }}
 ---
 {{- end }}
 {{- end }}
