@@ -199,9 +199,7 @@ spec:
       services:
         {{- if .cache }}
         - name: {{ $svcName }}-varnish
-          port: 8443
-          proxyProtocol:
-            version: 2
+          port: 80
           nativeLB: {{ .nativeLB | default false }}
           {{- with .weight }}
           weight: {{ . }}
