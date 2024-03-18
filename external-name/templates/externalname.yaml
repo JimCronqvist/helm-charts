@@ -7,8 +7,13 @@ metadata:
   namespace: {{ .namespace | default $.Release.Namespace }}
   labels:
     {{- include "external-name.labels" $ | nindent 4 }}
+spec:
   type: ExternalName
   externalName: {{ .externalName }}
+  {{- with .ports }}
+  ports:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 ---
 {{- end }}
 {{- end }}
