@@ -199,6 +199,8 @@ cache:
         #sizeLimit: 2Gi
       mounts:
         - mountPath: "/var/lib/varnish/varnishd"
+  logging:
+    enabled: false
   backendHost: ""
   backendPort:
   healthEndpoint: /health

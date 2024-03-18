@@ -154,6 +154,28 @@ spec:
               mountPath: "/etc/varnish/default.vcl"
               subPath: "default.vcl"
               readOnly: true
+        {{- if .Values.cache.logging.enabled }}
+        - name: {{ $fullName | default .Chart.Name }}-varnishncsa
+          image: "varnish:{{ .Values.cache.varnishVersion }}"
+          imagePullPolicy: {{ .Values.cache.varnishPullPolicy }}
+          command:
+            - varnishncsa
+            {{- if .Values.cache.logging.customOutputJsonFormat }}
+            - -j
+            {{- end }}
+            {{- if .Values.cache.logging.customOutput }}
+            - -F
+            - {{ .Values.cache.logging.customOutput | quote }}
+            {{- end }}
+            - -t
+            - {{ .Values.cache.logging.timeout | default "off" | quote }}
+          resources:
+            {{- include "helpers.wrapResourcesWithQuotes" .Values.cache.logging.resources | indent 12 }}
+          volumeMounts:
+            {{- with .Values.cache.pvc }}
+            {{- include "helpers.volume-mounts" (list $ . $.Values.cache.deploymentKind) | indent 12 }}
+            {{- end }}
+        {{- end }}
       volumes:
         {{- if eq .Values.cache.deploymentKind "Deployment" }}
         {{- with .Values.cache.pvc }}
