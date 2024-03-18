@@ -206,13 +206,13 @@ data:
 
       call vcl_req_authorization; # Do not cache if we have any Authorization header
       call vcl_req_cookie;        # Do not cache if we have Cookies left
-      call vcl_req_x_api_key;     # Do not cache if we have any X-Api-Key header
+      call custom_req_x_api_key;  # Do not cache if we have any X-Api-Key header
 
       # Ignore built-in by returning here, as we have already checked for every check that is included as built-in.
       return (hash);
     }
 
-    sub vcl_req_x_api_key {
+    sub custom_req_x_api_key {
       if (req.http.X-Api-Key) {
         return (pass); # Not cacheable by default
       }
