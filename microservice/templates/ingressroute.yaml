@@ -181,16 +181,16 @@ spec:
     {{- $matchRule = mustAppend $matchRule (tpl "Host(`{{ .host | replace \" \" \"\" | replace \",\" \"`,`\" }}`)" (merge . (dict "Template" $.Template))) }}
     {{- end }}
     {{- if and .header (regexMatch "[+*()\\[\\]{}]" .header) }}
-    {{- $matchRule = mustAppend $matchRule (tpl "HeaderRegexp(`{{ (splitn \":\" 2 .header)._0 }}`, `{{ (splitn \":\" 2 .header)._1 | trim }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- $matchRule = mustAppend $matchRule (tpl "HeadersRegexp(`{{ (splitn \":\" 2 .header)._0 }}`, `{{ (splitn \":\" 2 .header)._1 | trim }}`)" (merge . (dict "Template" $.Template))) }}
     {{- else if .header }}
-    {{- $matchRule = mustAppend $matchRule (tpl "Header(`{{ (splitn \":\" 2 .header)._0 }}`, `{{ (splitn \":\" 2 .header)._1 | trim }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- $matchRule = mustAppend $matchRule (tpl "Headers(`{{ (splitn \":\" 2 .header)._0 }}`, `{{ (splitn \":\" 2 .header)._1 | trim }}`)" (merge . (dict "Template" $.Template))) }}
     {{- end }}
     {{- if .method }}
     {{- $matchRule = mustAppend $matchRule (tpl "Method(`{{ .method | replace \" \" \"\" | replace \",\" \"`,`\" }}`)" (merge . (dict "Template" $.Template))) }}
     {{- end }}
     {{- $matchRule = mustAppend $matchRule (tpl "PathPrefix(`{{ .path }}`)" (merge . (dict "Template" $.Template))) }}
     {{- if .cache }}
-    {{- $matchRule = mustAppend $matchRule "!Header(`VARNISH`, `0`)" }}
+    {{- $matchRule = mustAppend $matchRule "!Headers(`VARNISH`, `0`)" }}
     {{- end }}
     {{- $matchRule = $matchRule | join " && " }}
     - kind: Rule
