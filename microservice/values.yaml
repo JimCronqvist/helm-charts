@@ -164,6 +164,8 @@ ingressroute:
     #   host: test(.*).local
     #   priority: 0
     #   stripPrefix: /base-path
+    #   method: GET,POST
+    #   header: "X-Api-Key: .*"
 
 cache:
   enabled: false

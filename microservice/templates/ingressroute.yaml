@@ -173,16 +173,26 @@ spec:
     - web
   routes:
     {{- range $index, $route := $ingressroute.routes }}
-    {{- $host := $ingressroute.overrideHost | default .host }}
+    {{- $_ := set . "host" ($ingressroute.overrideHost | default .host) }}
+    {{- $matchRule := list }}
+    {{- if and .host (regexMatch "[+*()\\[\\]{}]" .host) }}
+    {{- $matchRule = mustAppend $matchRule (tpl "HostRegexp(`{{ .host | replace \" \" \"\" | replace \",\" \"`,`\" }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- else if .host }}
+    {{- $matchRule = mustAppend $matchRule (tpl "Host(`{{ .host | replace \" \" \"\" | replace \",\" \"`,`\" }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- end }}
+    {{- if and .header (regexMatch "[+*()\\[\\]{}]" .header) }}
+    {{- $matchRule = mustAppend $matchRule (tpl "HeaderRegexp(`{{ (splitn \":\" 2 .header)._0 }}`, `{{ (splitn \":\" 2 .header)._1 | trim }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- else if .header }}
+    {{- $matchRule = mustAppend $matchRule (tpl "Header(`{{ (splitn \":\" 2 .header)._0 }}`, `{{ (splitn \":\" 2 .header)._1 | trim }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- end }}
+    {{- if .method }}
+    {{- $matchRule = mustAppend $matchRule (tpl "Method(`{{ .method | replace \" \" \"\" | replace \",\" \"`,`\" }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- end }}
+    {{- $matchRule = mustAppend $matchRule (tpl "PathPrefix(`{{ .path }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- $matchRule = $matchRule | join " && " }}
     - kind: Rule
-      priority: {{ .priority | default 0 }}
-      {{- if and $host (regexMatch "[+*()\\[\\]{}]" $host) }}
-      match: HostRegexp(`{{ $host | replace "," "`,`" }}`) && PathPrefix(`{{ .path }}`)
-      {{- else if $host }}
-      match: Host(`{{ $host | replace "," "`,`" }}`) && PathPrefix(`{{ .path }}`)
-      {{- else }}
-      match: PathPrefix(`{{ .path }}`)
-      {{- end }}
+      priority: {{ .priority | default (len $matchRule) }}
+      match: {{ $matchRule }}
       services:
         - name: {{ .serviceName | default $svcName }}
           {{- with .serviceNamespace }}
