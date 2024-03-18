@@ -159,6 +159,7 @@ ingressroute:
     #   host: test.local
     #   priority: 0
     #   stripPrefix:
+    #   cache: true
     #
     # - path: /{path:([0-9]{6,}}
     #   host: test(.*).local

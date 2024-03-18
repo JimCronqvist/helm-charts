@@ -189,11 +189,24 @@ spec:
     {{- $matchRule = mustAppend $matchRule (tpl "Method(`{{ .method | replace \" \" \"\" | replace \",\" \"`,`\" }}`)" (merge . (dict "Template" $.Template))) }}
     {{- end }}
     {{- $matchRule = mustAppend $matchRule (tpl "PathPrefix(`{{ .path }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- if .cache }}
+    {{- $matchRule = mustAppend $matchRule "!Header(`VARNISH`, `0`)" }}
+    {{- end }}
     {{- $matchRule = $matchRule | join " && " }}
     - kind: Rule
       priority: {{ .priority | default (len $matchRule) }}
       match: {{ $matchRule }}
       services:
+        {{- if .cache }}
+        - name: {{ $svcName }}-varnish
+          port: 8443
+          proxyProtocol:
+            version: 2
+          nativeLB: {{ .nativeLB | default false }}
+          {{- with .weight }}
+          weight: {{ . }}
+          {{- end }}
+        {{- else }}
         - name: {{ .serviceName | default $svcName }}
           {{- with .serviceNamespace }}
           namespace: {{ . }}
@@ -213,6 +226,7 @@ spec:
           {{- with .falllbackServiceWeight }}
           weight: {{ . }}
           {{- end }}
+        {{- end }}
         {{- end }}
       middlewares:
         {{- if and $ingressroute.tls.enabled $ingressroute.tls.forceHttps }}
