@@ -200,7 +200,7 @@ cache:
       mounts:
         - mountPath: "/var/lib/varnish/varnishd"
   backendHost: ""
-  backendPort: 443
+  backendPort:
   healthEndpoint: /health
   env:
     VARNISH_UNSET_COOKIE: "false"
