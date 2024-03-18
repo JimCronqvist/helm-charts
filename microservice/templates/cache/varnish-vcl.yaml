@@ -1,9 +1,7 @@
 {{- if .Values.cache.enabled }}
 {{- $fullName := include "microservice.fullname" . -}}
 {{- $labels := include "microservice.labels" (dict "context" $) -}}
-{{- $svcPort := dig "port" 80 (default (dict) .Values.service) -}}
 {{- $healthEndpoint := .Values.cache.healthEndpoint -}}
-{{- $svcName := $fullName -}}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -13,7 +11,7 @@ metadata:
 data:
   {{- if .Values.cache.customVcl }}
   default.vcl: |
-    {{- .Values.cache.customVcl | replace "${BACKEND_HOST}" $svcName | replace "${BACKEND_HEALTH_ENDPOINT}" $healthEndpoint | replace "${BACKEND_PORT}" ($svcPort | squote | replace "'" "") | nindent 4 }}
+    {{- .Values.cache.customVcl | replace "${BACKEND_HEALTH_ENDPOINT}" $healthEndpoint | nindent 4 }}
   {{- else }}
   default.vcl: |
     vcl 4.1;
@@ -63,8 +61,8 @@ data:
     }
 
     sub vcl_recv {
-      set req.http.host = "{{ $svcName }}";
-      set req.backend_hint = d.backend(req.http.host, "{{ $svcPort }}");
+      set req.http.host = std.getenv("VARNISH_BACKEND_HOST");
+      set req.backend_hint = d.backend(req.http.host, std.getenv("VARNISH_BACKEND_PORT"));
 
       # Remove the proxy header (see https://httpoxy.org/#mitigate-varnish)
       unset req.http.proxy;
@@ -100,6 +98,14 @@ data:
       if (req.url ~ "/varnish/health"){
         set req.http.Connection = "close";
         return (synth(200, "OK"));
+      } else if (req.url ~ "/varnish/health/backend") {
+        if (std.healthy(req.backend_hint) {
+          set req.http.Connection = "close";
+          return (synth(200, "Backend is healthy"));
+        } else {
+          set req.http.Connection = "close";
+          return (synth(503, "Backend is unhealthy"));
+        }
       }
 
       call vcl_req_host;   # Host presence check for http/1.1 requests and lower casing the host header
@@ -144,8 +150,20 @@ data:
         unset req.http.cookie;
       }
 
-      # Unset the entire cookie
-      #unset req.http.cookie;
+      # Env check - Unset the entire cookie
+      if(std.getenv("VARNISH_UNSET_COOKIE") == "true" || std.getenv("VARNISH_UNSET_COOKIE") == "1") {
+        unset req.http.cookie;
+      }
+
+      # Env check - Unset Authorization header
+      if(std.getenv("VARNISH_UNSET_AUTHORIZATION" || std.getenv("VARNISH_UNSET_AUTHORIZATION") == "1") == "true") {
+        unset req.http.Authorization;
+      }
+
+      # Env check - Unset X-Api-Key header
+      if(std.getenv("VARNISH_UNSET_X_API_KEY") == "true" || std.getenv("VARNISH_UNSET_X_API_KEY") == "1") {
+          unset req.http.X-Api-Key;
+      }
 
       # Some generic cookie manipulation, don't manipulate empty cookies
       if (req.http.Cookie !~ "^\s*$") {
@@ -186,14 +204,15 @@ data:
       # Send Surrogate-Capability headers to announce ESI support to backend
       set req.http.Surrogate-Capability = "key=ESI/1.0";
 
-      call vcl_req_authorization; # Do not cache if we have any Authorization or X-Api-Key headers
+      call vcl_req_authorization; # Do not cache if we have any Authorization header
       call vcl_req_cookie;        # Do not cache if we have Cookies left
+      call vcl_req_x_api_key;     # Do not cache if we have any X-Api-Key header
 
       # Ignore built-in by returning here, as we have already checked for every check that is included as built-in.
       return (hash);
     }
 
-    sub vcl_req_authorization {
+    sub vcl_req_x_api_key {
       if (req.http.X-Api-Key) {
         return (pass); # Not cacheable by default
       }
@@ -202,6 +221,9 @@ data:
     sub vcl_hash {
       if (req.http.Cookie) {
         hash_data(req.http.Cookie);
+      }
+      if (req.http.X-Api-Key) {
+        hash_data(req.http.X-Api-Key);
       }
       if (req.http.X-Forwarded-Proto) {
         hash_data(req.http.X-Forwarded-Proto);

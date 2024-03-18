@@ -159,7 +159,7 @@ ingressroute:
     #   host: test.local
     #   priority: 0
     #   stripPrefix:
-    #   cache: true
+    #   useCache: true
     #
     # - path: /{path:([0-9]{6,}}
     #   host: test(.*).local
@@ -199,7 +199,13 @@ cache:
         #sizeLimit: 2Gi
       mounts:
         - mountPath: "/var/lib/varnish/varnishd"
+  backendHost: ""
+  backendPort: 443
   healthEndpoint: /health
+  env:
+    VARNISH_UNSET_COOKIE: "false"
+    VARNISH_UNSET_AUTHORIZATION: "false"
+    VARNISH_UNSET_X_API_KEY: "false"
   rules: []
   customVcl: ""
 

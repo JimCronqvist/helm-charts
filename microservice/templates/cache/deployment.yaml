@@ -1,5 +1,7 @@
 {{- if .Values.cache.enabled }}
 {{- $fullName := include "microservice.fullname" . -}}
+{{- $svcName := $fullName -}}
+{{- $svcPort := dig "port" 80 (default (dict) .Values.service) -}}
 apiVersion: apps/v1
 kind: {{ .Values.cache.deploymentKind | default "Deployment" }}
 metadata:
@@ -115,6 +117,21 @@ spec:
             - containerPort: 8443
               name: varnish-proxy
               protocol: TCP
+          env:
+            - name: VARNISH_BACKEND_HOST
+              value: {{ .Values.cache.backendHost | default $svcName | quote }}
+            - name: VARNISH_BACKEND_PORT
+              value: {{ .Values.cache.backendPort | default $svcPort | quote }}
+            - name: VARNISH_UNSET_COOKIE
+              value: "{{ .Values.cache.env.VARNISH_UNSET_COOKIE | default false }}"
+            - name: VARNISH_UNSET_AUTHORIZATION
+              value: "{{ .Values.cache.env.VARNISH_UNSET_AUTHORIZATION | default false }}"
+            - name: VARNISH_UNSET_X_API_KEY
+              value: "{{ .Values.cache.env.VARNISH_UNSET_X_API_KEY | default false }}"
+            {{- range $key, $val := (omit .Values.cache.env "VARNISH_BACKEND_HOST" "VARNISH_BACKEND_PORT" "VARNISH_UNSET_COOKIE" "VARNISH_UNSET_AUTHORIZATION" "VARNISH_UNSET_X_API_KEY") }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
+            {{- end }}
           {{- if .Values.cache.livenessProbe }}
           livenessProbe:
             httpGet:

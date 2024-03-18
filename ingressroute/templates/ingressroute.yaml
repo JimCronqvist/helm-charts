@@ -189,7 +189,7 @@ spec:
     {{- $matchRule = mustAppend $matchRule (tpl "Method(`{{ .method | replace \" \" \"\" | replace \",\" \"`,`\" }}`)" (merge . (dict "Template" $.Template))) }}
     {{- end }}
     {{- $matchRule = mustAppend $matchRule (tpl "PathPrefix(`{{ .path }}`)" (merge . (dict "Template" $.Template))) }}
-    {{- if .cache }}
+    {{- if .useCache }}
     {{- $matchRule = mustAppend $matchRule "!Headers(`VARNISH`, `0`)" }}
     {{- end }}
     {{- $matchRule = $matchRule | join " && " }}
@@ -197,7 +197,7 @@ spec:
       priority: {{ .priority | default (len $matchRule) }}
       match: {{ $matchRule }}
       services:
-        {{- if .cache }}
+        {{- if .useCache }}
         - name: {{ $svcName }}-varnish
           port: 80
           nativeLB: {{ .nativeLB | default false }}
