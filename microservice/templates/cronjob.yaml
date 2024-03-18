@@ -26,6 +26,7 @@ spec:
       template:
         metadata:
           annotations:
+            karpenter.sh/do-not-disrupt: "true"
             {{- include "microservice.checksumPodAnnotations" $ | indent 12 }}
         spec:
           restartPolicy: OnFailure

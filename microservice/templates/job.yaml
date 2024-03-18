@@ -22,6 +22,9 @@ spec:
   activeDeadlineSeconds: {{ $job.activeDeadlineSeconds }}
   {{- end }}
   template:
+    metadata:
+      annotations:
+        karpenter.sh/do-not-disrupt: "true"
     spec:
       restartPolicy: OnFailure
       {{- with $.Values.imagePullSecrets }}
