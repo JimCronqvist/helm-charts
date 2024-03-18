@@ -99,7 +99,7 @@ data:
         set req.http.Connection = "close";
         return (synth(200, "OK"));
       } else if (req.url ~ "/varnish/health/backend") {
-        if (std.healthy(req.backend_hint) {
+        if (std.healthy(req.backend_hint)) {
           set req.http.Connection = "close";
           return (synth(200, "Backend is healthy"));
         } else {
