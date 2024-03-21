@@ -124,6 +124,15 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           {{- end }}
+          {{- if and (not .Values.deployment.lifecycle) (gt (int .Values.deployment.lifecyclePreStopSleep) 0) }}
+          lifecycle:
+            preStop:
+              exec:
+                command:
+                  - /bin/sh
+                  - -c
+                  - echo "Sleeping for {{ .Values.deployment.lifecyclePreStopSleep }} seconds before terminating" && sleep {{ .Values.deployment.lifecyclePreStopSleep }} && echo "Done sleeping, terminating."
+          {{- end }}
           {{- with .Values.deployment.lifecycle }}
           lifecycle:
             {{- toYaml . | nindent 12 }}

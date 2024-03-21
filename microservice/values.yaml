@@ -104,6 +104,10 @@ deployment:
     #  image: nginx:${IMAGE_TAG}
     #  imagePullPolicy: Always
     #  mounts: false
+  # Quick way to set a preStop sleep for the main container, ignored if lifecycle is set.
+  # Useful for graceful shutdowns when you have no control over the application. A common sane value would be 5 seconds.
+  lifecyclePreStopSleep: 0
+  # Lifecycle hooks for the main container
   lifecycle: {}
     # preStop:
     #   exec:
