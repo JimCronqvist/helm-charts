@@ -131,7 +131,7 @@ spec:
                 command:
                   - /bin/sh
                   - -c
-                  - echo "Sleeping for {{ .Values.deployment.lifecyclePreStopSleep }} seconds before terminating" && sleep {{ .Values.deployment.lifecyclePreStopSleep }} && echo "Done sleeping, terminating."
+                  - echo "Sleeping for {{ .Values.deployment.lifecyclePreStopSleep }} seconds before terminating" > /proc/1/fd/1 && sleep {{ .Values.deployment.lifecyclePreStopSleep }} && echo "Done sleeping, terminating." > /proc/1/fd/1
           {{- end }}
           {{- with .Values.deployment.lifecycle }}
           lifecycle:
