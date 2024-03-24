@@ -16,6 +16,18 @@ karpenter:
     tags.datadoghq.com/service: karpenter
   podLabels:
     tags.datadoghq.com/service: karpenter
+  podAnnotations:
+    ad.datadoghq.com/controller.checks: |
+      {
+        "karpenter": {
+          "init_config": {},
+          "instances": [
+            {
+              "openmetrics_endpoint": "http://%%host%%:8000/metrics"
+            }
+          ]
+        }
+      }
 
   settings:
     # The EKS cluster name

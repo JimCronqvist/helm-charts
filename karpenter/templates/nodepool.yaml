@@ -10,6 +10,7 @@ metadata:
   labels:
     {{- $labels | nindent 4 }}
 spec:
+  weight: {{ dig ($provisioner.nodePool) "weight" 1 $.Values.nodePool }}
   template:
     spec:
       kubelet: {}
@@ -47,7 +48,12 @@ spec:
     consolidateAfter: {{ dig ($provisioner.nodePool) "consolidateAfter" "2m" $.Values.nodePool }}
     {{- end }}
     expireAfter: {{ dig ($provisioner.nodePool) "expireAfter" "336h" $.Values.nodePool }}
-  weight: {{ dig ($provisioner.nodePool) "weight" 1 $.Values.nodePool }}
+    budgets:
+      {{- if (dig ($provisioner.nodePool) "budgets" false $.Values.nodePool) }}
+      {{- dig ($provisioner.nodePool) "budgets" false $.Values.nodePool | toYaml | nindent 6 }}
+      {{- else }}
+      - nodes: "10%"
+      {{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
