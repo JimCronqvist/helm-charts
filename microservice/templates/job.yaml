@@ -9,6 +9,7 @@ metadata:
   name: {{ printf "%s-%s" $fullName ($job.name | replace " " "-" | lower) | trunc 53 | trimSuffix "-" }}
   labels:
     {{- $labels | nindent 4 }}
+    {{- include "helpers.datadog-service-labels" $ | indent 4 }}
   {{- with $job.annotations }}
   annotations:
     {{- toYaml . | nindent 4 }}
@@ -25,6 +26,9 @@ spec:
     metadata:
       annotations:
         karpenter.sh/do-not-disrupt: "true"
+        {{- with $job.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
       restartPolicy: OnFailure
       {{- with $.Values.imagePullSecrets }}

@@ -6,9 +6,14 @@
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ printf "%s-%s" $fullName ($cronjob.name | replace " " "-" | lower) | trunc 52 | trimSuffix "-" }}
+  name: {{ printf "%s-%s" $fullName ($cronjob.name | replace " " "-" | lower) | trunc 50 | trimSuffix "-" }}
   labels:
     {{- $labels | nindent 4 }}
+    {{- include "helpers.datadog-service-labels" $ | indent 4 }}
+  {{- with $cronjob.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   schedule: "{{ $cronjob.schedule }}"
   timeZone: {{ default "Europe/Stockholm" $cronjob.timeZone }}
@@ -28,6 +33,9 @@ spec:
           annotations:
             karpenter.sh/do-not-disrupt: "true"
             {{- include "microservice.checksumPodAnnotations" $ | indent 12 }}
+            {{- with $cronjob.podAnnotations }}
+            {{- toYaml . | nindent 12 }}
+            {{- end }}
         spec:
           restartPolicy: OnFailure
           {{- with $.Values.imagePullSecrets }}
