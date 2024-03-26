@@ -8,8 +8,10 @@ aws-load-balancer-controller:
       # AWS Load Balancer Controller IAM role for service account (IRSA)
       eks.amazonaws.com/role-arn:
 
-  # If enabled, cert-manager issues the webhook certificates instead of the helm template, requires cert-manager and it's CRDs to be installed
+  # If enabled, cert-manager issues the webhook certificates instead of the helm template, requires cert-manager, and it's CRDs to be installed
   enableCertManager: false
+  # If enabled, reuse existing TLS Secret during chart upgrade (default: true)
+  keepTLSSecret: true
   # If false, disable the Service Mutator webhook which makes all new services of type LoadBalancer reconciled by the lb controller
   enableServiceMutatorWebhook: false
 
