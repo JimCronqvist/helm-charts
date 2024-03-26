@@ -1,0 +1,30 @@
+kyverno:
+  namespaceOverride: kyverno
+  config:
+    excludeKyvernoNamespace: true
+    resourceFiltersExcludeNamespaces:
+      - kube-system
+      - kube-system-ec2
+      - argocd
+      - traefik
+      - cert-manager
+      - karpenter
+    webhooks: []
+
+    # Kyverno default is true
+    enableDefaultRegistryMutation: false
+    defaultRegistry: docker.io
+
+  # https://kyverno.io/docs/high-availability/
+  admissionController:
+    replicas: 3
+    priorityClassName: "system-cluster-critical"
+  backgroundController:
+    replicas: 2
+    priorityClassName: ""
+  cleanupController:
+    replicas: 2
+    priorityClassName: ""
+  reportsController:
+    replicas: 2
+    priorityClassName: ""
