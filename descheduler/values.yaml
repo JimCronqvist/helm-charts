@@ -1,3 +1,41 @@
 descheduler:
+  kind: Deployment
+  deschedulingInterval: 5m
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 100m
+      memory: 128Mi
+
   podLabels:
     tags.datadoghq.com/service: descheduler
+
+  deschedulerPolicy:
+    maxNoOfPodsToEvictPerNode: 5
+    maxNoOfPodsToEvictPerNamespace: 10
+    ignorePvcPods: false
+    evictLocalStoragePods: false
+    minReplicas: 2
+
+    strategies:
+      RemoveDuplicates:
+        enabled: false
+      RemovePodsHavingTooManyRestarts:
+        enabled: false
+      RemovePodsViolatingNodeTaints:
+        enabled: false
+      RemovePodsViolatingNodeAffinity:
+        enabled: false
+      LowNodeUtilization:
+        enabled: false
+
+      RemovePodsViolatingInterPodAntiAffinity:
+        enabled: true
+      RemovePodsViolatingTopologySpreadConstraint:
+        enabled: true
+        params:
+          includeSoftConstraints: false
+
