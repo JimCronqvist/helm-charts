@@ -176,19 +176,23 @@ spec:
     {{- $_ := set . "host" ($ingressroute.overrideHost | default .host) }}
     {{- $matchRule := list }}
     {{- if and .host (regexMatch "[+*()\\[\\]{}]" .host) }}
-    {{- $matchRule = mustAppend $matchRule (tpl "HostRegexp(`{{ .host | replace \" \" \"\" | replace \",\" \"`,`\" }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- $matchRule = mustAppend $matchRule (regexReplaceAll "^(.*[|].*)$" (regexReplaceAll "([^,]+)" (nospace .host) "HostRegexp(`${1}`)" | replace "," " || ") "(${1})") }}
     {{- else if .host }}
-    {{- $matchRule = mustAppend $matchRule (tpl "Host(`{{ .host | replace \" \" \"\" | replace \",\" \"`,`\" }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- $matchRule = mustAppend $matchRule (regexReplaceAll "^(.*[|].*)$" (regexReplaceAll "([^,]+)" (nospace .host) "Host(`${1}`)" | replace "," " || ") "(${1})") }}
     {{- end }}
     {{- if and .header (regexMatch "[+*()\\[\\]{}]" .header) }}
-    {{- $matchRule = mustAppend $matchRule (tpl "HeadersRegexp(`{{ (splitn \":\" 2 .header)._0 }}`, `{{ (splitn \":\" 2 .header)._1 | trim }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- $matchRule = mustAppend $matchRule (tpl "HeaderRegexp(`{{ (splitn \":\" 2 .header)._0 }}`, `{{ (splitn \":\" 2 .header)._1 | trim }}`)" (merge . (dict "Template" $.Template))) }}
     {{- else if .header }}
-    {{- $matchRule = mustAppend $matchRule (tpl "Headers(`{{ (splitn \":\" 2 .header)._0 }}`, `{{ (splitn \":\" 2 .header)._1 | trim }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- $matchRule = mustAppend $matchRule (tpl "Header(`{{ (splitn \":\" 2 .header)._0 }}`, `{{ (splitn \":\" 2 .header)._1 | trim }}`)" (merge . (dict "Template" $.Template))) }}
     {{- end }}
     {{- if .method }}
-    {{- $matchRule = mustAppend $matchRule (tpl "Method(`{{ .method | replace \" \" \"\" | replace \",\" \"`,`\" }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- $matchRule = mustAppend $matchRule (regexReplaceAll "^(.*[|].*)$" (regexReplaceAll "([^,]+)" (nospace .method) "Method(`${1}`)" | replace "," " || ") "(${1})") }}
     {{- end }}
+    {{- if regexMatch "[+*()\\[\\]{}]" .path }}
+    {{- $matchRule = mustAppend $matchRule (tpl "PathRegexp(`{{ .path }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- else }}
     {{- $matchRule = mustAppend $matchRule (tpl "PathPrefix(`{{ .path }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- end }}
     {{- if .useCache }}
     {{- $matchRule = mustAppend $matchRule "!Headers(`VARNISH`, `0`)" }}
     {{- end }}

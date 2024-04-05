@@ -1,4 +1,7 @@
 traefik:
+  image:
+    tag: v3.0.0-rc3
+
   rbac:
     enabled: true
 
