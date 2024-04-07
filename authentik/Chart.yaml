@@ -9,7 +9,7 @@ version: 0.1.0
 
 dependencies:
   - name: ingressroute
-    version: 0.1.x
+    version: 0.2.x
     repository: file://../ingressroute
     condition: ingressroute.enabled
   - name: authentik
