@@ -194,7 +194,7 @@ spec:
     {{- $matchRule = mustAppend $matchRule (tpl "PathPrefix(`{{ .path }}`)" (merge . (dict "Template" $.Template))) }}
     {{- end }}
     {{- if .useCache }}
-    {{- $matchRule = mustAppend $matchRule "!Headers(`VARNISH`, `0`)" }}
+    {{- $matchRule = mustAppend $matchRule "!Header(`VARNISH`, `0`)" }}
     {{- end }}
     {{- $matchRule = $matchRule | join " && " }}
     - kind: Rule
