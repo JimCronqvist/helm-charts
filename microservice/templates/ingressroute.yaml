@@ -16,7 +16,7 @@ metadata:
   labels:
     {{- $labels | nindent 4 }}
 spec:
-  {{- if regexMatch "[+*()\\[\\]{}]" .stripPrefix }}
+  {{- if regexMatch "[^$+*()\\[\\]{}]" .stripPrefix }}
   stripPrefixRegex:
     regex:
       - {{ .stripPrefix | quote }}
@@ -175,12 +175,12 @@ spec:
     {{- range $index, $route := $ingressroute.routes }}
     {{- $_ := set . "host" ($ingressroute.overrideHost | default .host) }}
     {{- $matchRule := list }}
-    {{- if and .host (regexMatch "[+*()\\[\\]{}]" .host) }}
+    {{- if and .host (regexMatch "[^$+*()\\[\\]{}]" .host) }}
     {{- $matchRule = mustAppend $matchRule (regexReplaceAll "^(.*[|].*)$" (regexReplaceAll "([^,]+)" (nospace .host) "HostRegexp(`${1}`)" | replace "," " || ") "(${1})") }}
     {{- else if .host }}
     {{- $matchRule = mustAppend $matchRule (regexReplaceAll "^(.*[|].*)$" (regexReplaceAll "([^,]+)" (nospace .host) "Host(`${1}`)" | replace "," " || ") "(${1})") }}
     {{- end }}
-    {{- if and .header (regexMatch "[+*()\\[\\]{}]" .header) }}
+    {{- if and .header (regexMatch "[^$+*()\\[\\]{}]" .header) }}
     {{- $matchRule = mustAppend $matchRule (tpl "HeaderRegexp(`{{ (splitn \":\" 2 .header)._0 }}`, `{{ (splitn \":\" 2 .header)._1 | trim }}`)" (merge . (dict "Template" $.Template))) }}
     {{- else if .header }}
     {{- $matchRule = mustAppend $matchRule (tpl "Header(`{{ (splitn \":\" 2 .header)._0 }}`, `{{ (splitn \":\" 2 .header)._1 | trim }}`)" (merge . (dict "Template" $.Template))) }}
@@ -188,7 +188,7 @@ spec:
     {{- if .method }}
     {{- $matchRule = mustAppend $matchRule (regexReplaceAll "^(.*[|].*)$" (regexReplaceAll "([^,]+)" (nospace .method) "Method(`${1}`)" | replace "," " || ") "(${1})") }}
     {{- end }}
-    {{- if regexMatch "[+*()\\[\\]{}]" .path }}
+    {{- if regexMatch "[^$+*()\\[\\]{}]" .path }}
     {{- $matchRule = mustAppend $matchRule (tpl "PathRegexp(`{{ .path }}`)" (merge . (dict "Template" $.Template))) }}
     {{- else }}
     {{- $matchRule = mustAppend $matchRule (tpl "PathPrefix(`{{ .path }}`)" (merge . (dict "Template" $.Template))) }}

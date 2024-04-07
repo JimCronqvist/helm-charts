@@ -14,7 +14,7 @@ metadata:
   labels:
     {{- $labels | nindent 4 }}
 spec:
-  {{- if regexMatch "[+*()\\[\\]{}]" .stripPrefix }}
+  {{- if regexMatch "[^$+*()\\[\\]{}]" .stripPrefix }}
   stripPrefixRegex:
     regex:
       - {{ .stripPrefix | quote }}
@@ -64,7 +64,7 @@ spec:
     {{- $host := $.Values.ingressroute.overrideHost | default .host }}
     - kind: Rule
       priority: {{ .priority | default 0 }}
-      {{- if and $host (regexMatch "[+*()\\[\\]{}]" $host) }}
+      {{- if and $host (regexMatch "[^$+*()\\[\\]{}]" $host) }}
       match: HostRegexp(`{{ $host | replace "," "`,`" }}`) && PathPrefix(`{{ .path }}`)
       {{- else if $host }}
       match: Host(`{{ $host | replace "," "`,`" }}`) && PathPrefix(`{{ .path }}`)
