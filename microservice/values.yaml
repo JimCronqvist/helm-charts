@@ -165,7 +165,7 @@ ingressroute:
     #   stripPrefix:
     #   useCache: true
     #
-    # - path: /{path:([0-9]{6,}}
+    # - path: /([0-9]{6,}
     #   host: test(.*).local
     #   priority: 0
     #   stripPrefix: /base-path
