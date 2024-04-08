@@ -1,4 +1,6 @@
 descheduler:
+  enabled: true
+
   kind: Deployment
   deschedulingInterval: 5m
 
