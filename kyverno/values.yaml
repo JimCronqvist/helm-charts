@@ -2,6 +2,10 @@ kyverno:
   enabled: true
 
   namespaceOverride: kyverno
+  crds:
+    annotations:
+      argocd.argoproj.io/sync-options: Replace=true
+
   config:
     excludeKyvernoNamespace: true
     resourceFiltersExcludeNamespaces:
