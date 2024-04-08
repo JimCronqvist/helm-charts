@@ -1,4 +1,6 @@
 kyverno:
+  enabled: true
+
   namespaceOverride: kyverno
   config:
     excludeKyvernoNamespace: true
