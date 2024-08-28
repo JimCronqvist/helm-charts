@@ -64,14 +64,12 @@ spec:
                 {{- include "helpers.list-env-variables" $ | indent 16 }}
               resources:
                 {{- include "helpers.wrapResourcesWithQuotes" ($cronjob.resources | default dict) | indent 16 }}
-              {{- with $.Values.pvc }}
               volumeMounts:
-                {{- include "helpers.volume-mounts" (list $ . "CronJob") | indent 16 }}
-              {{- end }}
-          {{- with $.Values.pvc }}
+                {{- include "helpers.volume-mounts" (list $ $.Values.pvc "CronJob") | indent 16 }}
+                {{- include "helpers.volume-mounts-files" (list $ $.Values.files "CronJob") | indent 16 }}
           volumes:
-            {{- include "helpers.volumes" (list $ . "CronJob") | indent 12 }}
-          {{- end }}
+            {{- include "helpers.volumes" (list $ $.Values.pvc "CronJob") | indent 12 }}
+            {{- include "helpers.volumes-files" (list $ $.Values.files "CronJob") | indent 12 }}
           {{- with $.Values.nodeSelector }}
           nodeSelector:
             {{- toYaml . | nindent 12 }}

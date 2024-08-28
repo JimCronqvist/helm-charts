@@ -229,6 +229,27 @@ volumeMounts:
 {{- end -}}
 
 {{/*
+Return the Volume Mounts for the configmap-files
+{{- include "helpers.volume-mounts-files" (list $ . "Deployment") | indent 12 }}
+*/}}
+{{- define "helpers.volume-mounts-files" -}}
+{{- $ := index . 0 }}
+{{- $fullName := include (printf "%s.fullname" $.Chart.Name) $ }}
+{{- $kind := index . 2 }}
+{{- with index . 1 }}
+{{- range $fileName, $file := . }}
+{{- $mountToKind := dig (printf "mountTo%s" $kind) true $file }}
+{{- if $mountToKind }}
+- name: configmap-files-volume
+  mountPath: {{ $fileName | quote }}
+  subPath: "file.{{ $fileName | replace "/" "_" }}"
+  readOnly: true
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
 Return the Volumes
 {{- with .Values.pvc }}
 volumes:
@@ -259,6 +280,28 @@ volumes:
   {{- else }}
   emptyDir: {}
   {{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end -}}
+
+{{/*
+Return the Volumes for the configmap-files
+{{- include "helpers.volumes-files" (list $ $.Values.files "Deployment") | indent 8 }}
+*/}}
+{{- define "helpers.volumes-files" -}}
+{{- $ := index . 0 }}
+{{- $fullName := include (printf "%s.fullname" $.Chart.Name) $ }}
+{{- $kind := index . 2 }}
+{{- with index . 1 }}
+{{- range $fileName, $file := . }}
+{{- $mountToKind := dig (printf "mountTo%s" $kind) true $file }}
+{{- if $mountToKind }}
+- name: configmap-files-volume
+  configMap:
+    name: {{ $fullName }}-files
+    defaultMode: 0644
+{{- break -}}
 {{- end }}
 {{- end }}
 {{- end }}

@@ -57,14 +57,12 @@ spec:
             {{- include "helpers.list-env-variables" $ | indent 12 }}
           resources:
             {{- include "helpers.wrapResourcesWithQuotes" ($job.resources | default dict) | indent 12 }}
-          {{- with $.Values.pvc }}
           volumeMounts:
-            {{- include "helpers.volume-mounts" (list $ . "Job") | indent 12 }}
-          {{- end }}
-      {{- with $.Values.pvc }}
+            {{- include "helpers.volume-mounts" (list $ $.Values.pvc "Job") | indent 12 }}
+            {{- include "helpers.volume-mounts-files" (list $ $.Values.files "Job") | indent 12 }}
       volumes:
-        {{- include "helpers.volumes" (list $ . "Job") | indent 8 }}
-      {{- end }}
+        {{- include "helpers.volumes" (list $ $.Values.pvc "Job") | indent 8 }}
+        {{- include "helpers.volumes-files" (list $ $.Values.files "Job") | indent 8 }}
       {{- with $.Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

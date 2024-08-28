@@ -181,15 +181,8 @@ spec:
           resources:
             {{- include "helpers.wrapResourcesWithQuotes" .Values.resources | indent 12 }}
           volumeMounts:
-            {{- with .Values.pvc }}
-            {{- include "helpers.volume-mounts" (list $ . $.Values.deployment.kind) | indent 12 }}
-            {{- end }}
-            {{- range $name, $val := .Values.files }}
-            - name: configmap-files-volume
-              mountPath: {{ $name | quote }}
-              subPath: "file.{{ $name | replace "/" "_" }}"
-              readOnly: true
-            {{- end }}
+            {{- include "helpers.volume-mounts" (list $ $.Values.pvc $.Values.deployment.kind) | indent 12 }}
+            {{- include "helpers.volume-mounts-files" (list $ $.Values.files $.Values.deployment.kind) | indent 12 }}
         {{- range .Values.deployment.sidecars }}
         {{- $sidecar := .}}
         {{- toYaml (list (omit $sidecar "mounts")) | replace "${IMAGE_TAG}" (include "helpers.image-tag" $) | nindent 8 }}
@@ -200,23 +193,15 @@ spec:
             {{- end }}
           {{- if $sidecar.mounts }}
           volumeMounts:
-            {{- with $.Values.pvc }}
-            {{- include "helpers.volume-mounts" (list $ . $.Values.deployment.kind) | indent 12 }}
-            {{- end }}
+            {{- include "helpers.volume-mounts" (list $ $.Values.pvc $.Values.deployment.kind) | indent 12 }}
+            {{- include "helpers.volume-mounts-files" (list $ $.Values.files $.Values.deployment.kind) | indent 12 }}
           {{- end }}
         {{- end }}
       volumes:
         {{- if eq .Values.deployment.kind "Deployment" }}
-        {{- with .Values.pvc }}
-        {{- include "helpers.volumes" (list $ . $.Values.deployment.kind) | indent 8 }}
+        {{- include "helpers.volumes" (list $ $.Values.pvc $.Values.deployment.kind) | indent 8 }}
         {{- end }}
-        {{- end }}
-        {{- if .Values.files }}
-        - name: configmap-files-volume
-          configMap:
-            name: {{ include "microservice.fullname" . }}-files
-            defaultMode: 0644
-        {{- end }}
+        {{- include "helpers.volumes-files" (list $ $.Values.files $.Values.deployment.kind) | indent 8 }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

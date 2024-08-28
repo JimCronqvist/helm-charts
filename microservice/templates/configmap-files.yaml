@@ -6,8 +6,8 @@ metadata:
   labels:
     {{- include "microservice.labels" (dict "context" $) | nindent 4 }}
 data:
-  {{- range $name, $val := .Values.files }}
+  {{- range $name, $file := .Values.files }}
   file.{{ $name | replace "/" "_" }}: |
-    {{- $val | nindent 4 }}
+    {{- $file.content | nindent 4 }}
   {{- end }}
 {{- end }}
