@@ -1,0 +1,15 @@
+{
+  "extends": ["config:base"],
+  "packageRules": [
+    {
+      "managers": ["helmv3"],
+      "packagePatterns": ["*"],
+      "separateMinorPatch": true,
+      "separateMultipleMajor": true,
+      "schedule": ["before 5pm on sunday"]
+    }
+  ],
+  "labels": ["dependencies", "helm"],
+  "repositories": ["JimCronqvist/helm-charts"],
+  "assignees": ["JimCronqvist"]
+}
