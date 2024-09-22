@@ -4,9 +4,9 @@ A collection of Helm Charts
 
 ## Run renovate locally
 ```
-docker run \
-    -e RENOVATE_CONFIG_FILE="/usr/src/app/renovate.json" \
-    -e RENOVATE_TOKEN=$RENOVATE_TOKEN \
-    -v $(pwd)/renovate.json:/usr/src/app/renovate.json \
-    renovate/renovate --dry-run
+docker run -e RENOVATE_TOKEN=$RENOVATE_TOKEN renovate/renovate JimCronqvist/helm-charts --dry-run
 ```
+
+## Renovate permissions required:
+
+https://docs.renovatebot.com/modules/platform/github/#running-using-a-fine-grained-token
