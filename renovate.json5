@@ -2,7 +2,6 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    ":rebaseStalePrs",
     ":labels(renovate)"
   ],
   "timezone": "Europe/Stockholm",
@@ -12,10 +11,33 @@
   "fetchChangeLogs": "pr",
   "packageRules": [
     {
+      "matchPackageNames": [
+        "argocd-rollouts",
+        "authentik",
+        "bottlerocket-update-operator",
+        "cilium",
+        "github-actions-runner",
+        "github-actions-runner-controller",
+        "keda",
+        "kube-prometheus-stack",
+        "kubecost",
+        "postgresql",
+        "prometheus",
+        "prometheus-node-exporter"
+      ],
+      enabled: false
+    },
+    {
+      "matchPackageNames": ["aws-ebs-csi-driver"],
+      "sourceDirectory": "charts/aws-ebs-csi-driver"
+    },
+    {
       "matchPackageNames": ["aws-efs-csi-driver"],
-      "sourceUrl": "https://github.com/kubernetes-sigs/aws-efs-csi-driver",
-      "sourceDirectory": "charts/aws-efs-csi-driver",
-      "matchDatasources": ["github-releases"]
+      "sourceDirectory": "charts/aws-efs-csi-driver"
+    },
+    {
+      "matchPackageNames": ["datadog-operator"],
+      "sourceDirectory": "charts/datadog-operator",
     }
   ]
 }
