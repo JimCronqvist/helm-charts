@@ -1,4 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended"]
+  "extends": ["config:recommended"],
+  "prhourlylimit": 25,
+  "fetchChangelogs": "pr",
+  "packageRules": [
+    {
+      "matchPackageNames": ["aws-efs-csi-driver"],
+      "changelogUrl": "https://github.com/kubernetes-sigs/aws-efs-csi-driver/blob/master/charts/aws-efs-csi-driver/CHANGELOG.md",
+      "sourceUrl": "https://github.com/bitnami/charts",
+      "sourceDirectory": "charts/aws-efs-csi-driver"
+    }
+  ]
 }
