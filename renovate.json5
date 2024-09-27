@@ -2,7 +2,6 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "config:recommended",
-    ":rebaseStalePrs",
     ":labels(renovate)"
   ],
   "timezone": "Europe/Stockholm",
@@ -15,7 +14,11 @@
       "matchPackageNames": ["aws-efs-csi-driver"],
       "sourceUrl": "https://github.com/kubernetes-sigs/aws-efs-csi-driver",
       "sourceDirectory": "charts/aws-efs-csi-driver",
-      "matchDatasources": ["github-releases"]
+      "datasourceTemplate": "github-releases"
+    },
+    {
+      "matchPackageNames": ["datadog-operator"],
+      "sourceDirectory": "charts/datadog-operator",
     }
   ]
 }
