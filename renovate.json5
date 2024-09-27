@@ -11,6 +11,23 @@
   "fetchChangeLogs": "pr",
   "packageRules": [
     {
+      "matchPackageNames": [
+        "argocd-rollouts",
+        "authentik",
+        "bottlerocket-update-operator",
+        "cilium",
+        "github-actions-runner",
+        "github-actions-runner-controller",
+        "keda",
+        "kube-prometheus-stack",
+        "kubecost",
+        "postgresql",
+        "prometheus",
+        "prometheus-node-exporter"
+      ],
+      enabled: false
+    },
+    {
       "matchPackageNames": ["aws-ebs-csi-driver"],
       "sourceDirectory": "charts/aws-ebs-csi-driver"
     },
