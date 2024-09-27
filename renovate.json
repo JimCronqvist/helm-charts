@@ -1,8 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": ["config:recommended"],
-  "prhourlylimit": 25,
-  "fetchChangelogs": "pr",
+  "prHourlyLimit": 25,
+  "fetchChangeLogs": "pr",
   "packageRules": [
     {
       "matchPackageNames": ["aws-efs-csi-driver"],
