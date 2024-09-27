@@ -4,9 +4,9 @@ on:
   push:
     branches: [ 'master', 'main' ]
     paths-ignore:
-      - '.github/**',
-      - '.git*',
-      - 'README.md',
+      - '.github/**'
+      - '.git*'
+      - 'README.md'
       - 'renovate.json5?'
   workflow_dispatch:
 
