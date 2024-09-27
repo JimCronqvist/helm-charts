@@ -49,6 +49,11 @@
       matchPackageNames: ["csi-driver-nfs"],
       sourceUrl: "https://github.com/kubernetes-csi/csi-driver-nfs",
       sourceDirectory: "charts"
+    },
+    {
+      matchPackageNames: ["csi-driver-smb"],
+      sourceUrl: "https://github.com/kubernetes-csi/csi-driver-smb",
+      sourceDirectory: "charts"
     }
   ]
 }
