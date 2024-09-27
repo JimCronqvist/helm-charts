@@ -9,18 +9,24 @@
   "prConcurrentLimit": 0,
   "rebaseWhen": "auto",
   "fetchChangeLogs": "pr",
+  "ignoreTests": true,
   "packageRules": [
     {
+      "description": "Automerge patch updates",
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
+    },
+    {
       "matchPackageNames": [
-        "argocd-rollouts",
+        "argo-rollouts",
         "authentik",
         "bottlerocket-update-operator",
         "cilium",
-        "github-actions-runner",
-        "github-actions-runner-controller",
+        "gha-runner-scale-set-controller", // github-actions-runner-controller
+        "gha-runner-scale-set",            // github-actions-runner
         "keda",
         "kube-prometheus-stack",
-        "kubecost",
+        "cost-analyzer",                   // kubecost
         "postgresql",
         "prometheus",
         "prometheus-node-exporter"
