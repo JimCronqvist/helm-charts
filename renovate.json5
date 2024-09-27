@@ -1,15 +1,21 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["config:recommended", ":rebaseStalePrs"],
+  "extends": [
+    "config:recommended",
+    ":rebaseStalePrs",
+    ":labels(renovate)"
+  ],
   "timezone": "Europe/Stockholm",
-  "prHourlyLimit": 25,
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "rebaseWhen": "auto",
   "fetchChangeLogs": "pr",
   "packageRules": [
     {
       "matchPackageNames": ["aws-efs-csi-driver"],
-      //"sourceUrl": "https://github.com/kubernetes-sigs/aws-efs-csi-driver",
-      //"sourceDirectory": "charts/aws-efs-csi-driver",
-      "datasources": ["github-releases"]
+      "sourceUrl": "https://github.com/kubernetes-sigs/aws-efs-csi-driver",
+      "sourceDirectory": "charts/aws-efs-csi-driver",
+      "matchDatasources": ["github-releases"]
     }
   ]
 }
