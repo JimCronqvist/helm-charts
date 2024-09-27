@@ -5,7 +5,7 @@ microservice:
 
   image:
     repository: registry.k8s.io/pause
-    tag: "3.6"
+    tag: "3.10"
 
   strategy:
     type: RollingUpdate
