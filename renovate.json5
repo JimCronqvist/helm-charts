@@ -11,6 +11,10 @@
   "fetchChangeLogs": "pr",
   "packageRules": [
     {
+      "matchPackageNames": ["aws-ebs-csi-driver"],
+      "sourceDirectory": "charts/aws-ebs-csi-driver"
+    },
+    {
       "matchPackageNames": ["aws-efs-csi-driver"],
       "sourceDirectory": "charts/aws-efs-csi-driver"
     },
