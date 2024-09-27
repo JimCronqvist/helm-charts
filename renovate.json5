@@ -13,8 +13,7 @@
     {
       "matchPackageNames": ["aws-efs-csi-driver"],
       "sourceUrl": "https://github.com/kubernetes-sigs/aws-efs-csi-driver",
-      "sourceDirectory": "charts/aws-efs-csi-driver",
-      "datasourceTemplate": "github-releases"
+      "sourceDirectory": "charts/aws-efs-csi-driver"
     },
     {
       "matchPackageNames": ["datadog-operator"],
