@@ -13,5 +13,5 @@ version: 0.1.0
 dependencies:
   - name: cost-analyzer
     alias: kubecost
-    version: 1.106.0
+    version: 1.108.1
     repository: oci://public.ecr.aws/kubecost
