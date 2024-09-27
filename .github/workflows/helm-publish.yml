@@ -7,7 +7,7 @@ on:
       - '.github/**',
       - '.git*',
       - 'README.md',
-      - 'renovate.json'
+      - 'renovate.json5?'
   workflow_dispatch:
 
 jobs:
