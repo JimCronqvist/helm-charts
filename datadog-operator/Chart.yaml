@@ -12,7 +12,7 @@ version: 0.1.0
 
 dependencies:
   - name: datadog-operator
-    version: 2.0.0
+    version: 2.0.1
     repository: https://helm.datadoghq.com
     condition: datadog-operator.enabled
   - name: secrets
