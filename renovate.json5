@@ -44,6 +44,11 @@
     {
       "matchPackageNames": ["datadog-operator"],
       "sourceDirectory": "charts/datadog-operator",
+    },
+    {
+      matchPackageNames: ["csi-driver-nfs"],
+      sourceUrl: "https://github.com/kubernetes-csi/csi-driver-nfs",
+      sourceDirectory: "charts"
     }
   ]
 }
