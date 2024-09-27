@@ -6,7 +6,6 @@
   "packageRules": [
     {
       "matchPackageNames": ["aws-efs-csi-driver"],
-      "changelogUrl": "https://github.com/kubernetes-sigs/aws-efs-csi-driver/blob/master/charts/aws-efs-csi-driver/CHANGELOG.md",
       "sourceUrl": "https://github.com/kubernetes-sigs/aws-efs-csi-driver",
       "sourceDirectory": "charts/aws-efs-csi-driver"
     }
