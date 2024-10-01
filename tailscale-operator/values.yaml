@@ -3,3 +3,7 @@ tailscale-operator:
   oauth:
     clientId: ""
     clientSecret: ""
+
+  operatorConfig:
+    podLabels:
+      tags.datadoghq.com/service: tailscale-operator
