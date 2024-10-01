@@ -16,5 +16,5 @@ dependencies:
     repository: file://../ingressroute
     condition: ingressroute.enabled
   - name: zitadel
-    version: 7.6.1
+    version: 7.15.0
     repository: https://charts.zitadel.com
