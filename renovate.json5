@@ -54,6 +54,27 @@
       matchPackageNames: ["csi-driver-smb"],
       sourceUrl: "https://github.com/kubernetes-csi/csi-driver-smb",
       sourceDirectory: "charts"
+    },
+    {
+      matchPackageNames: ["karpenter"],
+      sourceUrl: "https://github.com/aws/karpenter-provider-aws",
+      sourceDirectory: "charts/karpenter",
+      changelogUrl: "https://karpenter.sh/docs/upgrading/upgrade-guide/"
+    },
+    {
+      matchPackageNames: ["cost-analyzer"],
+      sourceUrl: "https://github.com/kubecost/cost-analyzer-helm-chart",
+      sourceDirectory: "cost-analyzer"
+    },
+    {
+      matchPackageNames: ["metrics-server"],
+      sourceUrl: "https://github.com/kubernetes-sigs/metrics-server",
+      sourceDirectory: "charts/metrics-server"
+    },
+    {
+      matchPackageNames: ["aws-load-balancer-controller"],
+      sourceUrl: "https://github.com/aws/eks-charts",
+      sourceDirectory: "stable/aws-load-balancer-controller"
     }
   ]
 }
