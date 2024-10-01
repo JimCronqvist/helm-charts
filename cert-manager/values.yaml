@@ -2,7 +2,9 @@ cert-manager:
   # The chart is a bit buggy with the CRDs installation if the releaseName is provided, lets override the name to avoid issues
   fullnameOverride: cert-manager
   #namespace: cert-manager
-  installCRDs: true
+  crds:
+    enabled: true
+    keep: true
   dns01RecursiveNameservers: 8.8.8.8:53,1.1.1.1:53
   dns01RecursiveNameserversOnly: true
   # Whether to set the certificate resource as an owner of secret where the tls certificate is stored.
