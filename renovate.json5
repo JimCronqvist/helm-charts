@@ -12,11 +12,6 @@
   "ignoreTests": true,
   "packageRules": [
     {
-      "description": "Automerge patch updates",
-      "matchUpdateTypes": ["patch"],
-      "automerge": true
-    },
-    {
       "matchPackageNames": [
         "argo-rollouts",
         "authentik",
@@ -32,6 +27,11 @@
         "prometheus-node-exporter"
       ],
       enabled: false
+    },
+    {
+      "description": "Automerge patch updates",
+      "matchUpdateTypes": ["patch"],
+      "automerge": true
     },
     {
       "matchPackageNames": ["aws-ebs-csi-driver"],
