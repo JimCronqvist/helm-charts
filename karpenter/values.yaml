@@ -29,6 +29,8 @@ karpenter:
         }
       }
 
+  webhook:
+    enabled: false
   settings:
     # The EKS cluster name
     clusterName:
@@ -38,7 +40,6 @@ karpenter:
     interruptionQueue:
 
     featureGates:
-      drift: true
       spotToSpotConsolidation: true # Beta feature, use carefully.
   serviceAccount:
     # Override the name, as terraform will usually set the irsa to only allow 'karpenter:karpenter' in the trust policy.
