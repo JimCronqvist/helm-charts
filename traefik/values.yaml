@@ -14,9 +14,12 @@ traefik:
   # Enable dashboard - don't keep it publicly open on production environments without appropriate protection (fw, security groups, auth, ip filtering, etc.)
     dashboard:
       enabled: true
+
+  # -- You SHOULD NOT expose the traefik port on production deployments.
   ports:
     traefik:
-      expose: true
+      expose:
+        default: true
 
     websecure:
       tls: {}
