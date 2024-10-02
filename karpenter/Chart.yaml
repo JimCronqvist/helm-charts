@@ -9,5 +9,5 @@ version: 0.5.0
 
 dependencies:
   - name: karpenter
-    version: 0.37.4
+    version: 1.0.5
     repository: oci://public.ecr.aws/karpenter
