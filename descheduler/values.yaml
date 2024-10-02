@@ -48,7 +48,6 @@ descheduler:
                 cpu: 50
                 memory: 50
                 pods: 50
-          - name: RemovePodsViolatingPodAffinity
           - name: RemovePodsViolatingInterPodAntiAffinity
           - name: RemovePodsViolatingTopologySpreadConstraint
             args:
