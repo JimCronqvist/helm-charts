@@ -57,7 +57,7 @@
     {
       matchPackageNames: ["karpenter"],
       sourceUrl: "https://github.com/aws/karpenter-provider-aws",
-      changelogUrl: "https://karpenter.sh/docs/upgrading/upgrade-guide/"
+      //changelogUrl: "https://karpenter.sh/docs/upgrading/upgrade-guide/"
     },
     {
       matchPackageNames: ["cost-analyzer"],
