@@ -24,7 +24,6 @@ jobs:
         uses: azure/setup-helm@v4
         with:
           version: v3.12.3 # Lock version for now, helm v3.13.0 contains bugs related to oci that will be fixed in v3.13.1. https://github.com/helm/helm/issues/12423
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and Push the Helm Charts to GitHub Container Registry
         uses: JimCronqvist/action-helm-chart-repo@master
