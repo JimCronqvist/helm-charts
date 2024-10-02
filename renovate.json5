@@ -15,7 +15,6 @@
       "matchPackageNames": [
         "argo-rollouts",
         "authentik",
-        "bottlerocket-update-operator",
         "cilium",
         "gha-runner-scale-set-controller", // github-actions-runner-controller
         "gha-runner-scale-set",            // github-actions-runner
