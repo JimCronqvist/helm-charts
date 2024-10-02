@@ -3,7 +3,7 @@
 {{- if dig ($provisioner.nodePool) "enabled" true $.Values.nodePool }}
 {{- if gt (len (dig ($provisioner.nodePool) "requirements" (list) $.Values.nodePool)) 0 }}
 ---
-apiVersion: karpenter.sh/v1beta1
+apiVersion: karpenter.sh/v1
 kind: NodePool
 metadata:
   name: {{ $provisioner.name }}
@@ -13,9 +13,12 @@ spec:
   weight: {{ dig ($provisioner.nodePool) "weight" 1 $.Values.nodePool }}
   template:
     spec:
-      kubelet: {}
       nodeClassRef:
+        group: karpenter.k8s.aws
+        kind: EC2NodeClass
         name: {{ $provisioner.nodeClass }}
+      expireAfter: {{ dig ($provisioner.nodePool) "expireAfter" "336h" $.Values.nodePool }}
+      terminationGracePeriod: {{ dig ($provisioner.nodePool) "terminationGracePeriod" "48h" $.Values.nodePool }}
       requirements:
         {{- dig ($provisioner.nodePool) "requirements" (list) $.Values.nodePool | toYaml | nindent 8 }}
       {{- if or $provisioner.nodePoolTaint (gt (len (dig ($provisioner.nodePool) "taints" (list) $.Values.nodePool)) 0) }}
@@ -43,11 +46,10 @@ spec:
     cpu: {{ dig ($provisioner.nodePool) "limits" "cpu" 0 $.Values.nodePool | quote }}
     memory: {{ dig ($provisioner.nodePool) "limits" "memory" "0Gi" $.Values.nodePool }}
   disruption:
-    consolidationPolicy: {{ dig ($provisioner.nodePool) "consolidationPolicy" "WhenUnderutilized" $.Values.nodePool }}
+    consolidationPolicy: {{ dig ($provisioner.nodePool) "consolidationPolicy" "WhenEmptyOrUnderutilized" $.Values.nodePool }}
     {{- if eq "WhenEmpty" (dig ($provisioner.nodePool) "consolidationPolicy" false $.Values.nodePool) }}
     consolidateAfter: {{ dig ($provisioner.nodePool) "consolidateAfter" "2m" $.Values.nodePool }}
     {{- end }}
-    expireAfter: {{ dig ($provisioner.nodePool) "expireAfter" "336h" $.Values.nodePool }}
     budgets:
       {{- if (dig ($provisioner.nodePool) "budgets" false $.Values.nodePool) }}
       {{- dig ($provisioner.nodePool) "budgets" false $.Values.nodePool | toYaml | nindent 6 }}

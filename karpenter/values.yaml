@@ -68,7 +68,12 @@ nodeClassDefaultRole:
 
 nodeClass:
   al2:
-    amiFamily: AL2
+    kubelet: {}
+    detailedMonitoring: true
+
+    amiSelectorTerms:
+      - alias: al2@latest
+
     blockDeviceMappings:
       - deviceName: /dev/xvda
         ebs:
@@ -86,7 +91,7 @@ nodePool:
     # Karpenter works to actively reduce cluster cost by identifying when:
     # - Nodes can be removed as their workloads will run on other nodes in the cluster.
     # - Nodes can be replaced with cheaper variants due to a change in the workloads.
-    consolidationPolicy: WhenUnderutilized
+    consolidationPolicy: WhenEmptyOrUnderutilized
 
     # Wait a number of seconds after a node has no provisioned pods running before Karpenter requests to delete the node.
     # Ignored if consolidationPolicy is set.
@@ -97,6 +102,13 @@ nodePool:
     # nodes automatically. Defaults to 720h if not defined.
     # Note: Drift detection will also force recreation of nodes when a new version exist, when detected.
     expireAfter: 336h # 14 days = 14 * 24 Hours
+
+    # The amount of time that a node can be draining before it's forcibly deleted. A node begins draining when a delete call is made against it, starting
+    # its finalization flow. Pods with TerminationGracePeriodSeconds will be deleted preemptively before this terminationGracePeriod ends to give as much time to cleanup as possible.
+    # If your pod's terminationGracePeriodSeconds is larger than this terminationGracePeriod, Karpenter may forcibly delete the pod
+    # before it has its full terminationGracePeriod to cleanup.
+    # Note: changing this value in the nodepool will drift the nodeclaims.
+    terminationGracePeriod: 48h
 
     # Priority given to the NodePool when the scheduler considers which NodePool
     # to select. Higher weights indicate higher priority when comparing NodePools.
@@ -127,9 +139,10 @@ nodePool:
         values: ["2"]
 
   onDemand:
-    consolidationPolicy: WhenUnderutilized
+    consolidationPolicy: WhenEmptyOrUnderutilized
     consolidateAfter: 2m
     expireAfter: 336h # 14 days = 14 * 24 Hours
+    terminationGracePeriod: 48h
     weight: 2
     limits:
       cpu: 100
@@ -160,6 +173,7 @@ nodePool:
     consolidationPolicy: WhenEmpty
     consolidateAfter: Never
     expireAfter: 2160h # 3 months expire, expects to be managed by something else (before the 3 month expire).
+    terminationGracePeriod: 48h
     #budgets:
     #  - nodes: "1"
     #  - nodes: "0"
@@ -192,9 +206,10 @@ nodePool:
         values: [ "2" ]
 
   reservedInstances:
-    consolidationPolicy: WhenUnderutilized
+    consolidationPolicy: WhenEmptyOrUnderutilized
     consolidateAfter: 2m
     expireAfter: 336h # 14 days = 14 * 24 Hours
+    terminationGracePeriod: 48h
     weight: 50
     limits:
       cpu: 0
