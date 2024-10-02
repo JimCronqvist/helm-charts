@@ -18,26 +18,36 @@ descheduler:
   deschedulerPolicy:
     maxNoOfPodsToEvictPerNode: 5
     maxNoOfPodsToEvictPerNamespace: 10
-    ignorePvcPods: false
-    evictLocalStoragePods: false
-    minReplicas: 2
 
-    strategies:
-      RemoveDuplicates:
-        enabled: false
-      RemovePodsHavingTooManyRestarts:
-        enabled: false
-      RemovePodsViolatingNodeTaints:
-        enabled: false
-      RemovePodsViolatingNodeAffinity:
-        enabled: false
-      LowNodeUtilization:
-        enabled: false
+    profiles:
+      - name: default
+        pluginConfig:
+          - name: "DefaultEvictor"
+            args:
+              ignorePvcPods: false
+              evictLocalStoragePods: false
+              minReplicas: 2
 
-      RemovePodsViolatingInterPodAntiAffinity:
-        enabled: true
-      RemovePodsViolatingTopologySpreadConstraint:
-        enabled: true
-        params:
-          includeSoftConstraints: false
+          - name: RemoveDuplicates
+          - name: RemovePodsHavingTooManyRestarts
+          - name: RemovePodsViolatingNodeTaints
+          - name: RemovePodsViolatingNodeAffinity
+          - name: LowNodeUtilization
+          - name: RemovePodsViolatingPodAffinity
+          - name: RemovePodsViolatingInterPodAffinity
+          - name: RemovePodsViolatingTopologySpreadConstraint
+            args:
+              includeSoftConstraints: false
 
+        plugins:
+          balance:
+            enabled:
+              #- RemoveDuplicates
+              - RemovePodsViolatingTopologySpreadConstraint
+              #- LowNodeUtilization
+          deschedule:
+            enabled:
+              #- RemovePodsHavingTooManyRestarts
+              #- RemovePodsViolatingNodeTaints
+              #- RemovePodsViolatingNodeAffinity
+              - RemovePodsViolatingInterPodAntiAffinity
