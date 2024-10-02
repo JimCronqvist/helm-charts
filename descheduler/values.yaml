@@ -37,7 +37,9 @@ descheduler:
           - name: RemovePodsViolatingInterPodAffinity
           - name: RemovePodsViolatingTopologySpreadConstraint
             args:
-              includeSoftConstraints: false
+              constraints:
+                - DoNotSchedule
+                - ScheduleAnyway
 
         plugins:
           balance:
