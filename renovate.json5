@@ -57,7 +57,6 @@
     {
       matchPackageNames: ["karpenter"],
       sourceUrl: "https://github.com/aws/karpenter-provider-aws",
-      sourceDirectory: "charts/karpenter",
       changelogUrl: "https://karpenter.sh/docs/upgrading/upgrade-guide/"
     },
     {
