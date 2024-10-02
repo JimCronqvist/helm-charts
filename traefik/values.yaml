@@ -54,7 +54,7 @@ traefik:
   providers:
     kubernetesCRD:
       # Allow the IngressRoute to create an empty servers load balancer if the targeted Kubernetes service has no endpoints available
-      allowEmptyServices: false
+      allowEmptyServices: true
       # Allow the IngressRoute to reference an externalName Service
       allowExternalNameServices: false
       # Allow the IngressRoute to reference a Service in a different namespace
