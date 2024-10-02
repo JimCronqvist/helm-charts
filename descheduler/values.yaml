@@ -49,7 +49,7 @@ descheduler:
                 memory: 50
                 pods: 50
           - name: RemovePodsViolatingPodAffinity
-          - name: RemovePodsViolatingInterPodAffinity
+          - name: RemovePodsViolatingInterPodAntiAffinity
           - name: RemovePodsViolatingTopologySpreadConstraint
             args:
               constraints:
