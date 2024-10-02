@@ -30,7 +30,7 @@ karpenter:
       }
 
   webhook:
-    enabled: false
+    enabled: true
   settings:
     # The EKS cluster name
     clusterName:
