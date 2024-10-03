@@ -22,6 +22,11 @@ kubernetes-dashboard:
       # A Traefik IngressRoute is utilized instead of the included Ingress
       enabled: false
 
+  kong:
+    proxy:
+      tls:
+        enabled: false
+
 host: localhost
 
 # Retrieve read-only user token by:

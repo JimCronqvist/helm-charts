@@ -17,7 +17,5 @@ dependencies:
     import-values:
       - child: app
         parent: dashboard.app
-      - child: api
-        parent: dashboard.api
-      - child: web
-        parent: dashboard.web
+      - child: kong
+        parent: dashboard.kong
