@@ -26,6 +26,14 @@ kubernetes-dashboard:
     proxy:
       tls:
         enabled: false
+    ingressController:
+      enabled: false
+    manager:
+      enabled: false
+    portal:
+      enabled: false
+    portalapi:
+      enabled: false
 
 host: localhost
 
