@@ -40,14 +40,14 @@ spec:
   accessModes:
     {{- if $pvc.accessMode }}
     - {{ $pvc.accessMode }}
-    {{- else if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (has .csi.driver (list "smb.csi.k8s.io" "efs.csi.aws.com"))) }}
+    {{- else if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (has .csi.driver (list "smb.csi.k8s.io" "efs.csi.aws.com" "s3.csi.aws.com"))) }}
     - ReadWriteMany
     {{- else }}
     - ReadWriteOnce
     {{- end }}
   resources:
     requests:
-      {{- if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (has .csi.driver (list "smb.csi.k8s.io" "efs.csi.aws.com"))) }}
+      {{- if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (has .csi.driver (list "smb.csi.k8s.io" "efs.csi.aws.com" "s3.csi.aws.com"))) }}
       storage: 1Mi
       {{- else }}
       storage: {{ $pvc.size }}
@@ -71,13 +71,13 @@ spec:
   accessModes:
     {{- if $pvc.accessMode }}
     - {{ $pvc.accessMode }}
-    {{- else if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (has .csi.driver (list "smb.csi.k8s.io" "efs.csi.aws.com"))) }}
+    {{- else if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (has .csi.driver (list "smb.csi.k8s.io" "efs.csi.aws.com" "s3.csi.aws.com"))) }}
     - ReadWriteMany
     {{- else }}
     - ReadWriteOnce
     {{- end }}
   capacity:
-    {{- if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (has .csi.driver (list "smb.csi.k8s.io" "efs.csi.aws.com"))) }}
+    {{- if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (has .csi.driver (list "smb.csi.k8s.io" "efs.csi.aws.com" "s3.csi.aws.com"))) }}
     storage: 1Mi
     {{- else }}
     storage: {{ $pvc.size }}
