@@ -1,5 +1,6 @@
 aws-s3-csi-driver:
   node:
+    tolerateAllTaints: true
     serviceAccount:
       create: true
       name: s3-csi-driver-sa
