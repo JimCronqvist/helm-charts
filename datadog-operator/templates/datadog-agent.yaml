@@ -1,3 +1,4 @@
+{{- if and .Values (index .Values "datadog-operator") (index .Values "datadog-operator" "enabled") }}
 apiVersion: datadoghq.com/v2alpha1
 kind: DatadogAgent
 metadata:
@@ -24,3 +25,4 @@ spec:
   override:
     {{- toYaml . | nindent 4 }}
   {{- end }}
+{{- end }}
