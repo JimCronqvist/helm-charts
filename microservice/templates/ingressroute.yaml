@@ -261,6 +261,9 @@ spec:
     {{- end }}
   {{- if $ingressroute.tls.enabled }}
   tls:
+    {{- if $ingressroute.tls.secretName }}
+    secretName: {{ $ingressroute.tls.secretName }}
+    {{- end }}
     {{- if $ingressroute.tls.certResolver }}
     certResolver: {{ $ingressroute.tls.certResolver }}
     {{- end }}
