@@ -314,6 +314,7 @@ cronjobs: []
   #   #timeZone: "Europe/Stockholm"
   #   #concurrencyPolicy: Forbid
   #   #suspend: true
+  #   # Set to 0 for no retries
   #   #backoffLimit: 6
 
 # Set both normal and secret environment variables

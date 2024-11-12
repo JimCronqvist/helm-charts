@@ -24,7 +24,7 @@ spec:
   failedJobsHistoryLimit: {{ default 1 $cronjob.failedJobsHistoryLimit }}
   jobTemplate:
     spec:
-      backoffLimit: {{ dig $cronjob "backoffLimit" 6 }}
+      backoffLimit: {{ ternary $cronjob.backoffLimit 6 (has (kindOf $cronjob.backoffLimit) (list "int" "int64" "float" "float64")) }}
       {{- if $cronjob.activeDeadlineSeconds }}
       activeDeadlineSeconds: {{ $cronjob.activeDeadlineSeconds }}
       {{- end }}
