@@ -18,7 +18,7 @@ spec:
   {{- if and (hasKey $job "ttlSecondsAfterFinished") (not (kindIs "invalid" $job.ttlSecondsAfterFinished)) }}
   ttlSecondsAfterFinished: {{ $job.ttlSecondsAfterFinished }}
   {{- end }}
-  backoffLimit: {{ default 6 $job.backoffLimit }}
+  backoffLimit: {{ dig $job "backoffLimit" 6 }}
   {{- if $job.activeDeadlineSeconds }}
   activeDeadlineSeconds: {{ $job.activeDeadlineSeconds }}
   {{- end }}
