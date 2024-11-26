@@ -159,18 +159,34 @@ spec:
 {{/*
 IngressRoute
 */}}
+{{- $suffixes := list "" }}
+{{- range $key, $value := (omit .Values.tls "enabled" "forceHttps") }}
+  {{- if and $.Values.tls.enabled $value }}
+    {{- $suffixes = append $suffixes "-tls" }}
+    {{- break }}
+  {{- end }}
+{{- end }}
+{{- range $suffix := $suffixes }}
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
-  name: {{ $fullName }}
+  name: {{ $fullName }}-{{ $suffix }}
   labels:
     {{- $labels | nindent 4 }}
 spec:
   entryPoints:
+    {{- if has "-tls" $suffixes }}
+    {{- if eq $suffix "-tls" }}
+    - websecure
+    {{- else }}
+    - web
+    {{- end }}
+    {{- else }}
     {{- if $ingressroute.tls.enabled }}
     - websecure
     {{- end }}
     - web
+    {{- end }}
   routes:
     {{- range $index, $route := $ingressroute.routes }}
     {{- $_ := set . "host" ($ingressroute.overrideHost | default .host) }}
@@ -259,7 +275,7 @@ spec:
         - name: {{ $fullName }}-route{{ $index }}-custom
         {{- end }}
     {{- end }}
-  {{- if $ingressroute.tls.enabled }}
+  {{- if and $ingressroute.tls.enabled (eq $suffix "-tls") }}
   tls:
     {{- if $ingressroute.tls.secretName }}
     secretName: {{ $ingressroute.tls.secretName }}
@@ -278,4 +294,5 @@ spec:
     {{- end }}
     {{- end }}
   {{- end }}
+{{- end }}
 {{- end }}
