@@ -347,3 +347,11 @@ checksum/values.{{ . }}: {{ index $.Values . | toJson | sha256sum }}
 {{- end }}
 {{- end }}
 {{- end }}
+
+{{/*
+Var dump helper, stops the rendering and prints out the value of a variable. Useful for debugging.
+{{- include "helpers.var_dump" .Values.something }}
+*/}}
+{{- define "helpers.var_dump" -}}
+{{- . | mustToPrettyJson | printf "\nThe JSON output of the dumped var is: \n%s" | fail }}
+{{- end -}}
