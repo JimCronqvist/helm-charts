@@ -160,8 +160,8 @@ spec:
 IngressRoute
 */}}
 {{- $suffixes := list "" }}
-{{- range $key, $value := (omit .Values.tls "enabled" "forceHttps") }}
-  {{- if and $.Values.tls.enabled $value }}
+{{- range $key, $value := (omit $ingressroute.tls "enabled" "forceHttps") }}
+  {{- if and $ingressroute.tls.enabled $value }}
     {{- $suffixes = append $suffixes "-tls" }}
     {{- break }}
   {{- end }}
