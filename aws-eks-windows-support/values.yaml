@@ -1,0 +1,2 @@
+# Enable Windows support for the EKS cluster, default is false as Windows support is not the common use case
+enabled: false
