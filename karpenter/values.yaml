@@ -65,6 +65,7 @@ provisioners:
     nodeClass: al2
   - name: windows-default
     nodePool: windows-default
+    nodePoolTaint: NoSchedule
     nodeClass: windows2022
 
 # Define a default role for all node classes
