@@ -31,37 +31,44 @@ oauth2-proxy:
     # Set default values here, override them by using env vars rather than changing this configFile
     configFile: |-
       provider = "google"
+      proxy_prefix = "/oauth2"
       oidc_issuer_url = "https://accounts.google.com"
-      #allowed_groups = [ "group1@google.com" ]
+
+      #redirect_url = "http://oauth.localhost/oauth2/callback"
+      #whitelist_domains = [ "*.localhost" ]
+      #cookie_domains = ".localhost"
       
       cookie_secure = true
-      #cookie_httponly = true
-      cookie_samesite = "lax"
+      cookie_httponly = true
+      cookie_samesite = ""
       cookie_refresh = "1h"
       cookie_expire = "168h"
+      
       #cookie_csrf_per_request = true
-      #cookie_domains = ""
       
       reverse_proxy = true
-      skip_provider_button = true
+      show_debug_on_error = false
+      silence_ping_logging = true
+      force_https = true
+      footer = "-"
+      force_json_errors = false
       skip_auth_preflight = true
+      relative_redirect_url = false
+      upstreams = "static://202"
       
-      email_domains = [ 
-          "corp.localhost"
-      ]
-      upstreams = [
-          "http://127.0.0.1:3000/"
-      ]
-      #whitelist_domains = [ "*.localhost" ]
+      skip_provider_button = true
+      #custom_sign_in_logo = "https://example.com/logo.png"
+      
+      email_domains = [ "*" ]
+      #allowed_groups = [ "group1@google.com" ]
+
+  # If true, OAUTH2_PROXY_CLIENT_ID, OAUTH2_PROXY_CLIENT_SECRET, OAUTH2_PROXY_COOKIE_SECRET will be set as secrets from the values.yaml.
+  proxyVarsAsSecrets: true
 
   extraEnv:
     # Google
     - name: OAUTH2_PROXY_PROVIDER
       value: "google"
-    #- name: OAUTH2_PROXY_CLIENT_ID
-    #  value: ""
-    #- name: OAUTH2_PROXY_CLIENT_SECRET
-    #  value: ""
 
     # OpenID Connect (OIDC)
     #- name: OAUTH2_PROXY_PROVIDER
@@ -72,10 +79,6 @@ oauth2-proxy:
     # GitHub
     #- name: OAUTH2_PROXY_PROVIDER
     #  value: "github"
-    #- name: OAUTH2_PROXY_CLIENT_ID
-    #  value: "<github oauth app client id>"
-    #- name: OAUTH2_PROXY_CLIENT_SECRET
-    #  value: "<github oauth app client secret>"
 
     # Filters
     #- name: OAUTH2_PROXY_EMAIL_DOMAINS
