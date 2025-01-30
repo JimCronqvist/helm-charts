@@ -1,0 +1,98 @@
+ingressroute:
+  enabled: false
+  routes:
+    - path: /google
+      host: oauth.localhost
+      serviceName: oauth2-proxy
+      servicePort: 80
+
+oauth2-proxy:
+  config:
+    # Set to empty to autogenerate the name based on the deployment name
+    cookieName: ""
+
+    # Randomly generated key to protect the cookie, use:   openssl rand -base64 32 | head -c 32 | base64
+    cookieSecret: ""
+
+    # OAuth App settings
+    clientID: "X"     # OAuth App Client ID
+    clientSecret: "X" # OAuth App Client Secret
+
+    google: {}
+    extraArgs: {}
+
+    authenticatedEmailsFile:
+      enabled: false
+      # List of email addresses that are allowed to access the site
+      # restricted_access: |-
+      #   email1@domain
+      #   email2@domain
+
+    # Set default values here, override them by using env vars rather than changing this configFile
+    configFile: |-
+      provider = "google"
+      oidc_issuer_url = "https://accounts.google.com"
+      #allowed_groups = [ "group1@google.com" ]
+      
+      cookie_secure = true
+      #cookie_httponly = true
+      cookie_samesite = "lax"
+      cookie_refresh = "1h"
+      cookie_expire = "168h"
+      #cookie_csrf_per_request = true
+      #cookie_domains = ""
+      
+      reverse_proxy = true
+      skip_provider_button = true
+      skip_auth_preflight = true
+      
+      email_domains = [ * ]
+      upstreams = [
+          "http://127.0.0.1:3000/"
+      ]
+      #whitelist_domains = [ *.localhost ]
+
+    extraEnv:
+      # Google
+      - name: OAUTH2_PROXY_PROVIDER
+        value: "google"
+      - name: OAUTH2_PROXY_CLIENT_ID
+        value: ""
+      - name: OAUTH2_PROXY_CLIENT_SECRET
+        value: ""
+
+      # OpenID Connect (OIDC)
+      #- name: OAUTH2_PROXY_PROVIDER
+      #  value: "oidc"
+      #- name: OAUTH2_PROXY_OIDC_ISSUER_URL
+      #  value: "https://accounts.google.com"
+
+      # GitHub
+      #- name: OAUTH2_PROXY_PROVIDER
+      #  value: "github"
+      #- name: OAUTH2_PROXY_CLIENT_ID
+      #  value: "<github oauth app client id>"
+      #- name: OAUTH2_PROXY_CLIENT_SECRET
+      #  value: "<github oauth app client secret>"
+
+      # Filters
+      #- name: OAUTH2_PROXY_EMAIL_DOMAINS
+      #  value: "<comma separated list of email domains to allow>"
+      #- name: OAUTH2_PROXY_ALLOWED_EMAILS
+      #  value: "<comma separated list of email addresses to allow>"
+
+      # Extra settings
+      #- name: OAUTH2_PROXY_SKIP_PROVIDER_BUTTON
+      #  value: "false"
+      #- name: OAUTH2_PROXY_WHITELIST_DOMAINS
+      #  value: "*.localhost,*.localhost:3000"
+      #- name: OAUTH2_PROXY_COOKIE_DOMAINS
+      #  value: ".localhost"
+
+  sessionStorage:
+    # Allowed values: redis|cookie
+    type: cookie
+    redis:
+      password: ""
+      standalone:
+        connectionUrl: "" # redis://oauth2-proxy-redis:6379

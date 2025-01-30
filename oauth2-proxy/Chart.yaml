@@ -1,0 +1,17 @@
+apiVersion: v2
+name: oauth2-proxy
+description: A Helm chart for oauth2-proxy
+type: application
+
+# This is the chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: 0.1.0
+
+dependencies:
+  - name: oauth2-proxy
+    version: 7.10.2
+    repository: https://oauth2-proxy.github.io/manifests
+  - name: ingressroute
+    version: 0.2.x
+    repository: file://../ingressroute
+    condition: ingressroute.enabled
