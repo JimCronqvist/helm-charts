@@ -46,11 +46,13 @@ oauth2-proxy:
       skip_provider_button = true
       skip_auth_preflight = true
       
-      email_domains = [ * ]
+      email_domains = [ 
+          "corp.localhost"
+      ]
       upstreams = [
           "http://127.0.0.1:3000/"
       ]
-      #whitelist_domains = [ *.localhost ]
+      #whitelist_domains = [ "*.localhost" ]
 
     extraEnv:
       # Google
