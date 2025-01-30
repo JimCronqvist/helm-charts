@@ -54,42 +54,42 @@ oauth2-proxy:
       ]
       #whitelist_domains = [ "*.localhost" ]
 
-    extraEnv:
-      # Google
-      - name: OAUTH2_PROXY_PROVIDER
-        value: "google"
-      - name: OAUTH2_PROXY_CLIENT_ID
-        value: ""
-      - name: OAUTH2_PROXY_CLIENT_SECRET
-        value: ""
+  extraEnv:
+    # Google
+    - name: OAUTH2_PROXY_PROVIDER
+      value: "google"
+    #- name: OAUTH2_PROXY_CLIENT_ID
+    #  value: ""
+    #- name: OAUTH2_PROXY_CLIENT_SECRET
+    #  value: ""
 
-      # OpenID Connect (OIDC)
-      #- name: OAUTH2_PROXY_PROVIDER
-      #  value: "oidc"
-      #- name: OAUTH2_PROXY_OIDC_ISSUER_URL
-      #  value: "https://accounts.google.com"
+    # OpenID Connect (OIDC)
+    #- name: OAUTH2_PROXY_PROVIDER
+    #  value: "oidc"
+    #- name: OAUTH2_PROXY_OIDC_ISSUER_URL
+    #  value: "https://accounts.google.com"
 
-      # GitHub
-      #- name: OAUTH2_PROXY_PROVIDER
-      #  value: "github"
-      #- name: OAUTH2_PROXY_CLIENT_ID
-      #  value: "<github oauth app client id>"
-      #- name: OAUTH2_PROXY_CLIENT_SECRET
-      #  value: "<github oauth app client secret>"
+    # GitHub
+    #- name: OAUTH2_PROXY_PROVIDER
+    #  value: "github"
+    #- name: OAUTH2_PROXY_CLIENT_ID
+    #  value: "<github oauth app client id>"
+    #- name: OAUTH2_PROXY_CLIENT_SECRET
+    #  value: "<github oauth app client secret>"
 
-      # Filters
-      #- name: OAUTH2_PROXY_EMAIL_DOMAINS
-      #  value: "<comma separated list of email domains to allow>"
-      #- name: OAUTH2_PROXY_ALLOWED_EMAILS
-      #  value: "<comma separated list of email addresses to allow>"
+    # Filters
+    #- name: OAUTH2_PROXY_EMAIL_DOMAINS
+    #  value: "<comma separated list of email domains to allow>"
+    #- name: OAUTH2_PROXY_ALLOWED_EMAILS
+    #  value: "<comma separated list of email addresses to allow>"
 
-      # Extra settings
-      #- name: OAUTH2_PROXY_SKIP_PROVIDER_BUTTON
-      #  value: "false"
-      #- name: OAUTH2_PROXY_WHITELIST_DOMAINS
-      #  value: "*.localhost,*.localhost:3000"
-      #- name: OAUTH2_PROXY_COOKIE_DOMAINS
-      #  value: ".localhost"
+    # Extra settings
+    #- name: OAUTH2_PROXY_SKIP_PROVIDER_BUTTON
+    #  value: "false"
+    #- name: OAUTH2_PROXY_WHITELIST_DOMAINS
+    #  value: "*.localhost,*.localhost:3000"
+    #- name: OAUTH2_PROXY_COOKIE_DOMAINS
+    #  value: ".localhost"
 
   sessionStorage:
     # Allowed values: redis|cookie
