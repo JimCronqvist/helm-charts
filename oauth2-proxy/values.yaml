@@ -7,6 +7,11 @@ ingressroute:
       servicePort: 80
 
 oauth2-proxy:
+  replicaCount: 2
+
+  customLabels:
+    tags.datadoghq.com/service: oauth2-proxy
+
   config:
     # Set to empty to autogenerate the name based on the deployment name
     cookieName: ""
