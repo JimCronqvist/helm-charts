@@ -49,7 +49,7 @@ oauth2-proxy:
       reverse_proxy = true
       show_debug_on_error = false
       silence_ping_logging = true
-      force_https = true
+      force_https = false
       footer = "-"
       force_json_errors = false
       skip_auth_preflight = true
