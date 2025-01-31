@@ -34,9 +34,8 @@ oauth2-proxy:
       proxy_prefix = "/oauth2"
       oidc_issuer_url = "https://accounts.google.com"
 
-      # You most likely want to change this to false if you want to use the full redirect url
-      relative_redirect_url = true 
       #redirect_url = "https://oauth.example.com/oauth2/callback"
+      relative_redirect_url = false
       
       #whitelist_domains = [ ".localhost" ]
       #cookie_domains = ".localhost"
@@ -58,7 +57,6 @@ oauth2-proxy:
       skip_auth_preflight = true
       upstreams = "static://202"
       
-      # If you skip the provider button, you need to set the OAUTH2_PROXY_REDIRECT_URL in the extraEnv
       skip_provider_button = true
       #custom_sign_in_logo = "https://example.com/logo.png"
       
@@ -69,19 +67,23 @@ oauth2-proxy:
   proxyVarsAsSecrets: true
 
   extraEnv:
-    # Google
+    # Provider: Google
     - name: OAUTH2_PROXY_PROVIDER
       value: "google"
 
-    # OpenID Connect (OIDC)
+    # Provider: OpenID Connect (OIDC)
     #- name: OAUTH2_PROXY_PROVIDER
     #  value: "oidc"
     #- name: OAUTH2_PROXY_OIDC_ISSUER_URL
     #  value: "https://accounts.google.com"
 
-    # GitHub
+    # Provider: GitHub
     #- name: OAUTH2_PROXY_PROVIDER
     #  value: "github"
+
+    # Redirect URL
+    #- name: OAUTH2_PROXY_REDIRECT_URL
+    #  value: "https://oauth.example.com/oauth2/callback"
 
     # Filters
     #- name: OAUTH2_PROXY_EMAIL_DOMAINS
@@ -96,10 +98,6 @@ oauth2-proxy:
     #  value: "*.localhost,*.localhost:3000"
     #- name: OAUTH2_PROXY_COOKIE_DOMAINS
     #  value: ".localhost"
-
-    # Redirect - If you skip the provider button, you most likely need to set the OAUTH2_PROXY_REDIRECT_URL
-    #- name: OAUTH2_PROXY_REDIRECT_URL
-    #  value: "https://oauth.example.com/oauth2/callback"
 
   sessionStorage:
     # Allowed values: redis|cookie
