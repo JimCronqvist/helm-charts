@@ -70,8 +70,8 @@ oauth2-proxy:
 
   extraEnv:
     # Google
-    #- name: OAUTH2_PROXY_PROVIDER
-    #  value: "google"
+    - name: OAUTH2_PROXY_PROVIDER
+      value: "google"
 
     # OpenID Connect (OIDC)
     #- name: OAUTH2_PROXY_PROVIDER
