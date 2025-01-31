@@ -34,8 +34,11 @@ oauth2-proxy:
       proxy_prefix = "/oauth2"
       oidc_issuer_url = "https://accounts.google.com"
 
+      # You most likely want to change this to false if you want to use the full redirect url
+      relative_redirect_url = true 
       #redirect_url = "http://oauth.localhost/oauth2/callback"
-      #whitelist_domains = [ "*.localhost" ]
+      
+      #whitelist_domains = [ ".localhost" ]
       #cookie_domains = ".localhost"
       
       cookie_secure = true
@@ -53,7 +56,6 @@ oauth2-proxy:
       footer = "-"
       force_json_errors = false
       skip_auth_preflight = true
-      relative_redirect_url = false
       upstreams = "static://202"
       
       skip_provider_button = true
