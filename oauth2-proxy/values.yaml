@@ -33,6 +33,7 @@ oauth2-proxy:
       provider = "google"
       proxy_prefix = "/oauth2"
       oidc_issuer_url = "https://accounts.google.com"
+      prompt = "select_account"
 
       #redirect_url = "https://oauth.example.com/oauth2/callback"
       relative_redirect_url = false
