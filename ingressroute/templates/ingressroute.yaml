@@ -99,7 +99,7 @@ spec:
 ForwardAuth middleware
 */}}
 {{- range $index, $route := $ingressroute.routes }}
-{{- if and .forwardAuth .forwardAuth.address }}
+{{- if and .forwardAuth }}
 apiVersion: traefik.io/v1alpha1
 kind: Middleware
 metadata:
@@ -108,8 +108,13 @@ metadata:
     {{- $labels | nindent 4 }}
 spec:
   forwardAuth:
+    {{- if eq (kindOf .forwardAuth) "string" }}
+    address: {{ .forwardAuth | quote }}
+    trustForwardHeader: true
+    {{- else }}
     address: {{ .forwardAuth.address | quote }}
-    {{- toYaml (omit .forwardAuth "address") | nindent 4 }}
+    {{- toYaml (omit (merge (dict "trustForwardHeader" true) .forwardAuth) "address") | nindent 4 }}
+    {{- end }}
 ---
 {{- end }}
 {{- end }}
@@ -126,17 +131,19 @@ metadata:
     {{- $labels | nindent 4 }}
 spec:
   headers:
-    {{- with .headers.request }}
-    customRequestHeaders:
-      {{- toYaml . | nindent 6 }}
+    {{- $headers := .headers }}
+    {{- $mapping := dict "response" "customResponseHeaders" "request" "customRequestHeaders" }}
+    {{- $renamed := dict }}
+    {{- range $old, $new := $mapping }}
+      {{- if hasKey $headers $old }}
+        {{- $_ := set $renamed $new (index $headers $old) }}
+      {{- end }}
     {{- end }}
-    {{- with .headers.response }}
-    customResponseHeaders:
-      {{- toYaml . | nindent 6 }}
+    {{- $clean := deepCopy $headers }}
+    {{- range $old := keys $mapping }}
+      {{- $_ := unset $clean $old }}
     {{- end }}
-    {{- with (omit .headers "request" "response") }}
-    {{- toYaml . | nindent 4 }}
-    {{- end }}
+    {{- toYaml (merge $clean $renamed) | nindent 4 }}
 ---
 {{- end }}
 {{- end }}
@@ -250,8 +257,14 @@ spec:
         {{- if and $ingressroute.tls.enabled $ingressroute.tls.forceHttps }}
         - name: {{ $fullName }}-redirect-https
         {{- end }}
+        {{- if $ingressroute.compress }}
+        - name: {{ $fullName }}-compress
+        {{- end }}
         {{- if $ingressroute.responseHeaderMicroservice }}
         - name: {{ $fullName }}-header-x-microservice
+        {{- end }}
+        {{- if $ingressroute.headers }}
+        - name: {{ $fullName }}-headers
         {{- end }}
         {{- if .rateLimit }}
         - name: {{ $fullName }}-route{{ $index }}-rate-limit
