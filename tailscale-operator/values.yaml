@@ -1,5 +1,7 @@
 tailscale-operator:
-  # Create an OAuth client in the admin console, with 'Devices' write scope and the tag 'tag:k8s-operator'.
+  # Create an OAuth client in the admin console, with the following permissions:
+  # - 'Devices -> Core' write scope and the tag 'tag:k8s-operator'
+  # - 'Keys -> Auth Keys' write scope and the tag 'tag:k8s-operator'
   oauth:
     clientId: ""
     clientSecret: ""
