@@ -1,6 +1,10 @@
 external-secrets:
+  namespaceOverride: "external-secrets"
   commonLabels:
     tags.datadoghq.com/service: external-secrets
   serviceAccount:
     create: true
     name: "external-secrets-sa"
+    annotations:
+      # External Secrets IAM role for service account (IRSA)
+      eks.amazonaws.com/role-arn:
