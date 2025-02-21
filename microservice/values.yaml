@@ -323,6 +323,21 @@ env: {}
 secrets: {}
   # API_SECRET_KEY: ...
 
+externalSecrets: {}
+  # aws:
+  #   secrets:
+  #     MYSQL_PASSWORD: db01_secret/password
+  #     MYSQL_USERNAME: db01_secret/username
+  # vault:
+  #   enabled: true
+  #   priority: 2  # Higher priority (will be last in env, so it wins)
+  #   #secretName: vault-secret
+  #   #kind: ClusterSecretStore
+  #   #refreshInterval: 15s
+  #   secrets:
+  #     MYSQL_PASSWORD: vault/data/mysql-password
+  #     MYSQL_USERNAME: vault/data/mysql-username
+
 # Add configuration files to the container
 files: {}
 

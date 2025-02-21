@@ -132,6 +132,25 @@ Create a helper to map environment variables, both for sensitive (secrets) and n
   value: {{ $val | quote }}
   {{- end }}
 {{- end }}
+{{- include "helpers.list-external-secrets-variables" $ }}
+{{- end }}
+
+{{/*
+Create a helper to map external secrets to environment variables (secrets).
+*/}}
+{{- define "helpers.list-external-secrets-variables" }}
+{{- range $storeName, $store := .Values.externalSecrets }}
+  {{- if (dig "enabled" true $store) }}
+    {{- $secretName := $store.secretName | default (printf "%s-%s" (include "microservice.fullname" $) $storeName) }}
+    {{- range $key, $secretRef := $store.secrets }}
+- name: {{ $key }}
+  valueFrom:
+    secretKeyRef:
+      name: {{ $secretName }}
+      key: {{ $key }}
+    {{- end }}
+  {{- end }}
+{{- end }}
 {{- end }}
 
 {{/*
