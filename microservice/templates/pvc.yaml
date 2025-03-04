@@ -1,106 +1,43 @@
-{{- if .Values.pvc -}}
 {{- if or (eq .Values.deployment.kind "Deployment") (gt (len .Values.cronjobs) 0) (gt (len .Values.jobs) 0) }}
-{{- $fullName := include "microservice.fullname" . -}}
-{{- $labels := include "microservice.labels" (dict "context" $) -}}
 {{- $global := .Values.global -}}
+
+{{/* Main PVCs */}}
 {{- range $pvcName, $pvc := .Values.pvc }}
-{{- if and (dig "enabled" true $pvc) (not $pvc.existingClaim) (not .hostPath) (not .emptyDir) (or (not .nfs) .nfs.mountOptions) -}}
-{{- $createPvc := 0 }}
-{{- if and (eq $.Values.deployment.kind "Deployment") (dig "enabled" true $.Values.deployment) (dig "mountToDeployment" true $pvc) }}
-  {{- $createPvc = 1 }}
-{{- else if and (gt (len $.Values.cronjobs) 0) (dig "mountToCronJob" true $pvc) }}
-  {{- $createPvc = 2 }}
-{{- else if and (gt (len $.Values.jobs) 0) (dig "mountToJob" true $pvc) }}
-  {{- $createPvc = 3 }}
-{{- end }}
-# Create PVC code: {{ $createPvc }}
-{{- if gt $createPvc 0 }}
+{{- if and (dig "enabled" true $pvc) (not $pvc.existingClaim) (not $pvc.hostPath) (not $pvc.emptyDir) (or (not $pvc.nfs) $pvc.nfs.mountOptions) }}
+  {{- $createPvc := 0 }}
+  {{- if and (eq $.Values.deployment.kind "Deployment") (dig "enabled" true $.Values.deployment) (dig "mountToDeployment" true $pvc) }}
+    {{- $createPvc = 1 }}
+  {{- else if and (gt (len $.Values.cronjobs) 0) (dig "mountToCronJob" true $pvc) }}
+    {{- $createPvc = 2 }}
+  {{- else if and (gt (len $.Values.jobs) 0) (dig "mountToJob" true $pvc) }}
+    {{- $createPvc = 3 }}
+  {{- end }}
+# Create PVC code: {{ $createPvc }}{{- printf "\n" }}
+  {{- if gt $createPvc 0 }}
+    {{- include "microservice.render-pvc" (dict "pvcName" $pvcName "pvc" $pvc "global" $global "context" $ ) }}
 ---
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: {{ $fullName }}-{{ $pvcName }}
-  labels:
-    {{- $labels | nindent 4 }}
-  {{- if not (or .nfs (contains "efs" ($pvc.storageClass | default ""))) }}
-  {{- if or $pvc.volumeType $pvc.iops $pvc.throughput }}
-  annotations:
-    {{- if $pvc.volumeType }}
-    ebs.csi.aws.com/volumeType: {{ $pvc.volumeType | quote }}
-    {{- end }}
-    {{- if $pvc.iops }}
-    ebs.csi.aws.com/iops: {{ $pvc.iops | quote }}
-    {{- end }}
-    {{- if $pvc.throughput }}
-    ebs.csi.aws.com/throughput: {{ $pvc.throughput | quote }}
-    {{- end }}
   {{- end }}
-  {{- end }}
-spec:
-  accessModes:
-    {{- if $pvc.accessMode }}
-    - {{ $pvc.accessMode }}
-    {{- else if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (has .csi.driver (list "smb.csi.k8s.io" "efs.csi.aws.com" "s3.csi.aws.com"))) }}
-    - ReadWriteMany
-    {{- else }}
-    - ReadWriteOnce
-    {{- end }}
-  resources:
-    requests:
-      {{- if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (has .csi.driver (list "smb.csi.k8s.io" "efs.csi.aws.com" "s3.csi.aws.com"))) }}
-      storage: 1Mi
-      {{- else }}
-      storage: {{ $pvc.size }}
-      {{- end }}
-  {{- if or .nfs .csi }}
-  storageClassName: ""
-  volumeName: {{ $fullName }}-{{ $pvcName }}-pv
-  {{- else }}
-  {{- include "helpers.storage-class" (dict "persistence" $pvc "global" $global) | nindent 2 }}
-  {{- end }}
-{{- printf "\n" }}
-{{- if or .nfs .csi }}
+{{- end }}
+{{- end }}
+
+{{/* CronJob PVCs .Values.cronjobs.<name>.pvc */}}
+{{- range $cronjob := .Values.cronjobs }}
+  {{- range $pvcName, $pvc := $cronjob.pvc }}
+  {{- if and (dig "enabled" true $pvc) (not $pvc.existingClaim) (not $pvc.hostPath) (not $pvc.emptyDir) (or (not $pvc.nfs) $pvc.nfs.mountOptions) }}
+    {{- include "microservice.render-pvc" (dict "pvcName" (printf "%s-%s" ($cronjob.name | replace " " "-" | lower) $pvcName) "pvc" $pvc "global" $global "context" $ ) }}
 ---
-apiVersion: v1
-kind: PersistentVolume
-metadata:
-  name: {{ $fullName }}-{{ $pvcName }}-pv
-  labels:
-    {{- $labels | nindent 4 }}
-spec:
-  accessModes:
-    {{- if $pvc.accessMode }}
-    - {{ $pvc.accessMode }}
-    {{- else if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (has .csi.driver (list "smb.csi.k8s.io" "efs.csi.aws.com" "s3.csi.aws.com"))) }}
-    - ReadWriteMany
-    {{- else }}
-    - ReadWriteOnce
-    {{- end }}
-  capacity:
-    {{- if or .nfs (contains "efs" ($pvc.storageClass | default "")) (and .csi (has .csi.driver (list "smb.csi.k8s.io" "efs.csi.aws.com" "s3.csi.aws.com"))) }}
-    storage: 1Mi
-    {{- else }}
-    storage: {{ $pvc.size }}
-    {{- end }}
-  storageClassName: ""
-  persistentVolumeReclaimPolicy: Retain
-  {{- if .nfs }}
-  mountOptions:
-    {{- toYaml .nfs.mountOptions | nindent 4 }}
-  nfs:
-    {{- toYaml (omit .nfs "mountOptions") | nindent 4 }}
-  {{- else if .csi }}
-  {{- with .csi.mountOptions }}
-  mountOptions:
-    {{- toYaml . | nindent 4 }}
   {{- end }}
-  csi:
-    {{- toYaml (omit .csi "mountOptions") | nindent 4 }}
   {{- end }}
-{{- printf "\n" }}
 {{- end }}
+
+{{/* Job PVCs .Values.jobs.<name>.pvc */}}
+{{- range $job := .Values.jobs }}
+  {{- range $pvcName, $pvc := $job.pvc }}
+  {{- if and (dig "enabled" true $pvc) (not $pvc.existingClaim) (not $pvc.hostPath) (not $pvc.emptyDir) (or (not $pvc.nfs) $pvc.nfs.mountOptions) }}
+    {{- include "microservice.render-pvc" (dict "pvcName" (printf "%s-%s" ($job.name | replace " " "-" | lower) $pvcName) "pvc" $pvc "global" $global "context" $ ) }}
+---
+  {{- end }}
+  {{- end }}
 {{- end }}
-{{- end }}
-{{- end }}
-{{- end }}
+
 {{- end }}

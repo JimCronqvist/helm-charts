@@ -66,9 +66,11 @@ spec:
                 {{- include "helpers.wrapResourcesWithQuotes" ($cronjob.resources | default dict) | indent 16 }}
               volumeMounts:
                 {{- include "helpers.volume-mounts" (list $ $.Values.pvc "CronJob") | indent 16 }}
+                {{- include "helpers.volume-mounts" (list $ $cronjob.pvc "CronJob") | indent 16 }}
                 {{- include "helpers.volume-mounts-files" (list $ $.Values.files "CronJob") | indent 16 }}
           volumes:
             {{- include "helpers.volumes" (list $ $.Values.pvc "CronJob") | indent 12 }}
+            {{- include "helpers.volumes" (list $ $cronjob.pvc "CronJob") | indent 12 }}
             {{- include "helpers.volumes-files" (list $ $.Values.files "CronJob") | indent 12 }}
           {{- with $.Values.nodeSelector }}
           nodeSelector:

@@ -59,9 +59,11 @@ spec:
             {{- include "helpers.wrapResourcesWithQuotes" ($job.resources | default dict) | indent 12 }}
           volumeMounts:
             {{- include "helpers.volume-mounts" (list $ $.Values.pvc "Job") | indent 12 }}
+            {{- include "helpers.volume-mounts" (list $ $job.pvc "Job") | indent 12 }}
             {{- include "helpers.volume-mounts-files" (list $ $.Values.files "Job") | indent 12 }}
       volumes:
         {{- include "helpers.volumes" (list $ $.Values.pvc "Job") | indent 8 }}
+        {{- include "helpers.volumes" (list $ $job.pvc "Job") | indent 8 }}
         {{- include "helpers.volumes-files" (list $ $.Values.files "Job") | indent 8 }}
       {{- with $.Values.nodeSelector }}
       nodeSelector:
