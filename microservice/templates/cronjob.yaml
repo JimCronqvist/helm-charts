@@ -70,7 +70,7 @@ spec:
                 {{- include "helpers.volume-mounts-files" (list $ $.Values.files "CronJob") | indent 16 }}
           volumes:
             {{- include "helpers.volumes" (list $ $.Values.pvc "CronJob") | indent 12 }}
-            {{- include "helpers.volumes" (list $ $cronjob.pvc "CronJob") | indent 12 }}
+            {{- include "helpers.volumes" (list $ $cronjob.pvc "CronJob" ($cronjob.name | replace " " "-" | lower)) | indent 12 }}
             {{- include "helpers.volumes-files" (list $ $.Values.files "CronJob") | indent 12 }}
           {{- with $.Values.nodeSelector }}
           nodeSelector:

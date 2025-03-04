@@ -63,7 +63,7 @@ spec:
             {{- include "helpers.volume-mounts-files" (list $ $.Values.files "Job") | indent 12 }}
       volumes:
         {{- include "helpers.volumes" (list $ $.Values.pvc "Job") | indent 8 }}
-        {{- include "helpers.volumes" (list $ $job.pvc "Job") | indent 8 }}
+        {{- include "helpers.volumes" (list $ $job.pvc "Job" ($job.name | replace " " "-" | lower)) | indent 8 }}
         {{- include "helpers.volumes-files" (list $ $.Values.files "Job") | indent 8 }}
       {{- with $.Values.nodeSelector }}
       nodeSelector:

@@ -279,6 +279,8 @@ volumes:
 {{- $ := index . 0 }}
 {{- $fullName := include (printf "%s.fullname" $.Chart.Name) $ }}
 {{- $kind := index . 2 }}
+{{- $pvcNamePrefix := "" -}}
+{{- if ge (len .) 4 }}{{ $pvcNamePrefix = index . 3 }}{{ end -}}
 {{- with index . 1 }}
 {{- range $pvcName, $pvc := . }}
 {{- $mountToKind := dig (printf "mountTo%s" $kind) true $pvc }}
@@ -295,7 +297,7 @@ volumes:
     {{- toYaml .emptyDir | nindent 4 }}
   {{- else if (dig "enabled" true $pvc) }}
   persistentVolumeClaim:
-    claimName: {{ default (printf "%s-%s" $fullName $pvcName) .existingClaim }}
+    claimName: {{ default (printf "%s-%s-%s" $fullName $pvcNamePrefix $pvcName | replace "--" "-") .existingClaim }}
   {{- else }}
   emptyDir: {}
   {{- end }}
