@@ -224,12 +224,14 @@ volumeMounts:
 {{- $ := index . 0 }}
 {{- $fullName := include (printf "%s.fullname" $.Chart.Name) $ }}
 {{- $kind := index . 2 }}
+{{- $pvcNamePrefix := "" -}}
+{{- if ge (len .) 4 }}{{ $pvcNamePrefix = index . 3 }}{{ end -}}
 {{- with index . 1 }}
 {{- range $pvcName, $pvc := . }}
 {{- $mountToKind := dig (printf "mountTo%s" $kind) true $pvc }}
 {{- if $mountToKind }}
 {{- range $mount := $pvc.mounts }}
-- name: {{ $pvcName }}
+- name: {{ printf "%s-%s" $pvcNamePrefix $pvcName | trimPrefix "-" }}
   mountPath: {{ $mount.mountPath | quote }}
   {{- if $mount.subPath }}
   {{- if contains "$(" $mount.subPath }}
@@ -285,7 +287,7 @@ volumes:
 {{- range $pvcName, $pvc := . }}
 {{- $mountToKind := dig (printf "mountTo%s" $kind) true $pvc }}
 {{- if $mountToKind }}
-- name: {{ $pvcName }}
+- name: {{ printf "%s-%s" $pvcNamePrefix $pvcName | trimPrefix "-" }}
   {{- if .hostPath }}
   hostPath:
     {{- toYaml .hostPath | nindent 4 }}
