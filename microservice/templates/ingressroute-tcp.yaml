@@ -1,0 +1,89 @@
+{{- $tcp := .Values.ingressrouteTCP -}}
+{{- if $tcp.enabled -}}
+{{- $fullName := include "microservice.fullname" . -}}
+{{- $labels := include "microservice.labels" (dict "context" $) -}}
+{{- $svcPort := dig "port" 80 (default (dict) .Values.service) -}}
+{{- $svcName := $fullName -}}
+
+{{/*
+Custom middleware
+*/}}
+{{- range $index, $route := $tcp.routes }}
+{{- if .middlewares }}
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ $fullName }}-route{{ $index }}-custom
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  {{- toYaml $route.middlewares | nindent 2 }}
+---
+{{- end }}
+{{- end }}
+{{/*
+IngressRoute
+*/}}
+apiVersion: traefik.io/v1alpha1
+kind: IngressRouteTCP
+metadata:
+  name: {{ $fullName }}-tcp
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  {{- if $tcp.entryPoints }}
+  entryPoints:
+    {{- range $entryPoint := $tcp.entryPoints }}
+    - {{ $entryPoint }}
+    {{- end }}
+  {{- else }}
+  entryPoins: []
+  {{- end }}
+  routes:
+    {{- range $index, $route := $tcp.routes }}
+    {{- $matchRule := list }}
+    {{- if $route.hostSNI }}
+    {{- $matchRule = mustAppend $matchRule (tpl "HostSNI(`{{ .path }}`)" (merge . (dict "Template" $.Template))) }}
+    {{- end }}
+    {{- $matchRule = $matchRule | join " && " }}
+    - match: {{ $matchRule | default "HostSNI(`*`)"}}
+      priority: {{ .priority | default (len $matchRule) }}
+      services:
+        - name: {{ $route.serviceName | default $svcName }}
+          {{- with $route.serviceNamespace }}
+          namespace: {{ . }}
+          {{- end }}
+          port: {{ $route.servicePort | default $svcPort }}
+          nativeLB: {{ .nativeLB | default false }}
+          {{- with $route.weight }}
+          weight: {{ . }}
+          {{- end }}
+      middlewares:
+        {{- if .middlewares }}
+        - name: {{ $fullName }}-route{{ $index }}-custom-tcp
+        {{- end }}
+    {{- end }}
+
+  {{- if $tcp.tls.enabled }}
+  tls:
+    {{- if $tcp.tls.secretName }}
+    secretName: {{ $tcp.tls.secretName }}
+    {{- end }}
+    {{- if $tcp.tls.certResolver }}
+    certResolver: {{ $tcp.tls.certResolver }}
+    {{- end }}
+    {{- if $tcp.tls.domains }}
+    domains:
+      {{- range $domain := $tcp.tls.domains }}
+      - main: {{ $domain.main }}
+        {{- with $domain.sans }}
+        sans:
+          {{- toYaml $domain.sans | nindent 10 }}
+        {{- end }}
+      {{- end }}
+    {{- end }}
+    {{- if $tcp.tls.passthrough }}
+    passthrough: true
+    {{- end }}
+  {{- end }}
+{{- end }}

@@ -172,6 +172,15 @@ ingressroute:
     #   method: GET,POST
     #   header: "X-Api-Key: .*"
 
+ingressrouteTCP:
+  enabled: false
+  entryPoints: []
+  routes:
+    - priority: 0
+  tls:
+    enabled: false
+    passthrough: false
+
 cache:
   enabled: false
   replicaCount: 1
