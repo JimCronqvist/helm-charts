@@ -38,7 +38,8 @@ oauth2-proxy:
       provider = "google"
       proxy_prefix = "/oauth2"
       oidc_issuer_url = "https://accounts.google.com"
-      prompt = "select_account"
+      # 'consent' is required to get a refresh token by Google, 'select_account' to ensure an account selection happens. 
+      prompt = "consent select_account"
 
       #redirect_url = "https://oauth.example.com/oauth2/callback"
       relative_redirect_url = false
