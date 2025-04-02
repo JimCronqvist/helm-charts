@@ -111,6 +111,28 @@ traefik:
       maxUnavailable: 0
       maxSurge: 1
 
+  # Metrics
+  metrics:
+    otlp:
+      enabled: false
+      http:
+        enabled: false
+        endpoint: "http://localhost:4318/v1/metrics"
+      grpc:
+        enabled: false
+        endpoint: "localhost:4317"
+
+  # Tracing
+  tracing:
+    otlp:
+      enabled: false
+      http:
+        enabled: false
+        endpoint: "http://localhost:4318/v1/traces"
+      grpc:
+        enabled: false
+        endpoint: "localhost:4317"
+
   # Enable the experimental plugins
   experimental:
     plugins: {}
