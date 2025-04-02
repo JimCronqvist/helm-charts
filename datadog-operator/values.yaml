@@ -116,6 +116,17 @@ datadogAgent:
     #  enabled: false
     #usm:
     #  enabled: false
+    otlp:
+      receiver:
+        protocols:
+          grpc:
+            enabled: false
+            endpoint: 0.0.0.0:4317
+          http:
+            enabled: false
+            endpoint: 0.0.0.0:4318
+
+
 
   # Add custom checks that is run from the agent on each node
   # https://docs.datadoghq.com/developers/custom_checks/write_agent_check/
