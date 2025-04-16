@@ -24,7 +24,7 @@ serviceAccount:
 microservice:
   renderTemplates: false
 
-replicaCount: 3
+replicaCount: 1
 
 image:
   repository: public.ecr.aws/docker/library/registry
