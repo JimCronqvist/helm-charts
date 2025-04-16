@@ -74,8 +74,10 @@ traefik:
     replicas: 3
     labels:
       tags.datadoghq.com/service: traefik
+      tags.datadoghq.com/env: production
     podLabels:
       tags.datadoghq.com/service: traefik
+      tags.datadoghq.com/env: production
 
   priorityClassName: "system-cluster-critical"
 
@@ -117,10 +119,10 @@ traefik:
       enabled: false
       http:
         enabled: false
-        endpoint: "http://localhost:4318/v1/metrics"
+        endpoint: "http://datadog-agent.datadog.svc.cluster.local:4318/v1/metrics" # http://localhost:4318/v1/metrics
       grpc:
         enabled: false
-        endpoint: "localhost:4317"
+        endpoint: "datadog-agent.datadog.svc.cluster.local:4317" # localhost:4317
 
   # Tracing
   tracing:
@@ -128,10 +130,10 @@ traefik:
       enabled: false
       http:
         enabled: false
-        endpoint: "http://localhost:4318/v1/traces"
+        endpoint: "http://datadog-agent.datadog.svc.cluster.local:4318/v1/traces" # http://localhost:4318/v1/traces
       grpc:
         enabled: false
-        endpoint: "localhost:4317"
+        endpoint: "datadog-agent.datadog.svc.cluster.local:4317" # localhost:4317
 
   # Enable the experimental plugins
   experimental:
