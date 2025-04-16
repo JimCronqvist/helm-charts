@@ -222,7 +222,7 @@ volumeMounts:
 */}}
 {{- define "helpers.volume-mounts" -}}
 {{- $ := index . 0 }}
-{{- $fullName := include (printf "%s.fullname" $.Chart.Name) $ }}
+{{- $fullName := include "microservice.fullname" $ }}
 {{- $kind := index . 2 }}
 {{- $pvcNamePrefix := "" -}}
 {{- if ge (len .) 4 }}{{ $pvcNamePrefix = index . 3 }}{{ end -}}
@@ -255,7 +255,7 @@ Return the Volume Mounts for the configmap-files
 */}}
 {{- define "helpers.volume-mounts-files" -}}
 {{- $ := index . 0 }}
-{{- $fullName := include (printf "%s.fullname" $.Chart.Name) $ }}
+{{- $fullName := include "microservice.fullname" $ }}
 {{- $kind := index . 2 }}
 {{- with index . 1 }}
 {{- range $fileName, $file := . }}
@@ -279,7 +279,7 @@ volumes:
 */}}
 {{- define "helpers.volumes" -}}
 {{- $ := index . 0 }}
-{{- $fullName := include (printf "%s.fullname" $.Chart.Name) $ }}
+{{- $fullName := include "microservice.fullname" $ }}
 {{- $kind := index . 2 }}
 {{- $pvcNamePrefix := "" -}}
 {{- if ge (len .) 4 }}{{ $pvcNamePrefix = index . 3 }}{{ end -}}
@@ -314,7 +314,7 @@ Return the Volumes for the configmap-files
 */}}
 {{- define "helpers.volumes-files" -}}
 {{- $ := index . 0 }}
-{{- $fullName := include (printf "%s.fullname" $.Chart.Name) $ }}
+{{- $fullName := include "microservice.fullname" $ }}
 {{- $kind := index . 2 }}
 {{- with index . 1 }}
 {{- range $fileName, $file := . }}
@@ -359,9 +359,9 @@ Return the ports for a container
 Checksum pod annotations
 */}}
 {{- define "microservice.checksumPodAnnotations" -}}
-{{- $files := list "secret.yaml" "configmap-files.yaml" -}}
+{{- $files := list "secret" "configmap-files" -}}
 {{- range $files }}
-checksum/{{ . }}: {{ include (print $.Template.BasePath (printf "/%s" .)) $ | sha256sum }}
+checksum/{{ . }}.yaml: {{ include (printf "microservice.tpl.%s" .) $ | sha256sum }}
 {{- end }}
 {{- $valueKeys := list "env" "secrets" "files" -}}
 {{- range $valueKeys }}
@@ -377,4 +377,51 @@ Var dump helper, stops the rendering and prints out the value of a variable. Use
 */}}
 {{- define "helpers.var_dump" -}}
 {{- . | mustToPrettyJson | printf "\nThe JSON output of the dumped var is: \n%s" | fail }}
+{{- end -}}
+
+{{/*
+Generate the full chart. Note: does not include the subfolders.
+*/}}
+{{- define "microservice.fullchart" -}}
+{{ include "microservice.tpl.configmap-files" . }}
+---
+{{ include "microservice.tpl.cronjob" . }}
+---
+{{ include "microservice.tpl.deployment" . }}
+---
+{{ include "microservice.tpl.external-secret" . }}
+---
+{{ include "microservice.tpl.extra" . }}
+---
+{{ include "microservice.tpl.hpa" . }}
+---
+{{ include "microservice.tpl.ingressroute" . }}
+---
+{{ include "microservice.tpl.ingressroute-tcp" . }}
+---
+{{ include "microservice.tpl.job" . }}
+---
+{{ include "microservice.tpl.pdb" . }}
+---
+{{ include "microservice.tpl.priorityclass" . }}
+---
+{{ include "microservice.tpl.pvc" . }}
+---
+{{ include "microservice.tpl.role" . }}
+---
+{{ include "microservice.tpl.rolebinding" . }}
+---
+{{ include "microservice.tpl.secret" . }}
+---
+{{ include "microservice.tpl.service" . }}
+---
+{{ include "microservice.tpl.serviceaccount" . }}
+---
+{{ include "microservice.tpl.ingressroute.compress" . }}
+---
+{{ include "microservice.tpl.ingressroute.header-microservice" . }}
+---
+{{ include "microservice.tpl.ingressroute.headers" . }}
+---
+{{ include "microservice.tpl.ingressroute.redirect-https" . }}
 {{- end -}}

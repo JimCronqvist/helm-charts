@@ -1,3 +1,4 @@
+{{- define "microservice.tpl.job" -}}
 {{- $fullName := include "microservice.fullname" . -}}
 {{- $labels := include "microservice.labels" (dict "context" $ "component" "job") -}}
 {{- $serviceAccountName := include "microservice.serviceAccountName" . -}}
@@ -82,4 +83,5 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       enableServiceLinks: false
+{{- end }}
 {{- end }}

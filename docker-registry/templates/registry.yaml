@@ -1,0 +1,49 @@
+{{/* Dynamic computed values helper */}}
+{{- define "computedConfig" -}}
+{{- $remoteUrl := .Values.registry.remoteUrl | default "https://registry-1.docker.io" }}
+{{- $registryHost := (urlParse $remoteUrl).host }}
+{{- if $registryHost }}
+env:
+  # Proxy - uses the 'remoteUrl' as the prefix
+  REGISTRY_PROXY_REMOTEURL: {{ $remoteUrl | quote }}
+  REGISTRY_PROXY_USERNAME: {{ .Values.registry.proxy.username | quote }}
+
+  {{- if .Values.registry.s3.bucket }}
+  # S3 driver
+  REGISTRY_STORAGE_S3_REGION: {{ .Values.registry.s3.region | quote }}
+  REGISTRY_STORAGE_S3_BUCKET: {{ .Values.registry.s3.bucket | quote }}
+  REGISTRY_STORAGE_S3_ROOTDIRECTORY: "{{ $registryHost }}/"
+
+  {{- if and .Values.registry.s3.accessKey .Values.registry.s3.secretKey }}
+  # S3 Auth
+  REGISTRY_STORAGE_S3_ACCESSKEY: {{ .Values.registry.s3.accessKey | quote }}
+  REGISTRY_STORAGE_S3_SECRETKEY: {{ .Values.registry.s3.secretKey | quote }}
+  {{- end }}
+
+  # MinIO
+  {{- with .Values.registry.s3.regionendpoint }}
+  REGISTRY_STORAGE_S3_REGIONENDPOINT: {{ . | quote }}
+  {{- end }}
+  {{- if .Values.registry.s3.forcepathstyle }}
+  REGISTRY_STORAGE_S3_FORCEPATHSTYLE: true
+  {{- end }}
+
+  {{- else }}
+  # Filesystem driver - when the PVC is enabled
+  REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY: "/mnt/registry/{{ $registryHost }}"
+  {{- end }}
+
+  # Http prefix
+  REGISTRY_HTTP_PREFIX: "/{{ $registryHost }}/"
+
+secrets:
+  REGISTRY_PROXY_PASSWORD: {{ .Values.registry.proxy.password | quote }}
+  # Http secret, cryptoraphically unique, required when using multiple replicas.
+  REGISTRY_HTTP_SECRET: {{ .Values.registry.secret | default (randAlphaNum 32) }}
+{{- end }}
+{{- end }}
+
+{{- $dynamicValues := fromYaml (include "computedConfig" .) }}
+{{- $mergedValues := mergeOverwrite (deepCopy .Values.microservice) .Values $dynamicValues }}
+{{- $context := set (deepCopy $) "Values" $mergedValues }}
+{{- include "microservice.fullchart" $context }}

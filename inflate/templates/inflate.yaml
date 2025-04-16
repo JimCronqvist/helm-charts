@@ -1,0 +1,3 @@
+{{- $mergedValues := mergeOverwrite (deepCopy .Values.microservice) .Values }}
+{{- $context := set (deepCopy $) "Values" $mergedValues }}
+{{- include "microservice.fullchart" $context }}

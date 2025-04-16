@@ -1,3 +1,4 @@
+{{- define "microservice.tpl.service" -}}
 {{- if and .Values.service (dig "enabled" true .Values.service) }}
 apiVersion: v1
 kind: Service
@@ -47,4 +48,5 @@ spec:
     {{- end }}
   selector:
     {{- include "microservice.selectorLabels" (dict "context" $ "component" "app") | nindent 4 }}
+{{- end }}
 {{- end }}

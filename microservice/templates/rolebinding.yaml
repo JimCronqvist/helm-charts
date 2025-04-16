@@ -1,3 +1,4 @@
+{{- define "microservice.tpl.rolebinding" -}}
 {{- if and .Values.serviceAccount.create .Values.rbac.create }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: {{ .Values.rbac.kind | default "Role" }}Binding
@@ -13,4 +14,5 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "microservice.serviceAccountName" . }}
     namespace: {{ .Release.Namespace }}
+{{- end }}
 {{- end }}

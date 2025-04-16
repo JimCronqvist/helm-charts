@@ -1,3 +1,4 @@
+{{- define "microservice.tpl.pdb" -}}
 {{- if and .Values.pdb .Values.pdb.enabled (or (gt (int .Values.replicaCount) 1) .Values.autoscaling.enabled) }}
 apiVersion: policy/v1
 kind: PodDisruptionBudget
@@ -15,4 +16,5 @@ spec:
   selector:
     matchLabels:
       {{- include "microservice.selectorLabels" (dict "context" $ "component" "app") | nindent 6 }}
+{{- end }}
 {{- end }}

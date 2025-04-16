@@ -1,3 +1,4 @@
+{{- define "microservice.tpl.ingressroute.headers" -}}
 {{- $ingressroute := .Values.ingressroute -}}
 {{- if and $ingressroute.enabled $ingressroute.headers }}
 apiVersion: traefik.io/v1alpha1
@@ -21,4 +22,5 @@ spec:
       {{- $_ := unset $clean $old }}
     {{- end }}
     {{- toYaml (merge $clean $renamed) | nindent 4 }}
+{{- end }}
 {{- end }}

@@ -1,6 +1,7 @@
 # Default values for microservice.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+renderTemplates: true
 
 replicaCount: 1
 

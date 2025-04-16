@@ -1,3 +1,4 @@
+{{- define "microservice.tpl.configmap-files" -}}
 {{- if and .Values.files -}}
 apiVersion: v1
 kind: ConfigMap
@@ -10,4 +11,5 @@ data:
   file.{{ $name | replace "/" "_" }}: |
     {{- $file.content | nindent 4 }}
   {{- end }}
+{{- end }}
 {{- end }}

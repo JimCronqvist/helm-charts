@@ -1,3 +1,4 @@
+{{- define "microservice.tpl.cronjob" -}}
 {{- $fullName := include "microservice.fullname" . -}}
 {{- $labels := include "microservice.labels" (dict "context" $ "component" "cronjob") -}}
 {{- $serviceAccountName := include "microservice.serviceAccountName" . -}}
@@ -89,4 +90,5 @@ spec:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           enableServiceLinks: false
+{{- end }}
 {{- end }}

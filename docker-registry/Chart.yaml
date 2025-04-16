@@ -1,0 +1,12 @@
+apiVersion: v2
+name: docker-registry
+description: A Helm chart for Docker Registry
+type: application
+
+version: 0.1.0
+appVersion: 3.0
+
+dependencies:
+  - name: microservice
+    repository: "file://../microservice"
+    version: 0.3.x

@@ -1,3 +1,4 @@
+{{- define "microservice.tpl.ingressroute.compress" -}}
 {{- $ingressroute := .Values.ingressroute -}}
 {{- if and $ingressroute.enabled $ingressroute.compress }}
 apiVersion: traefik.io/v1alpha1
@@ -26,4 +27,5 @@ spec:
       - text/html
       - text/plain
       - text/xml
+{{- end }}
 {{- end }}

@@ -1,3 +1,4 @@
+{{- define "microservice.tpl.pvc" -}}
 {{- if or (eq .Values.deployment.kind "Deployment") (gt (len .Values.cronjobs) 0) (gt (len .Values.jobs) 0) }}
 {{- $global := .Values.global -}}
 
@@ -40,4 +41,5 @@
   {{- end }}
 {{- end }}
 
+{{- end }}
 {{- end }}

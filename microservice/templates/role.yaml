@@ -1,3 +1,4 @@
+{{- define "microservice.tpl.role" -}}
 {{- if and .Values.serviceAccount.create .Values.rbac.create }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: {{ .Values.rbac.kind | default "Role" }}
@@ -7,4 +8,5 @@ metadata:
     {{- include "microservice.labels" (dict "context" $ "component" "app") | nindent 4 }}
 rules:
   {{- toYaml .Values.rbac.rules | nindent 2 }}
+{{- end }}
 {{- end }}

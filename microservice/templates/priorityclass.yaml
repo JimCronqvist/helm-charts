@@ -1,4 +1,5 @@
-{{- if .Values.priorityClassValue }}
+{{- define "microservice.tpl.priorityclass" -}}
+{{- if and .Values.priorityClassValue }}
 apiVersion: scheduling.k8s.io/v1
 kind: PriorityClass
 metadata:
@@ -7,4 +8,5 @@ metadata:
     {{- include "microservice.labels" (dict "context" $) | nindent 4 }}
 value: {{ .Values.priorityClassValue | default 0 }}
 globalDefault: false
+{{- end }}
 {{- end }}

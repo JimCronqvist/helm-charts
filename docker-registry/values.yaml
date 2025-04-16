@@ -1,0 +1,140 @@
+registry:
+  # Allowed values: filesystem, s3
+  storage: filesystem
+  proxy:
+    enabled: false
+    remoteUrl: https://registry-1.docker.io
+    username: ""
+    password: ""
+  s3:
+    region: eu-north-1
+    # Endpoint for S3 compatible storage services (Minio, etc).
+    bucket:
+    rootDirectory: /docker.io
+
+    # Optional, typically only needed for S3 compatible storage services (Minio, etc).
+    # regionEndpoint:
+    # accessKey:
+    # secretKey:
+
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn:
+
+microservice:
+  renderTemplates: false
+
+replicaCount: 3
+
+image:
+  repository: public.ecr.aws/docker/library/registry
+
+datadog:
+  enabled: true
+
+imagePullSecrets: []
+
+probes:
+  livenessPath: /
+  readinessPath: /
+
+priorityClassName: system-critical
+
+resources: {}
+
+securityContext:
+  enabled: true
+  seLinuxOptions: {}
+  allowPrivilegeEscalation: false
+  capabilities:
+    drop:
+      - ALL
+  privileged: false
+  readOnlyRootFilesystem: true
+  runAsUser: 1000
+  runAsGroup: 1000
+  runAsNonRoot: true
+  seccompProfile:
+    type: RuntimeDefault
+
+podSecurityContext:
+  enabled: true
+  fsGroupChangePolicy: Always
+  sysctls: []
+  supplementalGroups: []
+  fsGroup: 1000
+
+scheduler:
+  minZones: 2
+
+affinity:
+  podAntiAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: '{{ template "microservice.name" . }}'
+            app.kubernetes.io/instance: '{{ .Release.Name }}-{{ .Release.Namespace }}'
+        topologyKey: kubernetes.io/hostname
+        # Requires feature gate: MatchLabelKeysInPodAffinity
+        #matchLabelKeys:
+        #  - pod-template-hash
+
+cronjobs:
+  - name: registry-gc
+    schedule: "0 1 * * *"
+    command: ["/bin/registry", "garbage-collect", "--delete-untagged=true", "/etc/docker/registry/config.yml"]
+    suspend: true
+
+files:
+  /auth/htpasswd:
+    tpl: true
+    content: |
+      {{- $htpasswd := .Values.registry.htpasswd | default (randAlphaNum 16) -}}
+      {{- $htpasswd | b64enc | quote -}}
+
+  /etc/docker/registry/config.yml:
+    content: |
+      version: 0.1
+      log:
+        accesslog:
+          disabled: false
+        level: info
+        formatter: text
+        fields:
+          service: registry
+          environment: production
+      storage:
+        tag:
+          concurrencylimit: 8
+        cache:
+          blobdescriptor: inmemory
+          blobdescriptorsize: 10000
+        delete:
+          enabled: true
+        redirect:
+          disable: false
+      auth:
+        htpasswd:
+          realm: basic-realm
+          path: /etc/docker/registry/.htpasswd
+      http:
+        addr: :80
+        prefix: /
+        relativeurls: false
+        draintimeout: 60s
+        headers:
+          X-Content-Type-Options: [nosniff]
+        debug:
+          addr: :5001
+          prometheus:
+            enabled: false
+            path: /metrics
+        http2:
+          disabled: false
+        h2c:
+          enabled: false
+      health:
+        storagedriver:
+          enabled: true
+          interval: 10s
+          threshold: 3

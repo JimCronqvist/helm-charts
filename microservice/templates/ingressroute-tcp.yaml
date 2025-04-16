@@ -1,3 +1,4 @@
+{{- define "microservice.tpl.ingressroute-tcp" -}}
 {{- $tcp := .Values.ingressrouteTCP -}}
 {{- if $tcp.enabled -}}
 {{- $fullName := include "microservice.fullname" . -}}
@@ -86,4 +87,5 @@ spec:
     passthrough: true
     {{- end }}
   {{- end }}
+{{- end }}
 {{- end }}

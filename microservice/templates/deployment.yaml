@@ -1,3 +1,4 @@
+{{- define "microservice.tpl.deployment" -}}
 {{- if and .Values.deployment (dig "enabled" true .Values.deployment) }}
 {{- $fullName := include "microservice.fullname" . -}}
 apiVersion: apps/v1
@@ -266,4 +267,5 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       enableServiceLinks: false
+{{- end }}
 {{- end }}

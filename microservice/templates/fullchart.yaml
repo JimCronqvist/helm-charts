@@ -1,0 +1,3 @@
+{{- if and .Values.renderTemplates }}
+{{- include "microservice.fullchart" . }}
+{{- end }}

@@ -1,3 +1,4 @@
+{{- define "microservice.tpl.ingressroute" -}}
 {{- $ingressroute := .Values.ingressroute -}}
 {{- if $ingressroute.enabled -}}
 {{- $fullName := include "microservice.fullname" . -}}
@@ -308,5 +309,6 @@ spec:
     {{- end }}
   {{- end }}
 ---
+{{- end }}
 {{- end }}
 {{- end }}

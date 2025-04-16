@@ -1,3 +1,4 @@
+{{- define "microservice.tpl.ingressroute.header-microservice" -}}
 {{- $ingressroute := .Values.ingressroute -}}
 {{- if and $ingressroute.enabled $ingressroute.responseHeaderMicroservice }}
 apiVersion: traefik.io/v1alpha1
@@ -10,4 +11,5 @@ spec:
   headers:
     customResponseHeaders:
       X-Microservice: "{{ include "microservice.fullname" . }}"
+{{- end }}
 {{- end }}

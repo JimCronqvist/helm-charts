@@ -1,4 +1,6 @@
+{{- define "microservice.tpl.extra" -}}
 {{- range default list .Values.extraManifests }}
 ---
 {{ tpl (toYaml .) $ }}
+{{- end }}
 {{- end }}

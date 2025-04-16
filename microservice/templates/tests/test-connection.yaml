@@ -1,3 +1,4 @@
+{{- if and .Values.enabled -}}
 apiVersion: v1
 kind: Pod
 metadata:
@@ -17,3 +18,4 @@ spec:
       args: ['{{ include "microservice.fullname" . }}:{{ .Values.service.port }}']
       {{- end }}
   restartPolicy: Never
+{{- end }}
