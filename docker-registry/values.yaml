@@ -1,6 +1,8 @@
 registry:
   # Allowed values: filesystem, s3
   storage: filesystem
+  # docker run --entrypoint htpasswd httpd:2 -Bbn registry password
+  htpasswd: ""
   proxy:
     enabled: false
     remoteUrl: https://registry-1.docker.io
@@ -10,7 +12,6 @@ registry:
     region: eu-north-1
     # Endpoint for S3 compatible storage services (Minio, etc).
     bucket:
-    rootDirectory: /docker.io
 
     # Optional, typically only needed for S3 compatible storage services (Minio, etc).
     # regionEndpoint:
@@ -90,12 +91,6 @@ cronjobs:
     suspend: true
 
 files:
-  /auth/htpasswd:
-    tpl: true
-    content: |
-      {{- $htpasswd := .Values.registry.htpasswd | default (randAlphaNum 16) -}}
-      {{- $htpasswd | b64enc | quote -}}
-
   /etc/docker/registry/config.yml:
     content: |
       version: 0.1
@@ -117,10 +112,6 @@ files:
           enabled: true
         redirect:
           disable: false
-      auth:
-        htpasswd:
-          realm: basic-realm
-          path: /etc/docker/registry/.htpasswd
       http:
         addr: :5000
         prefix: /

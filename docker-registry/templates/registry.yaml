@@ -36,10 +36,24 @@ env:
   # Http prefix
   REGISTRY_HTTP_PREFIX: "/{{ $registryHost }}/"
 
+  # Auth
+  {{- if .Values.registry.htpasswd }}
+  REGISTRY_AUTH: htpasswd
+  REGISTRY_AUTH_HTPASSWD_REALM: "Registry Realm"
+  REGISTRY_AUTH_HTPASSWD_PATH: "/etc/docker/registry/config.yml"
+  {{- end }}
+
 secrets:
   REGISTRY_PROXY_PASSWORD: {{ .Values.registry.proxy.password | quote }}
   # Http secret, cryptoraphically unique, required when using multiple replicas.
   REGISTRY_HTTP_SECRET: {{ .Values.registry.secret | default (randAlphaNum 32) }}
+
+{{- if .Values.registry.htpasswd }}
+files:
+  /etc/docker/registry/.htpasswd:
+    content: |
+      {{ .Values.registry.htpasswd }}
+{{- end }}
 {{- end }}
 {{- end }}
 
