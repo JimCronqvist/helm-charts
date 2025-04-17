@@ -43,7 +43,6 @@ priorityClassName: system-cluster-critical
 resources: {}
 
 securityContext:
-  enabled: true
   seLinuxOptions: {}
   allowPrivilegeEscalation: false
   capabilities:
@@ -58,7 +57,6 @@ securityContext:
     type: RuntimeDefault
 
 podSecurityContext:
-  enabled: true
   fsGroupChangePolicy: Always
   sysctls: []
   supplementalGroups: []
