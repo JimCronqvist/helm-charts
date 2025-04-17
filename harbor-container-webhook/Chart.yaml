@@ -1,5 +1,5 @@
 apiVersion: v2
-name: harbor
+name: harbor-container-webhook
 description: A Helm chart for Harbor Mutating Webhook that rewrites container images
 
 # Application charts are a collection of templates that can be packaged into versioned archives
