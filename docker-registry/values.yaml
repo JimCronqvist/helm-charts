@@ -62,6 +62,12 @@ podSecurityContext:
   supplementalGroups: []
   fsGroup: 1000
 
+deployment:
+  command:
+    - /bin/registry
+    - serve
+    - /etc/docker/registry/config.yml
+
 #scheduler:
 #  minZones: 2
 
@@ -116,7 +122,7 @@ files:
           realm: basic-realm
           path: /etc/docker/registry/.htpasswd
       http:
-        addr: :80
+        addr: :5000
         prefix: /
         relativeurls: false
         draintimeout: 60s
