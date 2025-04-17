@@ -62,8 +62,8 @@ podSecurityContext:
   supplementalGroups: []
   fsGroup: 1000
 
-scheduler:
-  minZones: 2
+#scheduler:
+#  minZones: 2
 
 #affinity:
 #  podAntiAffinity:
