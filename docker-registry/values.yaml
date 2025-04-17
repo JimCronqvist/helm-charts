@@ -38,7 +38,7 @@ probes:
   livenessPath: /
   readinessPath: /
 
-priorityClassName: system-critical
+priorityClassName: system-cluster-critical
 
 resources: {}
 
