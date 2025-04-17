@@ -63,6 +63,9 @@ podSecurityContext:
   supplementalGroups: []
   fsGroup: 1000
 
+service:
+  port: 5000
+
 deployment:
   command:
     - /bin/registry
