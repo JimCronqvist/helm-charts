@@ -58,6 +58,6 @@ files:
 {{- end }}
 
 {{- $dynamicValues := fromYaml (include "computedConfig" .) }}
-{{- $mergedValues := mergeOverwrite (deepCopy .Values.microservice) .Values $dynamicValues }}
+{{- $mergedValues := mergeOverwrite (deepCopy .Values.microservice) $dynamicValues .Values }}
 {{- $context := set (deepCopy $) "Values" $mergedValues }}
 {{- include "microservice.fullchart" $context }}
