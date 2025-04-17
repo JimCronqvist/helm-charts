@@ -65,17 +65,17 @@ podSecurityContext:
 scheduler:
   minZones: 2
 
-affinity:
-  podAntiAffinity:
-    requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchLabels:
-            app.kubernetes.io/name: '{{ template "microservice.name" . }}'
-            app.kubernetes.io/instance: '{{ .Release.Name }}-{{ .Release.Namespace }}'
-        topologyKey: kubernetes.io/hostname
-        # Requires feature gate: MatchLabelKeysInPodAffinity
-        #matchLabelKeys:
-        #  - pod-template-hash
+#affinity:
+#  podAntiAffinity:
+#    requiredDuringSchedulingIgnoredDuringExecution:
+#      - labelSelector:
+#          matchLabels:
+#            app.kubernetes.io/name: '{{ template "microservice.name" . }}'
+#            app.kubernetes.io/instance: '{{ .Release.Name }}-{{ .Release.Namespace }}'
+#        topologyKey: kubernetes.io/hostname
+#        # Requires feature gate: MatchLabelKeysInPodAffinity
+#        #matchLabelKeys:
+#        #  - pod-template-hash
 
 cronjobs:
   - name: registry-gc
