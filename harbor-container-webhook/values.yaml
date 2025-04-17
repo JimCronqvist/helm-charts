@@ -1,0 +1,24 @@
+harbor-container-webhook:
+  replicaCount: 2
+
+  verbose: false
+
+  certManager:
+    enabled: true
+
+  priorityClassName: "system-cluster-critical"
+
+  webhook:
+    namespaceSelector:
+      matchExpressions:
+        - key: "goharbor.io/harbor-container-webhook-disable"
+          operator: NotIn
+          values: ["true"]
+    objectSelector:
+      matchExpressions:
+        - key: "goharbor.io/harbor-container-webhook-disable"
+          operator: NotIn
+          values: ["true"]
+    failurePolicy: Ignore
+
+  rules: []
