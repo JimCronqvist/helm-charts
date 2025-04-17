@@ -82,7 +82,7 @@ affinity:
 cronjobs:
   - name: registry-gc
     schedule: "0 1 * * *"
-    command: ["/bin/registry", "garbage-collect", "--delete-untagged=true", "/etc/docker/registry/config.yml"]
+    command: "/bin/registry garbage-collect --delete-untagged=true /etc/docker/registry/config.yml"
     suspend: true
 
 files:
