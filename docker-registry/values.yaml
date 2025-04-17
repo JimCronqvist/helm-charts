@@ -93,6 +93,10 @@ cronjobs:
     command: "/bin/registry garbage-collect --delete-untagged=true /etc/docker/registry/config.yml"
     suspend: true
 
+env:
+  OTEL_SDK_DISABLED: true
+  OTEL_TRACES_EXPORTER: none
+
 files:
   /etc/docker/registry/config.yml:
     content: |
