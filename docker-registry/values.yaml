@@ -4,8 +4,25 @@ registry:
       remoteUrl: https://registry-1.docker.io
       username: ""
       password: ""
-      # docker run --entrypoint htpasswd httpd:2 -Bbn username password
-      htpasswd: ""
+
+      # Define the authentication of clients connecting to this new proxy registry
+      # Allowed values: transparent, htpasswd, credentials, none
+      #
+      # transparent = use the credentials from the registry (default)
+      # htpasswd    = specify a htpasswd format in the authHtpasswd property.
+      # credentials = use the username and password from the authUsername and authPassword properties
+      # none        = no authentication
+      #
+      auth: transparent
+      # authUsername: ""
+      # authPassword: ""
+      # To generate a htpasswd formatted string, use:   docker run --entrypoint htpasswd httpd:2 -Bbn username password
+      # authHtpasswd: ""
+
+    # - name: ghcr
+    #   remoteUrl: https://ghcr.io
+    # - name: ecr
+    #   remoteUrl: https://public.ecr.aws
 
   # Allowed values: filesystem, s3
   storage: filesystem

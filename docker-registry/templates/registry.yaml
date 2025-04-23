@@ -52,7 +52,7 @@ env:
   #REGISTRY_HTTP_PREFIX: "/{{ $proxy.name }}/"
 
   # Auth
-  {{- if or $proxy.htpasswd $proxy.password }}
+  {{- if and (ne $proxy.auth "none") (or (ne $proxy.auth "transparent") (and $proxy.username $proxy.password)) }}
   REGISTRY_AUTH: htpasswd
   REGISTRY_AUTH_HTPASSWD_REALM: "Registry Realm"
   REGISTRY_AUTH_HTPASSWD_PATH: "/etc/docker/registry/.htpasswd"
@@ -60,17 +60,19 @@ env:
 
 secrets:
   REGISTRY_PROXY_PASSWORD: {{ $proxy.password | quote }}
-  # Http secret, cryptoraphically unique, required when using multiple replicas.
+  # Http secret, cryptographically unique, required when using multiple replicas.
   REGISTRY_HTTP_SECRET: {{ $registry.secret | default (randAlphaNum 32) }}
 
-{{- if or $proxy.htpasswd $proxy.password }}
+{{- if and (ne $proxy.auth "none") (or (ne $proxy.auth "transparent") (and $proxy.username $proxy.password)) }}
 files:
   /etc/docker/registry/.htpasswd:
     content: |
-      {{- if $proxy.htpasswd }}
-      {{ $proxy.htpasswd }}
+      {{- if and (eq $proxy.auth "htpasswd") $proxy.authHtpasswd }}
+      {{ required "You must provide proxy.authHtpasswd when proxy.auth is set to 'htpasswd'." $proxy.authHtpasswd }}
+      {{- else if eq $proxy.auth "credentials" }}
+      {{ htpasswd (required "proxy.authUsername is required!" $proxy.authUsername) (required "proxy.authPassword is required!" $proxy.authPassword) }}
       {{- else }}
-      {{ htpasswd $proxy.username $proxy.password }}
+      {{ htpasswd (required "proxy.username is required!" $proxy.username) (required "proxy.password is required" $proxy.password) }}
       {{- end }}
 {{- end }}
 
