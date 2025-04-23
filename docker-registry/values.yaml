@@ -40,7 +40,7 @@ registry:
   secret: ""
 
   dockerhubPodLabels:
-    goharbor.io/harbor-container-webhook-disable: true
+    goharbor.io/harbor-container-webhook-disable: "true"
 
 serviceAccount:
   annotations:
