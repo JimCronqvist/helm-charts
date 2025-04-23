@@ -1,11 +1,13 @@
 {{/* Dynamic computed values helper */}}
 {{- define "computedIngressroute" -}}
-{{- $fullName := include "microservice.fullname" . }}
 ingressroute:
   routes:
   {{- range $proxy := .Values.registry.proxies }}
+  {{- $mergedValues := mergeOverwrite (deepCopy $.Values) (dict "nameOverride" (printf "docker-registry-%s" $proxy.name)) }}
+  {{- $context := set (deepCopy $) "Values" $mergedValues }}
+  {{- $fullName := include "microservice.fullname" $context }}
     - path: "/{{ $proxy.name }}"
-      serviceName: {{ $fullName }}-{{ $proxy.name }}
+      serviceName: {{ $fullName }}
       rewrite:
         regex: "^/{{ $proxy.name }}/(.*)"
         replacement: "/v2/$1"
