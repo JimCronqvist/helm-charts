@@ -7,7 +7,7 @@ ingressroute:
   {{- $mergedValues := mergeOverwrite (deepCopy $.Values) (dict "nameOverride" (printf "docker-registry-%s" $proxy.name)) }}
   {{- $context := set (deepCopy $) "Values" $mergedValues }}
   {{- $fullName := include "microservice.fullname" $context }}
-    {{- if contains $proxy.remoteUrl "docker.io" }}
+    {{- if contains ($proxy.remoteUrl | default "https://registry-1.docker.io") "docker.io" }}
     - path: "/v2/{{ $proxy.name }}/[^/]+$"
       serviceName: {{ $fullName }}
       rewrite:
