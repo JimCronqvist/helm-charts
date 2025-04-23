@@ -1,0 +1,18 @@
+{{/* Dynamic computed values helper */}}
+{{- define "computedIngressroute" -}}
+{{- $fullName := include "microservice.fullname" . }}
+ingressroute:
+  routes:
+  {{- range $proxy := .Values.registry.proxies }}
+    - path: "/{{ $proxy.name }}"
+      serviceName: {{ $fullName }}-{{ $proxy.name }}
+      rewrite:
+        regex: "^/{{ $proxy.name }}/(.*)"
+        replacement: "/v2/$1"
+  {{- end }}
+{{- end }}
+
+{{- $dynamicValues := fromYaml (include "computedIngressroute" .) }}
+{{- $mergedValues := mergeOverwrite (deepCopy $.Values.microservice) $dynamicValues $.Values }}
+{{- $context := set (deepCopy $) "Values" $mergedValues }}
+{{- include "microservice.tpl.ingressroute" $context }}

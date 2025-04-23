@@ -1,18 +1,17 @@
 registry:
+  proxies:
+    - name: docker
+      remoteUrl: https://docker.io
+      username: ""
+      password: ""
+      # docker run --entrypoint htpasswd httpd:2 -Bbn username password
+      htpasswd: ""
+
   # Allowed values: filesystem, s3
   storage: filesystem
-  # docker run --entrypoint htpasswd httpd:2 -Bbn registry password
-  htpasswd: ""
-  proxy:
-    enabled: false
-    remoteUrl: https://registry-1.docker.io
-    username: ""
-    password: ""
   s3:
     region: eu-north-1
-    # Endpoint for S3 compatible storage services (Minio, etc).
     bucket:
-
     # Optional, typically only needed for S3 compatible storage services (Minio, etc).
     # regionEndpoint:
     # accessKey:
