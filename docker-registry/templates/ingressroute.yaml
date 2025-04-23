@@ -12,13 +12,19 @@ ingressroute:
       serviceName: {{ $fullName }}
       rewrite:
         regex: "^/v2/{{ $proxy.name }}/(.*)"
+        replacement: "/v2/$1"
+    - path: "/v2/{{ $proxy.name }}/"
+      serviceName: {{ $fullName }}
+      rewrite:
+        regex: "^/v2/{{ $proxy.name }}/(.*)"
         replacement: "/v2/library/$1"
-    {{- end }}
+    {{- else }}
     - path: "/v2/{{ $proxy.name }}/"
       serviceName: {{ $fullName }}
       rewrite:
         regex: "^/v2/{{ $proxy.name }}/(.*)"
         replacement: "/v2/$1"
+    {{- end }}
   {{- end }}
 {{- end }}
 
