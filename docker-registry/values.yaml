@@ -39,6 +39,9 @@ registry:
   # Generate if you use more than 1 replica, with:    openssl rand -base64 32 | head -c 32 | base64
   secret: ""
 
+  dockerhubPodLabels:
+    goharbor.io/harbor-container-webhook-disable: true
+
 serviceAccount:
   annotations:
     eks.amazonaws.com/role-arn:
