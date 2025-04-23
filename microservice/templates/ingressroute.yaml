@@ -212,13 +212,16 @@ spec:
     {{- if .method }}
     {{- $matchRule = mustAppend $matchRule (regexReplaceAll "^(.*[|].*)$" (regexReplaceAll "([^,]+)" (nospace .method) "Method(`${1}`)" | replace "," " || ") "(${1})") }}
     {{- end }}
-    {{- if regexMatch "[$^+*()\\[\\]{}]" .path }}
+    {{- if and .path (regexMatch "[$^+*()\\[\\]{}]" .path) }}
     {{- $matchRule = mustAppend $matchRule (tpl "PathRegexp(`{{ .path }}`)" (merge . (dict "Template" $.Template))) }}
-    {{- else }}
+    {{- else if .path }}
     {{- $matchRule = mustAppend $matchRule (tpl "PathPrefix(`{{ .path }}`)" (merge . (dict "Template" $.Template))) }}
     {{- end }}
     {{- if .useCache }}
     {{- $matchRule = mustAppend $matchRule "!Header(`VARNISH`, `0`)" }}
+    {{- end }}
+    {{- if .rule }}
+    {{- $matchRule = mustAppend $matchRule (tpl "({{ .rule }})" (merge . (dict "Template" $.Template))) }}
     {{- end }}
     {{- $matchRule = $matchRule | join " && " }}
     - kind: Rule
