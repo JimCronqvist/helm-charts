@@ -1,6 +1,7 @@
 {{/* Dynamic computed values helper */}}
 {{- define "computedIngressroute" -}}
 ingressroute:
+  responseHeaderMicroservice: true
   routes:
   {{- range $proxy := .Values.registry.proxies }}
   {{- $mergedValues := mergeOverwrite (deepCopy $.Values) (dict "nameOverride" (printf "docker-registry-%s" $proxy.name)) }}
@@ -18,3 +19,7 @@ ingressroute:
 {{- $mergedValues := mergeOverwrite (deepCopy $.Values.microservice) $dynamicValues $.Values }}
 {{- $context := set (deepCopy $) "Values" $mergedValues }}
 {{- include "microservice.tpl.ingressroute" $context }}
+---
+{{- include "microservice.tpl.ingressroute.header-microservice" $context }}
+---
+{{- include "microservice.tpl.ingressroute.redirect-https" $context }}
