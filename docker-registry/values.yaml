@@ -21,8 +21,10 @@ registry:
 
     # - name: ghcr
     #   remoteUrl: https://ghcr.io
+    #   auth: transparent
     # - name: ecr
     #   remoteUrl: https://public.ecr.aws
+    #   auth: transparent
 
   # Allowed values: filesystem, s3
   storage: filesystem
