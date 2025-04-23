@@ -19,9 +19,11 @@ ingressroute:
   enabled: false
 
 env:
-  # Proxy - uses the 'remoteUrl' as the prefix
+  # Upstream proxy
   REGISTRY_PROXY_REMOTEURL: {{ $remoteUrl | quote }}
+  {{- if $proxy.username }}
   REGISTRY_PROXY_USERNAME: {{ $proxy.username | quote }}
+  {{- end }}
 
   {{- if $registry.s3.bucket }}
   # S3 driver
@@ -59,7 +61,9 @@ env:
   {{- end }}
 
 secrets:
+  {{- if $proxy.password }}
   REGISTRY_PROXY_PASSWORD: {{ $proxy.password | quote }}
+  {{- end }}
   # Http secret, cryptographically unique, required when using multiple replicas.
   REGISTRY_HTTP_SECRET: {{ $registry.secret | default (randAlphaNum 32) }}
 
