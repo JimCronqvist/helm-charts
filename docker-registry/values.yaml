@@ -1,7 +1,7 @@
 registry:
   proxies:
     - name: docker
-      remoteUrl: https://docker.io
+      remoteUrl: https://registry-1.docker.io
       username: ""
       password: ""
       # docker run --entrypoint htpasswd httpd:2 -Bbn username password
@@ -16,6 +16,9 @@ registry:
     # regionEndpoint:
     # accessKey:
     # secretKey:
+
+  # Generate if you use more than 1 replica, with:    openssl rand -base64 32 | head -c 32 | base64
+  secret: ""
 
 serviceAccount:
   annotations:

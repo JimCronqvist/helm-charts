@@ -6,7 +6,7 @@
 {{- $registry := .registry }}
 {{- $fullName := .fullName }}
 
-{{- $remoteUrl := $proxy.remoteUrl | default "https://docker.io" }}
+{{- $remoteUrl := $proxy.remoteUrl | default "https://registry-1.docker.io" }}
 {{- $registryHost := (urlParse $remoteUrl).host }}
 {{- if $registryHost }}
 nameOverride: docker-registry-{{ $proxy.name }}
@@ -49,7 +49,7 @@ env:
   {{- end }}
 
   # Http prefix
-  REGISTRY_HTTP_PREFIX: "/{{ $proxy.name }}/"
+  #REGISTRY_HTTP_PREFIX: "/{{ $proxy.name }}/"
 
   # Auth
   {{- if or $proxy.htpasswd $proxy.password }}
