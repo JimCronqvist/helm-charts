@@ -80,8 +80,8 @@ files:
       {{- end }}
 {{- end }}
 
-{{- if contains "docker.io" ($proxy.remoteUrl | default "https://registry-1.docker.io") }}
-{{- with $registry.dockerhubPodLabels }}
+{{- if or $proxy.ignoreRewriteForRegistryPod (contains "docker.io" ($proxy.remoteUrl | default "https://registry-1.docker.io")) }}
+{{- with $registry.noRewritePodLabels }}
 podLabels:
   {{- toYaml . | nindent 2 }}
 {{- end }}

@@ -19,6 +19,9 @@ registry:
       # To generate a htpasswd formatted string, use:   docker run --entrypoint htpasswd httpd:2 -Bbn username password
       # authHtpasswd: ""
 
+      # Optional, if you want the registry to be ignored when rewriting the image references
+      ignoreRewriteForRegistryPod: true
+
     # - name: ghcr
     #   remoteUrl: https://ghcr.io
     #   auth: transparent
@@ -39,33 +42,34 @@ registry:
   # Generate if you use more than 1 replica, with:    openssl rand -base64 32 | head -c 32 | base64
   secret: ""
 
-  dockerhubPodLabels:
+  noRewritePodLabels:
     goharbor.io/harbor-container-webhook-disable: "true"
 
 serviceAccount:
   annotations:
     eks.amazonaws.com/role-arn:
 
+imagePullSecrets: []
+replicaCount: 1
+image:
+  #repository: public.ecr.aws/docker/library/registry
+  repository: registry
+resources: {}
+
 microservice:
   renderTemplates: false
 
-replicaCount: 1
 
-image:
-  repository: public.ecr.aws/docker/library/registry
+
 
 datadog:
   enabled: true
-
-imagePullSecrets: []
 
 probes:
   livenessPath: /
   readinessPath: /
 
 priorityClassName: system-cluster-critical
-
-resources: {}
 
 securityContext:
   seLinuxOptions: {}
