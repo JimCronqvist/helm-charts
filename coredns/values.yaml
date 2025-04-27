@@ -27,7 +27,7 @@ coredns:
     service:
       enabled: true
     monitor:
-      enabled: true
+      enabled: false
 
   serviceAccount:
     create: true
