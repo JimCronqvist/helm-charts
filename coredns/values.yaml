@@ -1,7 +1,19 @@
+# Custom configmap for CoreDNS
+# *.conf files are imported in the root zone block
+# *.server files are imported in the server block
+customConfigmap: {}
+#  NodeHosts.conf: |
+#    hosts /etc/coredns/NodeHosts {
+#      ttl 60
+#      reload 15s
+#      fallthrough
+#    }
+
 coredns:
   replicaCount: 2
 
   isClusterService: true
+
   #fullnameOverride: coredns
 
   service:
@@ -61,10 +73,30 @@ coredns:
         - name: loop
         - name: reload
         - name: loadbalance
+        - name: import
+          parameters: /etc/coredns/custom/*.conf
 
   extraConfig:
     import:
-      parameters: /opt/coredns/*.conf
+      parameters: /etc/coredns/custom/*.server
+
+  extraVolumes:
+    - name: custom-config-volume
+      configMap:
+        name: coredns-custom # Note: This name does not use the release name
+        defaultMode: 420
+        optional: true
+    #- name: node-hosts-file
+    #  hostPath:
+    #    path: /var/lib/rancher/k3s/server/manifests/coredns/NodeHosts
+
+  extraVolumeMounts:
+    - name: custom-config-volume
+      readOnly: true
+      mountPath: /etc/coredns/custom
+    #- name: node-hosts-file
+    #  mountPath: /etc/coredns/NodeHosts
+    #  readOnly: true
 
   zoneFiles: []
 

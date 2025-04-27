@@ -1,0 +1,25 @@
+{{- if .Values.coredns.deployment.enabled }}
+{{- if not .Values.coredns.deployment.skipConfig }}
+{{- if not (empty .Values.customConfigmap) }}
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ template "coredns.fullname" . }}-custom
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "coredns.labels" . | nindent 4 }}
+{{- if .Values.coredns.customLabels }}
+{{ toYaml .Values.coredns.customLabels | indent 4 }}
+{{- end }}
+{{- with .Values.coredns.customAnnotations }}
+  annotations:
+{{- toYaml . | nindent 4 }}
+{{- end }}
+data:
+{{- range $key, $value := .Values.customConfigmap }}
+  {{ $key }}: |-
+{{ $value | indent 4 }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
