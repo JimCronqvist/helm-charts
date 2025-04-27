@@ -1,0 +1,97 @@
+coredns:
+  replicaCount: 2
+
+  isClusterService: true
+  #fullnameOverride: coredns
+
+  service:
+    name: "kube-dns"
+    clusterIP: "172.20.0.10"   # AWS EKS
+    # clusterIP: "10.43.0.10"  # k3s
+
+  priorityClassName: system-node-critical
+
+  # To support legacy deployments using CoreDNS with the "k8s-app: kube-dns" label selectors.
+  # See https://github.com/coredns/helm/blob/master/charts/coredns/README.md#adopting-existing-coredns-resources
+  #k8sAppLabelOverride: "kube-dns"
+
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 250m
+      memory: 256Mi
+
+  prometheus:
+    service:
+      enabled: true
+    monitor:
+      enabled: true
+
+  serviceAccount:
+    create: true
+
+  servers:
+    - zones:
+        - zone: .
+      port: 53
+      plugins:
+        - name: errors
+        # Serves a /health endpoint on :8080, required for livenessProbe
+        - name: health
+          configBlock: |-
+            lameduck 5s
+        # Serves a /ready endpoint on :8181, required for readinessProbe
+        - name: ready
+        # Required to query kubernetes API for data
+        - name: kubernetes
+          parameters: cluster.local in-addr.arpa ip6.arpa
+          configBlock: |-
+            pods insecure
+            fallthrough in-addr.arpa ip6.arpa
+            ttl 30
+        # Serves a /metrics endpoint on :9153, required for serviceMonitor
+        - name: prometheus
+          parameters: 0.0.0.0:9153
+        - name: forward
+          parameters: . /etc/resolv.conf
+        - name: cache
+          parameters: 30
+        - name: loop
+        - name: reload
+        - name: loadbalance
+
+  extraConfig:
+    import:
+      parameters: /opt/coredns/*.conf
+
+  zoneFiles: []
+
+  topologySpreadConstraints:
+    - labelSelector:
+        matchLabels:
+          app.kubernetes.io/name: '{{ template "coredns.name" . }}'
+          app.kubernetes.io/instance: '{{ .Release.Name }}'
+      topologyKey: topology.kubernetes.io/zone
+      maxSkew: 1
+      whenUnsatisfiable: ScheduleAnyway
+    - labelSelector:
+        matchLabels:
+          app.kubernetes.io/name: '{{ template "coredns.name" . }}'
+          app.kubernetes.io/instance: '{{ .Release.Name }}'
+      topologyKey: kubernetes.io/hostname
+      maxSkew: 1
+      whenUnsatisfiable: ScheduleAnyway
+
+  podDisruptionBudget:
+    maxUnavailable: 1
+
+  env: []
+
+  # Custom labels to apply to Deployment, Pod, Configmap, Service, ServiceMonitor. Including autoscaler if enabled.
+  customLabels: {}
+
+  # Custom annotations to apply to Deployment, Pod, Configmap, Service, ServiceMonitor. Including autoscaler if enabled.
+  customAnnotations: {}
+
