@@ -125,6 +125,7 @@ coredns:
   customLabels:
     tags.datadoghq.com/service: "coredns"
     tags.datadoghq.com/env: "production"
+    goharbor.io/harbor-container-webhook-disable: "true"
 
   # Custom annotations to apply to Deployment, Pod, Configmap, Service, ServiceMonitor. Including autoscaler if enabled.
   customAnnotations: {}
