@@ -125,6 +125,13 @@ coredns:
   podDisruptionBudget:
     maxUnavailable: 1
 
+  rbac:
+    create: true
+    extraRules:
+      - apiGroups: [""]
+        resources: ["nodes"]
+        verbs: ["get"]
+
   env: []
 
   # Custom labels to apply to Deployment, Pod, Configmap, Service, ServiceMonitor. Including autoscaler if enabled.
