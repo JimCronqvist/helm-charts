@@ -1,7 +1,13 @@
 # Custom configmap for CoreDNS
 # *.conf files are imported in the root zone block
 # *.server files are imported in the server block
-customConfigmap: {}
+customConfigmap:
+  custom.server: |
+    # This empty placeholder prevents warnings about no matching import files.
+  custom.conf: |
+    # This empty placeholder prevents warnings about no matching import files.
+#  verbose.conf: |
+#    dump
 #  NodeHosts.conf: |
 #    hosts /etc/coredns/NodeHosts {
 #      ttl 60
