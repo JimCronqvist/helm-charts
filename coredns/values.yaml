@@ -127,6 +127,7 @@ coredns:
 
   rbac:
     create: true
+    # Custom implementation in this chart only (not in coredns chart), used to add EKS required permissions as below
     extraRules:
       - apiGroups: [""]
         resources: ["nodes"]
