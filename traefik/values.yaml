@@ -15,13 +15,19 @@ traefik:
     dashboard:
       enabled: true
 
-  # -- You SHOULD NOT expose the traefik port on production deployments.
   ports:
     traefik:
       expose:
+        default: true # -- You SHOULD NOT expose the traefik port on production deployments.
+        internal: false
+    web:
+      expose:
         default: true
-
+        internal: true
     websecure:
+      expose:
+        default: true
+        internal: true
       tls: {}
 
   # Enable access logs
@@ -35,6 +41,7 @@ traefik:
       enabled: true
 
   service:
+    #externalTrafficPolicy: Local
     annotations:
       # On AWS, create a Network load balancer with IP target groups
       service.beta.kubernetes.io/aws-load-balancer-type: external
@@ -46,7 +53,19 @@ traefik:
       # You must specify three elastic IPs if you are using 3 availability zones and 3 subnets
       #service.beta.kubernetes.io/aws-load-balancer-eip-allocations: eipalloc-xxx, eipalloc-yyy, eipalloc-zzz
 
-  externalTrafficPolicy: Local
+    additionalServices:
+      internal:
+        # Enable if you want a secondary internal service - for example an Internal NLB on AWS.
+        enabled: false
+        type: LoadBalancer
+        single: true
+        annotations:
+          # On AWS, create an Internal Network Load Balancer with IP target groups
+          service.beta.kubernetes.io/aws-load-balancer-type: external
+          service.beta.kubernetes.io/aws-load-balancer-scheme: internal
+          service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
+          service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
+          service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: preserve_client_ip.enabled=true
 
   persistence:
     enabled: false
