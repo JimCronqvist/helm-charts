@@ -49,7 +49,7 @@ traefik:
       service.beta.kubernetes.io/aws-load-balancer-scheme: internet-facing
       service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
       service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: preserve_client_ip.enabled=true
-      #service.beta.kubernetes.io/aws-load-balancer-name: "k8s-traefik"
+      service.beta.kubernetes.io/aws-load-balancer-name: "k8s-traefik"
 
       # You must specify three elastic IPs if you are using 3 availability zones and 3 subnets
       #service.beta.kubernetes.io/aws-load-balancer-eip-allocations: eipalloc-xxx, eipalloc-yyy, eipalloc-zzz
@@ -67,7 +67,7 @@ traefik:
           service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
           service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
           service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: preserve_client_ip.enabled=true
-          #service.beta.kubernetes.io/aws-load-balancer-name: "k8s-traefik-internal"
+          service.beta.kubernetes.io/aws-load-balancer-name: "k8s-traefik-internal"
 
   persistence:
     enabled: false
