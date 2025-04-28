@@ -122,7 +122,9 @@ coredns:
   env: []
 
   # Custom labels to apply to Deployment, Pod, Configmap, Service, ServiceMonitor. Including autoscaler if enabled.
-  customLabels: {}
+  customLabels:
+    tags.datadoghq.com/service: "coredns"
+    tags.datadoghq.com/env: "production"
 
   # Custom annotations to apply to Deployment, Pod, Configmap, Service, ServiceMonitor. Including autoscaler if enabled.
   customAnnotations: {}
