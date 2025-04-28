@@ -1,4 +1,6 @@
 harbor-container-webhook:
+  enabled: true
+
   replicaCount: 2
 
   verbose: false
@@ -22,3 +24,4 @@ harbor-container-webhook:
     failurePolicy: Ignore
 
   rules: []
+  extraRules: []
