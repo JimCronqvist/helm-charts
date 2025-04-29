@@ -121,6 +121,7 @@ cronjobs:
 env:
   OTEL_SDK_DISABLED: true
   OTEL_TRACES_EXPORTER: none
+  REGISTRY_LOG_LEVEL: info
 
 files:
   /etc/docker/registry/config.yml:
