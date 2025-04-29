@@ -19,7 +19,7 @@ traefik:
     traefik:
       expose:
         default: true # -- You SHOULD NOT expose the traefik port on production deployments.
-        internal: false
+        internal: true
     web:
       expose:
         default: true
@@ -66,7 +66,8 @@ traefik:
           service.beta.kubernetes.io/aws-load-balancer-scheme: internal
           service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
           service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
-          service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: preserve_client_ip.enabled=true
+          # NAT loopback (hairpinning) is not supported when client ip preserving is enabled. If preserving client ip is needed, consider using proxy protocol v2.
+          service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: preserve_client_ip.enabled=false
           service.beta.kubernetes.io/aws-load-balancer-name: "k8s-traefik-internal"
 
   persistence:
