@@ -1,5 +1,6 @@
 traefik:
   image:
+    #registry: public.ecr.aws/docker/library
     tag:
 
   rbac:
@@ -60,6 +61,7 @@ traefik:
         enabled: false
         type: LoadBalancer
         single: true
+        #externalTrafficPolicy: Local # Avoids an extra kube-proxy hop/SNAT, helpful for preserving client IP. But won't load balance across nodes.
         annotations:
           # On AWS, create an Internal Network Load Balancer with IP target groups
           service.beta.kubernetes.io/aws-load-balancer-type: external
@@ -67,6 +69,7 @@ traefik:
           service.beta.kubernetes.io/aws-load-balancer-nlb-target-type: ip
           service.beta.kubernetes.io/aws-load-balancer-attributes: load_balancing.cross_zone.enabled=true
           # NAT loopback (hairpinning) is not supported when client ip preserving is enabled. If preserving client ip is needed, consider using proxy protocol v2.
+          # https://docs.aws.amazon.com/elasticloadbalancing/latest/network/load-balancer-troubleshooting.html#loopback-timeout
           service.beta.kubernetes.io/aws-load-balancer-target-group-attributes: preserve_client_ip.enabled=false
           service.beta.kubernetes.io/aws-load-balancer-name: "k8s-traefik-internal"
 
