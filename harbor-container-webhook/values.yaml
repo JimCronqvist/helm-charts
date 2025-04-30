@@ -3,6 +3,8 @@ harbor-container-webhook:
 
   replicaCount: 2
 
+  imagePullSecrets: []
+
   verbose: false
 
   certManager:
