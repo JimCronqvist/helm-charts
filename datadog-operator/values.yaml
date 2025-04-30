@@ -5,7 +5,7 @@ datadog-operator:
     enabled: true
 
   image:
-    repository: datadoghq/operator
+    repository: datadog/operator
 
   # Set Datadog Operator log level: debug, info (default), error, panic, fatal
   logLevel: "info"
