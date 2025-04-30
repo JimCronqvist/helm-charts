@@ -48,6 +48,34 @@ spec:
 {{- end }}
 {{- end }}
 {{/*
+IP Whitelist/AllowList middleware
+*/}}
+{{- range $index, $route := $ingressroute.routes }}
+{{- if or .ipWhiteList .ipAllowList }}
+{{- $ipList := .ipAllowList | default .ipWhiteList }}
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: {{ $fullName }}-route{{ $index }}-ip-whitelist
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  ipWhiteList:
+    {{- if kindIs "string" $ipList }}
+    sourceRange:
+      - {{ $ipList }}
+    {{- else if kindIs "slice" $ipList }}
+    sourceRange:
+    {{- range $ipList }}
+      - {{ . }}
+    {{- end }}
+    {{- else }}
+      {{- toYaml $ipList | nindent 4 }}
+    {{- end }}
+---
+{{- end }}
+{{- end }}
+{{/*
 Rate Limit middleware
 */}}
 {{- range $index, $route := $ingressroute.routes }}
@@ -269,6 +297,9 @@ spec:
         {{- end }}
         {{- if $ingressroute.headers }}
         - name: {{ $fullName }}-headers
+        {{- end }}
+        {{- if or $ingressroute.ipAllowList $ingressroute.ipWhiteList }}
+        - name: {{ $fullName }}-ip-whitelist
         {{- end }}
         {{- if .rateLimit }}
         - name: {{ $fullName }}-route{{ $index }}-rate-limit
