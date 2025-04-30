@@ -97,6 +97,7 @@ traefik:
 
   deployment:
     replicas: 3
+    imagePullSecrets: []
     labels:
       tags.datadoghq.com/service: traefik
       tags.datadoghq.com/env: production
