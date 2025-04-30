@@ -4,6 +4,9 @@ datadog-operator:
   datadogMonitor:
     enabled: true
 
+  image:
+    repository: datadoghq/operator
+
   # Set Datadog Operator log level: debug, info (default), error, panic, fatal
   logLevel: "info"
 
@@ -46,7 +49,9 @@ datadogAgent:
 
   # Configuration options available here:
   # https://github.com/DataDog/datadog-operator/blob/main/docs/configuration.v2alpha1.md
-  global: {}
+  global:
+    # Use docker.io as the default image registry
+    registry: datadog
   override:
     nodeAgent:
       priorityClassName: "system-node-critical"
