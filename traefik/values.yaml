@@ -103,6 +103,7 @@ traefik:
     podLabels:
       tags.datadoghq.com/service: traefik
       tags.datadoghq.com/env: production
+      goharbor.io/harbor-container-webhook-disable: "true"
 
   priorityClassName: "system-cluster-critical"
 
