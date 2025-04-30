@@ -299,7 +299,7 @@ spec:
         - name: {{ $fullName }}-headers
         {{- end }}
         {{- if or .ipAllowList .ipWhiteList }}
-        - name: {{ $fullName }}-ip-whitelist
+        - name: {{ $fullName }}-route{{ $index }}-ip-whitelist
         {{- end }}
         {{- if .rateLimit }}
         - name: {{ $fullName }}-route{{ $index }}-rate-limit
