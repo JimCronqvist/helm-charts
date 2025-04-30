@@ -25,6 +25,7 @@ registry:
     # - name: ghcr
     #   remoteUrl: https://ghcr.io
     #   auth: transparent
+    # Warning: ECR is not compatible with official specs, registry v2 and v3.0.0 does not work with it. See: https://github.com/distribution/distribution/issues/4383
     # - name: ecr
     #   remoteUrl: https://public.ecr.aws
     #   auth: transparent
