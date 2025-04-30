@@ -298,7 +298,7 @@ spec:
         {{- if $ingressroute.headers }}
         - name: {{ $fullName }}-headers
         {{- end }}
-        {{- if or $ingressroute.ipAllowList $ingressroute.ipWhiteList }}
+        {{- if or .ipAllowList .ipWhiteList }}
         - name: {{ $fullName }}-ip-whitelist
         {{- end }}
         {{- if .rateLimit }}
