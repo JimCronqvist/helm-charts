@@ -51,18 +51,18 @@ karpenter:
 provisioners:
   - name: default
     nodePool: default
-    nodeClass: al2
+    nodeClass: al2023
   - name: on-demand
     nodePool: onDemand
     nodePoolTaint: NoSchedule
-    nodeClass: al2
+    nodeClass: al2023
   - name: unmanaged
     nodePool: unmanaged
     nodePoolTaint: NoSchedule
-    nodeClass: al2
+    nodeClass: al2023
   - name: reserved-instances
     nodePool: reservedInstances
-    nodeClass: al2
+    nodeClass: al2023
   - name: windows-default
     nodePool: windows-default
     nodePoolTaint: NoSchedule
@@ -72,12 +72,12 @@ provisioners:
 nodeClassDefaultRole:
 
 nodeClass:
-  al2:
+  al2023:
     kubelet: {}
     detailedMonitoring: true
 
     amiSelectorTerms:
-      - alias: al2@latest
+      - alias: al2023@latest
 
     blockDeviceMappings:
       - deviceName: /dev/xvda
