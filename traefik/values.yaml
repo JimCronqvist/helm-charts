@@ -42,7 +42,8 @@ traefik:
       enabled: true
 
   service:
-    #externalTrafficPolicy: Local
+    spec: {}
+      #externalTrafficPolicy: Local # Avoids an extra kube-proxy hop/SNAT, helpful for preserving client IP. But won't load balance across nodes.
     annotations:
       # On AWS, create a Network load balancer with IP target groups
       service.beta.kubernetes.io/aws-load-balancer-type: external
@@ -61,7 +62,8 @@ traefik:
         enabled: false
         type: LoadBalancer
         single: true
-        #externalTrafficPolicy: Local # Avoids an extra kube-proxy hop/SNAT, helpful for preserving client IP. But won't load balance across nodes.
+        spec: {}
+          #externalTrafficPolicy: Local # Avoids an extra kube-proxy hop/SNAT, helpful for preserving client IP. But won't load balance across nodes.
         annotations:
           # On AWS, create an Internal Network Load Balancer with IP target groups
           service.beta.kubernetes.io/aws-load-balancer-type: external
