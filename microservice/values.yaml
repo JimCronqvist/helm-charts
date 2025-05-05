@@ -353,3 +353,65 @@ files: {}
 
 # Extra custom manifests
 extraManifests: []
+
+networkPolicy:
+  enabled: false
+
+  ingressAllowCluster:
+    enabled: false
+    ports: []
+
+  ingressAllowSameNamespace:
+    enabled: false
+    ports: []  # Empty to fallback on container port
+
+  # Combined ingress rules for namespaces and apps
+  ingressAllowRules: []
+  #  - namespace: "frontend-namespace"
+  #    ports: []  # Empty to fallback on container port
+  #  - app: "frontend"
+  #    ports: []
+  #  - namespace: "backend-namespace"
+  #    app: "backend"
+  #    ports:
+  #      - "8080"
+  ingressAllowRulesExtra: []
+
+  # For custom additional rules
+  ingressExtra: []
+
+  egressAllowInternet:
+    enabled: false
+    ports:
+      - "443"
+
+  egressAllowCluster:
+    enabled: false
+    ports: [] # All ports
+
+  egressAllowSameNamespace:
+    enabled: false
+    ports: []
+
+  # Combined egress rules for namespaces and apps
+  egressAllowRules: []
+  #  - namespace: "namespace1"
+  #    ports:
+  #      - "80"
+  #  - app: "myapp"
+  #    ports: [] # all ports
+  #  - namespace: "namespace2"
+  #    app: "frontend"
+  #    ports:
+  #      - "8080"
+  #  - cidr: 10.1.2.3/32
+  egressAllowRulesExtra: []
+
+  # Custom additional rules
+  egressExtra: []
+
+  # Cilium specific rules for fqdn egress
+  egressAllowFqdn: []
+  #  - fqdn: "example.com"
+  #  - fqdn: "*.example.com"
+  #    ports: []

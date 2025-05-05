@@ -424,4 +424,6 @@ Generate the full chart. Note: does not include the subfolders.
 {{ include "microservice.tpl.ingressroute.headers" . }}
 ---
 {{ include "microservice.tpl.ingressroute.redirect-https" . }}
+---
+{{ include "microservice.tpl.networkpolicy" . }}
 {{- end -}}
