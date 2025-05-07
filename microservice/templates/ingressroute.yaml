@@ -166,8 +166,7 @@ stringData:
     {{- $username := index $parts 0 }}
     {{- $password := index $parts 1 }}
     {{- $hashedPassword := printf "%s" $password | sha1sum }}
-    {{- $credential := printf "%s:{SHA}%s" $username $hashedPassword }}
-    {{ $credential }}
+    {{ printf "%s:%s" $username $hashedPassword }}
     {{- end }}
 ---
 apiVersion: traefik.io/v1alpha1
