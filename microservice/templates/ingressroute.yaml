@@ -165,7 +165,7 @@ stringData:
     {{- $parts := splitList ":" . }}
     {{- $username := index $parts 0 }}
     {{- $password := index $parts 1 }}
-    {{- $hashedPassword := printf "%s" $password | sha1sum }}
+    {{- $hashedPassword := printf "{SHA}%s" ($password | sha1sum | b64enc) }}
     {{ printf "%s:%s" $username $hashedPassword }}
     {{- end }}
 ---
