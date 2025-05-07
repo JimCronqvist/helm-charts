@@ -152,6 +152,9 @@ BasicAuth middleware
 */}}
 {{- range $index, $route := $ingressroute.routes }}
 {{- if and .basicAuth }}
+{{- if not (gt (len (.basicAuth.users | default (list))) 0) }}
+{{- fail "You must specify at least one user for basic auth!" }}
+{{- end }}
 apiVersion: v1
 kind: Secret
 metadata:
