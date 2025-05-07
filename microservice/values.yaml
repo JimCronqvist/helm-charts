@@ -354,6 +354,7 @@ files: {}
 # Extra custom manifests
 extraManifests: []
 
+# https://editor.networkpolicy.io/
 networkPolicy:
   enabled: false
 
