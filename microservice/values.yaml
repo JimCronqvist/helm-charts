@@ -159,9 +159,13 @@ ingressroute:
     # Path is required, and will match against PathPrefix(`...`), with an optional Host() or HostRegexp() match (multiple with commas)
     # priority: 0, means the priority will be ignored, and the default traefik rules length sorting is applied.
     # stripPrefix: {path}, use to remove a base path when the container does not expect it, such as nginx with static files
+    # basicAuth: Generate with 'htpasswd -nb username password'
     #
     # - path: /
     #   host: test.local
+    #   basicAuth:
+    #     users:
+    #       - "username:<hash>"
     #   priority: 0
     #   stripPrefix:
     #   useCache: true
