@@ -383,47 +383,50 @@ Var dump helper, stops the rendering and prints out the value of a variable. Use
 Generate the full chart. Note: does not include the subfolders.
 */}}
 {{- define "microservice.fullchart" -}}
-{{ include "microservice.tpl.configmap-files" . }}
+{{- $verbose := false }}
+{{- $templates := list
+    "microservice.tpl.configmap-files"
+    "microservice.tpl.cronjob"
+    "microservice.tpl.deployment"
+    "microservice.tpl.external-secret"
+    "microservice.tpl.extra"
+    "microservice.tpl.hpa"
+    "microservice.tpl.ingressroute"
+    "microservice.tpl.ingressroute-tcp"
+    "microservice.tpl.job"
+    "microservice.tpl.pdb"
+    "microservice.tpl.priorityclass"
+    "microservice.tpl.pvc"
+    "microservice.tpl.role"
+    "microservice.tpl.rolebinding"
+    "microservice.tpl.secret"
+    "microservice.tpl.service"
+    "microservice.tpl.serviceaccount"
+    "microservice.tpl.ingressroute.compress"
+    "microservice.tpl.ingressroute.header-microservice"
+    "microservice.tpl.ingressroute.headers"
+    "microservice.tpl.ingressroute.redirect-https"
+    "microservice.tpl.networkpolicy"
+-}}
+{{- $manifests := (list) -}}
+{{- range $templates -}}
+  {{- $content := include . $ | trim -}}{{/* | trimSuffix "---" | trim */}}
+  {{- if $content -}}
+    {{- $manifests = mustAppend $manifests (dict "content" $content "tpl" .) -}}
+  {{- end -}}
+{{- end -}}
+{{/*
+{{- $manifests | mustToPrettyJson | printf "\nThe JSON output of the dumped var is: \n%s" | fail }}
+{{- $manifests | toYaml | printf "\nThe YAML output of the dumped var is: \n%s" | fail }}
+*/}}
+{{- $numManifests := len $manifests }}
+{{- range $index, $manifest := $manifests }}
+{{- if $verbose }}
+# Template (index={{ $index }}, tpl={{ $manifest.tpl }})
+{{- end }}
+{{ $manifest.content }}
+{{- if lt $index (sub $numManifests 1) }}
 ---
-{{ include "microservice.tpl.cronjob" . }}
----
-{{ include "microservice.tpl.deployment" . }}
----
-{{ include "microservice.tpl.external-secret" . }}
----
-{{ include "microservice.tpl.extra" . }}
----
-{{ include "microservice.tpl.hpa" . }}
----
-{{ include "microservice.tpl.ingressroute" . }}
----
-{{ include "microservice.tpl.ingressroute-tcp" . }}
----
-{{ include "microservice.tpl.job" . }}
----
-{{ include "microservice.tpl.pdb" . }}
----
-{{ include "microservice.tpl.priorityclass" . }}
----
-{{ include "microservice.tpl.pvc" . }}
----
-{{ include "microservice.tpl.role" . }}
----
-{{ include "microservice.tpl.rolebinding" . }}
----
-{{ include "microservice.tpl.secret" . }}
----
-{{ include "microservice.tpl.service" . }}
----
-{{ include "microservice.tpl.serviceaccount" . }}
----
-{{ include "microservice.tpl.ingressroute.compress" . }}
----
-{{ include "microservice.tpl.ingressroute.header-microservice" . }}
----
-{{ include "microservice.tpl.ingressroute.headers" . }}
----
-{{ include "microservice.tpl.ingressroute.redirect-https" . }}
----
-{{ include "microservice.tpl.networkpolicy" . }}
+{{- end }}
+{{- end }}
 {{- end -}}

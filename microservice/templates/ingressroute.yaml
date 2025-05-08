@@ -238,7 +238,7 @@ IngressRoute
     {{- break }}
   {{- end }}
 {{- end }}
-{{- range $suffix := $suffixes }}
+{{- range $manifestIndex, $suffix := $suffixes }}
 apiVersion: traefik.io/v1alpha1
 kind: IngressRoute
 metadata:
@@ -381,7 +381,9 @@ spec:
     {{- end }}
     {{- end }}
   {{- end }}
+{{- if lt $manifestIndex (sub (len $suffixes) 1) }}
 ---
+{{- end }}
 {{- end }}
 {{- end }}
 {{- end }}
