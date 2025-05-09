@@ -114,10 +114,10 @@ deployment:
 #        #  - pod-template-hash
 
 cronjobs:
-  - name: registry-gc
-    schedule: "0 1 * * *"
+  - name: gc
+    schedule: "0 2 * * *"
     command: "/bin/registry garbage-collect --delete-untagged=true /etc/docker/registry/config.yml"
-    suspend: true
+    suspend: false
 
 env:
   OTEL_SDK_DISABLED: true
