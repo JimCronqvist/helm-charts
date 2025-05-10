@@ -13,6 +13,12 @@ spec:
   weight: {{ dig ($provisioner.nodePool) "weight" 1 $.Values.nodePool }}
   template:
     spec:
+      {{- if .Values.cilium.enabled }}
+      startupTaints:
+        - key: node.cilium.io/agent-not-ready
+          value: "true"
+          effect: NoExecute
+      {{- end }}
       nodeClassRef:
         group: karpenter.k8s.aws
         kind: EC2NodeClass

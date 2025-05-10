@@ -1,4 +1,8 @@
 
+cilium:
+  # Apply startupTaints to all node pools when cilium is enabled.
+  enabled: false
+
 karpenter:
   logLevel: info
   podDisruptionBudget:

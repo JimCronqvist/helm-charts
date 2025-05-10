@@ -1,7 +1,36 @@
 cilium:
   podLabels:
     tags.datadoghq.com/service: cilium
-  cni:
-    chainingMode: aws-cni
-  enableIPv4Masquerade: false
-  tunnel: disabled
+
+  hubble:
+    enabled: true
+    relay:
+      enabled: true
+    ui:
+      enabled: true
+
+  #
+  # Below are a few pre-configured options for Cilium, ensure that you only have one section active at any given time.
+  #
+
+  # Option 1 - EKS with CNI chaining mode (AWS VPC CNI + Cilium) - Good choice if you only need Cilium for network policies and to support fqdn egress policies.
+  # cni:
+  #   chainingMode: aws-cni
+  #   exclusive: false
+  # enableIPv4Masquerade: false
+  # routingMode: native
+
+  # Option 2 - EKS full mode - Note: This requires further steps to enable Cilium as the default CNI, please check the docs.
+  # eni:
+  #   enabled: true
+  # ipam:
+  #   mode: eni
+  # routingMode: native
+
+  # Option 3 - K3s with Cilium as the default CNI
+  # Note: When installing k3s, ensure to do it with these configs: --flannel-backend=none --disable-network-policy
+  # operator:
+  #   replicas: 1
+  # ipam:
+  #   operator:
+  #     clusterPoolIPv4PodCIDRList: "10.42.0.0/16" # replicates the default k3s CIDR
