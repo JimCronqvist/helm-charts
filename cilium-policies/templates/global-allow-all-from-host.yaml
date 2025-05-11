@@ -1,0 +1,19 @@
+{{- $fullName := include "cilium-policies.fullname" . -}}
+{{- $labels := include "cilium-policies.labels" . -}}
+{{- if .Values.policies.allowAllFromHost }}
+apiVersion: "cilium.io/v2"
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: {{ $fullName }}-global-allow-all-from-host
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  description: "Globally allows ingress from the local host to all pods, primarily for health checks from kubelet."
+  enableDefaultDeny:
+    egress: false
+    ingress: false
+  endpointSelector: {}
+  ingress:
+    - fromEntities:
+        - host
+{{- end }}

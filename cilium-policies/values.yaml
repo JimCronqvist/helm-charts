@@ -1,0 +1,3 @@
+policies:
+  # Useful as a global 'allow all kubelet health checks' policy. But, beware that it opens up all traffic from the host.
+  allowAllFromHost: true

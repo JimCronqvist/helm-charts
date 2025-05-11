@@ -2,6 +2,12 @@ cilium:
   podLabels:
     tags.datadoghq.com/service: cilium
 
+  policyEnforcementMode: "default"
+  k8sNetworkPolicy:
+    # Warning: If set to 'false', this will disable all K8s network policies in the cluster.
+    # Useful to make first time installs less risky/error-prone.
+    enabled: true
+
   hubble:
     enabled: true
     relay:
@@ -14,6 +20,13 @@ cilium:
   #
 
   # Option 1 - EKS with CNI chaining mode (AWS VPC CNI + Cilium) - Good choice if you only need Cilium for network policies and to support fqdn egress policies.
+  # Install by:
+  # helm upgrade --install cilium oci://ghcr.io/jimcronqvist/helm-charts/cilium -n kube-system \
+  #  --set cilium.cni.chainingMode=aws-cni \
+  #  --set cilium.cni.exclusive=false \
+  #  --set cilium.enableIPv4Masquerade=false \
+  #  --set cilium.routingMode=native
+  #
   # cni:
   #   chainingMode: aws-cni
   #   exclusive: false
@@ -29,8 +42,13 @@ cilium:
 
   # Option 3 - K3s with Cilium as the default CNI
   # Note: When installing k3s, ensure to do it with these configs: --flannel-backend=none --disable-network-policy
-  # operator:
-  #   replicas: 1
+  # Install by:
+  # helm upgrade --install cilium oci://ghcr.io/jimcronqvist/helm-charts/cilium -n kube-system \
+  #  --set cilium.ipam.operator.clusterPoolIPv4PodCIDRList="10.42.0.0/16" \
+  #  --set cilium.operator.replicas=1
+  #
   # ipam:
   #   operator:
   #     clusterPoolIPv4PodCIDRList: "10.42.0.0/16" # replicates the default k3s CIDR
+  # operator:
+  #   replicas: 1
