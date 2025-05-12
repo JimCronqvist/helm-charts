@@ -1,0 +1,31 @@
+replicaCount: 1
+
+nameOverride: "whoami"
+
+image:
+  repository: ghcr.io/jimcronqvist/whoami
+  pullPolicy: IfNotPresent
+  tag: "latest"
+
+imagePullSecrets: []
+
+ingressroute:
+  enabled: false
+  responseHeaderMicroservice: true
+  routes:
+    - path: /whoami
+      stripPrefix: /whoami
+      priority: 100
+
+datadog:
+  enabled: true
+
+probes:
+  livenessPath: /
+  readinessPath: /
+
+serviceAccount:
+  create: false
+
+microservice:
+  renderTemplates: false
