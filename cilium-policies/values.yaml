@@ -2,5 +2,6 @@
 # helm upgrade --install cilium-policies oci://ghcr.io/jimcronqvist/helm-charts/cilium-policies -n kube-system
 
 policies:
-  # Useful as a global 'allow all kubelet health checks' policy. But, beware that it opens up all traffic from the host.
-  allowAllFromHost: true
+  # Useful as a global 'allow all kubelet health checks' policy. But, beware that it opens up all traffic from the host. - This is default behavior.
+  allowAllFromHost: false
+  allowAllDnsLocally: false

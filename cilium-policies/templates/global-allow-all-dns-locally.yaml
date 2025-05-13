@@ -1,0 +1,27 @@
+{{- $fullName := include "cilium-policies.fullname" . -}}
+{{- $labels := include "cilium-policies.labels" . -}}
+{{- if .Values.policies.allowAllDnsLocally }}
+apiVersion: "cilium.io/v2"
+kind: CiliumClusterwideNetworkPolicy
+metadata:
+  name: {{ $fullName }}-global-allow-all-dns-locally
+  labels:
+    {{- $labels | nindent 4 }}
+spec:
+  description: "Globally allow egress to any DNS server on a local IP, primarily as a workaround if CoreDNS is not managed by Cilium (Fargate, etc.)"
+  enableDefaultDeny:
+    egress: false
+    ingress: false
+  endpointSelector: {}
+  egress:
+    - toCIDR:
+        - 10.0.0.0/8
+        - 172.16.0.0/12
+        - 192.168.0.0/16
+      toPorts:
+        - ports:
+            - port: 53
+              protocol: UDP
+            - port: 53
+              protocol: TCP
+{{- end }}
