@@ -28,7 +28,6 @@ cilium:
                   operator: NotIn
                   values:
                     - "true"
-            - matchExpressions:
                 - key: eks.amazonaws.com/compute-type
                   operator: NotIn
                   values:
