@@ -1,0 +1,4 @@
+argocd:
+  fullnameOverride: "argocd"
+  podLabels:
+    tags.datadoghq.com/service: argocd
