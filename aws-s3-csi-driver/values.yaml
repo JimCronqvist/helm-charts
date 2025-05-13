@@ -1,6 +1,31 @@
 aws-s3-csi-driver:
   node:
-    tolerateAllTaints: true
+    tolerateAllTaints: false
+    defaultTolerations: false
+    tolerations:
+      # Tolerate standard Kubernetes node condition taints, but not 'node.kubernetes.io/unschedulable' or 'node.cilium.io/agent-not-ready'.
+      # This ensures that the node is ready from a Karpenter and CNI perspective first
+      - key: node.kubernetes.io/not-ready
+        operator: Exists
+        effect: NoExecute
+        #tolerationSeconds: 300
+      - key: node.kubernetes.io/unreachable
+        operator: Exists
+        effect: NoExecute
+        #tolerationSeconds: 300
+      - key: node.kubernetes.io/disk-pressure
+        operator: Exists
+        effect: NoSchedule
+      - key: node.kubernetes.io/memory-pressure
+        operator: Exists
+        effect: NoSchedule
+      - key: node.kubernetes.io/pid-pressure
+        operator: Exists
+        effect: NoSchedule
+      - key: node.kubernetes.io/network-unavailable
+        operator: Exists
+        effect: NoSchedule
+
     serviceAccount:
       create: true
       name: s3-csi-driver-sa
