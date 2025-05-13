@@ -4,6 +4,9 @@ redis:
     enabled: false
     password: ""
 
+  networkPolicy:
+    enabled: true
+
   # Override how pvc's are managed throughout the lifecycle of the Stateful Set for the different components of redis
   master:
     podLabels:
