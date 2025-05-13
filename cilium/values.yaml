@@ -18,6 +18,22 @@ cilium:
                 values:
                   - fargate
 
+  envoy:
+    affinity:
+      nodeAffinity:
+        requiredDuringSchedulingIgnoredDuringExecution:
+          nodeSelectorTerms:
+            - matchExpressions:
+                - key: cilium.io/no-schedule
+                  operator: NotIn
+                  values:
+                    - "true"
+            - matchExpressions:
+                - key: eks.amazonaws.com/compute-type
+                  operator: NotIn
+                  values:
+                    - fargate
+
   hubble:
     enabled: true
     relay:
