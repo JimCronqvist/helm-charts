@@ -89,7 +89,7 @@ spec:
     - to:
         - namespaceSelector:
             matchLabels:
-              name: kube-system
+              kubernetes.io/metadata.name: kube-system
       ports:
         - port: 53
           protocol: UDP
