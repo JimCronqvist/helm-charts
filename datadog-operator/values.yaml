@@ -79,6 +79,10 @@ datadogAgent:
         - key: node.kubernetes.io/network-unavailable
           operator: Exists
           effect: NoSchedule
+        - key: karpenter.sh/nodepool
+          operator: Exists
+          effect: NoSchedule
+
       # Do not try to schedule on fargate nodes
       affinity:
         nodeAffinity:

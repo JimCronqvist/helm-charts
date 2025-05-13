@@ -31,6 +31,9 @@ aws-efs-csi-driver:
       - key: node.kubernetes.io/network-unavailable
         operator: Exists
         effect: NoSchedule
+      - key: karpenter.sh/nodepool
+        operator: Exists
+        effect: NoSchedule
 
     serviceAccount:
       create: true
