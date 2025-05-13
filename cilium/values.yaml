@@ -8,6 +8,16 @@ cilium:
     # Useful to make first time installs less risky/error-prone.
     enabled: true
 
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: eks.amazonaws.com/compute-type
+                operator: NotIn
+                values:
+                  - fargate
+
   hubble:
     enabled: true
     relay:
@@ -20,6 +30,7 @@ cilium:
   #
 
   # Option 1 - EKS with CNI chaining mode (AWS VPC CNI + Cilium) - Good choice if you only need Cilium for network policies and to support fqdn egress policies.
+  # After install, all pods needs to be restarted to take effect, see: https://docs.cilium.io/en/latest/installation/cni-chaining-aws-cni/#restart-existing-pods
   # Install by:
   # helm upgrade --install cilium oci://ghcr.io/jimcronqvist/helm-charts/cilium -n kube-system \
   #  --set cilium.cni.chainingMode=aws-cni \
