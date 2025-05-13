@@ -10,5 +10,5 @@ version: 0.1.0
 dependencies:
   - name: aws-mountpoint-s3-csi-driver
     alias: aws-s3-csi-driver
-    version: 1.9.0
+    version: 1.14.1
     repository: https://awslabs.github.io/mountpoint-s3-csi-driver
