@@ -20,8 +20,8 @@ spec:
         - 192.168.0.0/16
       toPorts:
         - ports:
-            - port: 53
+            - port: "53"
               protocol: UDP
-            - port: 53
+            - port: "53"
               protocol: TCP
 {{- end }}
