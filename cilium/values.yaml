@@ -18,7 +18,11 @@ cilium:
                 values:
                   - fargate
 
+  # If you only need L3/L4 policies, you can set this to false in order to disable L7 proxying. DNS content rules will still function.
+  l7Proxy: false
   envoy:
+    # Set to true if you want a separate DaemonSet for envoy container instead of using the cilium agent as the L7 proxy.
+    enabled: false
     affinity:
       nodeAffinity:
         requiredDuringSchedulingIgnoredDuringExecution:
