@@ -69,6 +69,12 @@ probes:
 
 priorityClassName: system-cluster-critical
 
+tolerations:
+  - key: CriticalAddonsOnly
+    operator: Exists
+
+nodeSelector: {}
+
 securityContext:
   seLinuxOptions: {}
   allowPrivilegeEscalation: false
