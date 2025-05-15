@@ -16,6 +16,8 @@ karpenter:
   tolerations:
     - key: CriticalAddonsOnly
       operator: Exists
+  nodeSelector:
+    kubernetes.io/os: linux
   controller:
     resources:
       requests:

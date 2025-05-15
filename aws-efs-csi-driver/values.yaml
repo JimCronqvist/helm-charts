@@ -7,6 +7,11 @@ aws-efs-csi-driver:
       name: efs-csi-controller-sa
       annotations:
         eks.amazonaws.com/role-arn:
+    tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - key: efs.csi.aws.com/agent-not-ready
+        operator: Exists
   node:
     tolerations:
       # Tolerate standard Kubernetes node condition taints, but not 'node.kubernetes.io/unschedulable' or 'node.cilium.io/agent-not-ready'.

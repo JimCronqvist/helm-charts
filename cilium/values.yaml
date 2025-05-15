@@ -37,6 +37,12 @@ cilium:
                   values:
                     - fargate
 
+  operator:
+    tolerations:
+      - operator: Exists
+    nodeSelector:
+      kubernetes.io/os: linux
+
   hubble:
     enabled: true
     relay:

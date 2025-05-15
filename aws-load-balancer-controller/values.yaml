@@ -19,6 +19,8 @@ aws-load-balancer-controller:
     - key: CriticalAddonsOnly
       operator: Exists
 
+  nodeSelector: {}
+
   # Specify details about the EKS environment, if all is provided it will also run on Fargate.
   clusterName:
   region:

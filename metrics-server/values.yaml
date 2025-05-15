@@ -11,3 +11,5 @@ metrics-server:
   tolerations:
     - key: CriticalAddonsOnly
       operator: Exists
+
+  nodeSelector: {}

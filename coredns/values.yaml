@@ -126,6 +126,8 @@ coredns:
     - key: CriticalAddonsOnly
       operator: Exists
 
+  nodeSelector: {}
+
   podDisruptionBudget:
     maxUnavailable: 1
 

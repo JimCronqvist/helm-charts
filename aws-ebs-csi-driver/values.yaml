@@ -78,6 +78,15 @@ aws-ebs-csi-driver:
         image: bitnami/kubectl:latest
         command: ["kubectl", "patch", "storageclass", "gp2", "-p", '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}']
 
+    tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+      - effect: NoExecute
+        operator: Exists
+        tolerationSeconds: 300
+
+    nodeSelector: {}
+
     # Enable volume modification via annotations for ebs volumes.
     volumeModificationFeature:
       enabled: true
