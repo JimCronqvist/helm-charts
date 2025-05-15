@@ -5,9 +5,17 @@ cilium:
 
 karpenter:
   logLevel: info
+  # dnsPolicy
+  # - ClusterFirst - Default for EKS clusters. Uses coredns to resolve DNS names. Requires coredns to be running in the cluster when Karpenter is installed.
+  # - Default - Can be used to not be dependent on coredns. But, does not work when some sidecars are used, such as datadodg-agent.
+  # See: https://github.com/aws/karpenter-provider-aws/issues/2186 & https://github.com/aws/karpenter-provider-aws/issues/4947 & https://github.com/aws/karpenter-provider-aws/issues/6637#issuecomment-2407907172
+  dnsPolicy: ClusterFirst
   podDisruptionBudget:
     name: karpenter
     maxUnavailable: 1
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
   controller:
     resources:
       requests:

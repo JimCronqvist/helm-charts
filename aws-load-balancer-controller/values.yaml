@@ -15,6 +15,10 @@ aws-load-balancer-controller:
   # If false, disable the Service Mutator webhook which makes all new services of type LoadBalancer reconciled by the lb controller
   enableServiceMutatorWebhook: false
 
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+
   # Specify details about the EKS environment, if all is provided it will also run on Fargate.
   clusterName:
   region:

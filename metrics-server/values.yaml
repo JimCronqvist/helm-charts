@@ -8,3 +8,6 @@ metrics-server:
   #args:
   #  - --kubelet-insecure-tls
 
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists

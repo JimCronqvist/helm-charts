@@ -122,6 +122,10 @@ coredns:
       maxSkew: 1
       whenUnsatisfiable: ScheduleAnyway
 
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+
   podDisruptionBudget:
     maxUnavailable: 1
 

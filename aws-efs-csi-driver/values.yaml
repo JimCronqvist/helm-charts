@@ -34,6 +34,8 @@ aws-efs-csi-driver:
       - key: karpenter.sh/nodepool
         operator: Exists
         effect: NoSchedule
+      - key: CriticalAddonsOnly
+        operator: Exists
 
     serviceAccount:
       create: true
