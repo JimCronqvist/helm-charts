@@ -164,9 +164,11 @@ spec:
     {{- range .Values.networkPolicy.egressAllowFqdn }}
     - toFQDNs:
         - matchName: {{ .fqdn | quote }}
+      {{- with .ports }}
       toPorts:
         - ports:
-            {{- include "networkpolicy.renderPorts" (.ports | default list) | indent 12 }}
+            {{- include "networkpolicy.renderPorts" . | indent 12 }}
+      {{- end }}
     {{- end }}
 {{- end }}
 {{- end }}
