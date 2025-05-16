@@ -161,6 +161,16 @@ spec:
     matchLabels:
       {{- include "microservice.selectorLabels" (dict "context" $ "component" "app") | nindent 6 }}
   egress:
+    - toEndpoints:
+        - matchLabels:
+            'k8s:io.kubernetes.pod.namespace': kube-system
+      toPorts:
+        - ports:
+            - port: '53'
+              protocol: ANY
+          rules:
+            dns:
+              - matchPattern: '*'
     {{- range .Values.networkPolicy.egressAllowFqdn }}
     - toFQDNs:
         - matchName: {{ .fqdn | quote }}
