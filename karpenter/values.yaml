@@ -28,8 +28,10 @@ karpenter:
           memory: 1Gi
   additionalLabels:
     tags.datadoghq.com/service: karpenter
+    tags.datadoghq.com/env: production
   podLabels:
     tags.datadoghq.com/service: karpenter
+    tags.datadoghq.com/env: production
   podAnnotations:
     ad.datadoghq.com/controller.checks: |
       {
