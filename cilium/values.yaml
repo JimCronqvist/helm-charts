@@ -60,6 +60,9 @@ cilium:
         effect: NoSchedule
       - key: CriticalAddonsOnly
         operator: Exists
+      #- key: node.cilium.io/agent-not-ready
+      #  operator: Exists
+      #  effect: NoExecute
 
     nodeSelector:
       kubernetes.io/os: linux
