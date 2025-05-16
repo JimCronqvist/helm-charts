@@ -12,6 +12,12 @@ harbor-container-webhook:
 
   priorityClassName: "system-cluster-critical"
 
+  tolerations:
+    - key: CriticalAddonsOnly
+      operator: Exists
+
+  nodeSelector: {}
+
   webhook:
     namespaceSelector:
       matchExpressions:
