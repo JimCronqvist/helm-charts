@@ -82,6 +82,8 @@ datadogAgent:
         - key: karpenter.sh/nodepool
           operator: Exists
           effect: NoSchedule
+        - key: CriticalAddonsOnly
+          operator: Exists
 
       # Do not try to schedule on fargate nodes
       affinity:
