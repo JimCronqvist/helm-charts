@@ -69,6 +69,8 @@ aws-ebs-csi-driver:
         effect: NoSchedule
       - key: CriticalAddonsOnly
         operator: Exists
+      - key: karpenter.sh/disrupted
+        operator: Exists
 
   controller:
     podLabels:

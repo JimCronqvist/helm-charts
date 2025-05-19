@@ -62,6 +62,8 @@ cilium:
         operator: Exists
       - key: node.cilium.io/agent-not-ready
         operator: Exists
+      - key: ebs.csi.aws.com/agent-not-ready
+        operator: Exists
 
     nodeSelector:
       kubernetes.io/os: linux
