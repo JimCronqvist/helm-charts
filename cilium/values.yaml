@@ -37,7 +37,13 @@ cilium:
                   values:
                     - fargate
 
+  prometheus:
+    enabled: true
+
   operator:
+    prometheus:
+      enabled: true
+
     tolerations:
       #- operator: Exists
       - key: node.kubernetes.io/not-ready
