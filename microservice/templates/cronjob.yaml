@@ -69,6 +69,15 @@ spec:
                 {{- include "helpers.volume-mounts" (list $ $.Values.pvc "CronJob") | indent 16 }}
                 {{- include "helpers.volume-mounts" (list $ $cronjob.pvc "CronJob" ($cronjob.name | replace " " "-" | lower)) | indent 16 }}
                 {{- include "helpers.volume-mounts-files" (list $ $.Values.files "CronJob") | indent 16 }}
+            {{- range $cronjob.sidecars }}
+            {{- $sidecar := .}}
+            {{- toYaml (list (omit $sidecar "mounts")) | replace "${IMAGE_TAG}" (include "helpers.image-tag" $) | nindent 12 }}
+            {{- if $sidecar.mounts }}
+              volumeMounts:
+                {{- include "helpers.volume-mounts" (list $ $.Values.pvc "CronJob") | indent 16 }}
+                {{- include "helpers.volume-mounts-files" (list $ $.Values.files "CronJob") | indent 16 }}
+            {{- end }}
+            {{- end }}
           volumes:
             {{- include "helpers.volumes" (list $ $.Values.pvc "CronJob") | indent 12 }}
             {{- include "helpers.volumes" (list $ $cronjob.pvc "CronJob" ($cronjob.name | replace " " "-" | lower)) | indent 12 }}
