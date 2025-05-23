@@ -138,6 +138,15 @@ cronjobsTemplate:
           - -n
           - '{{ .Release.Namespace }}'
 
+rbac:
+  rules:
+    - apiGroups: [""]
+      resources: ["pods"]
+      verbs: ["get"]
+    - apiGroups: ["apps"]
+      resources: ["deployments"]
+      verbs: ["patch"]
+
 env:
   OTEL_SDK_DISABLED: true
   OTEL_TRACES_EXPORTER: none
