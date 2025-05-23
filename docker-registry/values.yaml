@@ -122,7 +122,14 @@ deployment:
 cronjobsTemplate:
   - name: gc
     schedule: "0 2 * * *"
-    command: "/bin/registry garbage-collect --delete-untagged=true /etc/docker/registry/config.yml"
+    command: |
+      if [ -v REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY ]; then
+        for path in ${REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY}/docker/registry/v2/repositories/*/*; do
+          test -d "${path}/_layers" || mkdir -pv "${path}/_layers"
+        done
+      fi
+
+      /bin/registry garbage-collect --delete-untagged=true /etc/docker/registry/config.yml
     suspend: false
     sidecars:
       - name: gc-sidecar

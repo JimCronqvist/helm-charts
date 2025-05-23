@@ -52,7 +52,7 @@ spec:
               command:
                 - /bin/sh
                 - -c
-                - {{ $cronjob.command }}
+                - | {{ ($cronjob.command | trim) | nindent 18 }}
               securityContext:
                 {{- toYaml $.Values.securityContext | nindent 16 }}
               {{- if $cronjob.image }}
