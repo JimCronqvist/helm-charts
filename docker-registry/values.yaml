@@ -173,7 +173,7 @@ files:
         delete:
           enabled: true
         redirect:
-          disable: false
+          disable: true
       http:
         addr: :5000
         prefix: /
