@@ -129,7 +129,7 @@ cronjobsTemplate:
         image: ghcr.io/jimcronqvist/docker-devops
         imagePullPolicy: IfNotPresent
         command:
-          - /scripts/kubectl-sidecar-want-and-run.sh
+          - /scripts/kubectl-sidecar-wait-and-run.sh
           - kubectl
           - rollout
           - restart
