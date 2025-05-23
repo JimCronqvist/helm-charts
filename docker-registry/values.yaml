@@ -127,7 +127,7 @@ cronjobsTemplate:
     sidecars:
       - name: gc-sidecar
         image: ghcr.io/jimcronqvist/docker-devops:master
-        imagePullPolicy: IfNotPresent
+        imagePullPolicy: Always
         command:
           - /scripts/kubectl-sidecar-wait-and-run.sh
           - kubectl
