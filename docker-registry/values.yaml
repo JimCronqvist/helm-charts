@@ -126,7 +126,7 @@ cronjobsTemplate:
     suspend: false
     sidecars:
       - name: gc-sidecar
-        image: ghcr.io/jimcronqvist/docker-devops
+        image: ghcr.io/jimcronqvist/docker-devops:master
         imagePullPolicy: IfNotPresent
         command:
           - /scripts/kubectl-sidecar-wait-and-run.sh
