@@ -124,8 +124,8 @@ cronjobsTemplate:
     schedule: "0 2 * * *"
     command: |
       if [ -n "${REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY}" ]; then
-        for path in ${REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY}/docker/registry/v2/repositories/*/*; do
-          test -d "${path}/_layers" || mkdir -pv "${path}/_layers"
+        find "${REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY}/docker/registry/v2/repositories" -name "_manifests" -type d | while read -r path; do
+          mkdir -pv "$(dirname "$path")/_layers"
         done
       fi
 
