@@ -51,7 +51,7 @@ serviceAccount:
     eks.amazonaws.com/role-arn:
 
 imagePullSecrets: []
-replicaCount: 2
+replicaCount: 1
 image:
   #repository: public.ecr.aws/docker/library/registry
   repository: registry
@@ -123,7 +123,7 @@ cronjobsTemplate:
   - name: gc
     schedule: "0 2 * * *"
     command: |
-      if [ -v REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY ]; then
+      if [ -n "${REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY}" ]; then
         for path in ${REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY}/docker/registry/v2/repositories/*/*; do
           test -d "${path}/_layers" || mkdir -pv "${path}/_layers"
         done
