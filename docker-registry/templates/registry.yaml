@@ -5,6 +5,8 @@
 {{- $proxy := .proxy }}
 {{- $registry := .registry }}
 {{- $fullName := .fullName }}
+{{- $global := .global }}
+{{- $_ := set $global.Values "nameOverride" (printf "docker-registry-%s" $proxy.name) }}
 
 {{- $remoteUrl := $proxy.remoteUrl | default "https://registry-1.docker.io" }}
 {{- $registryHost := (urlParse $remoteUrl).host }}
@@ -87,11 +89,28 @@ podLabels:
 {{- end }}
 {{- end }}
 
+{{- with $global.Values.cronjobsTemplate }}
+cronjobs:
+  {{- range . }}
+  - {{- omit . "sidecars" | toYaml | nindent 4 }}
+    {{- with .sidecars }}
+    sidecars:
+      {{- range . }}
+      - {{- omit . "command" | toYaml | nindent 8 }}
+        command:
+          {{- range $cmd := .command }}
+          - {{ tpl $cmd $global | quote }}
+          {{- end }}
+        {{- end }}
+    {{- end }}
+  {{- end }}
+{{- end }}
+
 {{- end }}
 {{- end }}
 
 {{- range $proxy := .Values.registry.proxies }}
-{{- $dynamicValues := fromYaml (include "computedConfig" (dict "proxy" $proxy "registry" $.Values.registry "fullName" $fullName )) }}
+{{- $dynamicValues := fromYaml (include "computedConfig" (dict "proxy" $proxy "registry" $.Values.registry "fullName" $fullName "global" $ )) }}
 {{- $mergedValues := mergeOverwrite (deepCopy $.Values.microservice) $dynamicValues $.Values }}
 {{- $context := set (deepCopy $) "Values" $mergedValues }}
 ---

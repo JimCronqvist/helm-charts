@@ -119,11 +119,24 @@ deployment:
 #        #matchLabelKeys:
 #        #  - pod-template-hash
 
-cronjobs:
+cronjobsTemplate:
   - name: gc
     schedule: "0 2 * * *"
     command: "/bin/registry garbage-collect --delete-untagged=true /etc/docker/registry/config.yml"
     suspend: false
+    sidecars:
+      - name: gc-sidecar
+        image: ghcr.io/jimcronqvist/docker-devops
+        imagePullPolicy: IfNotPresent
+        command:
+          - /scripts/kubectl-sidecar-want-and-run.sh
+          - kubectl
+          - rollout
+          - restart
+          - deployment
+          - '{{ template "microservice.fullname" . }}'
+          - -n
+          - '{{ .Release.Namespace }}'
 
 env:
   OTEL_SDK_DISABLED: true
