@@ -19,6 +19,7 @@ traefik:
   ports:
     traefik:
       port: 9000 # The port that Traefik listens on for the dashboard and API, default is 8080. Change this if you don't want to use a custom port.
+      exposedPort: 9000
       expose:
         default: true # -- You SHOULD NOT expose the traefik port on production deployments.
         internal: true
