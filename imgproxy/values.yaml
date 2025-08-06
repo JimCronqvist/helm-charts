@@ -52,7 +52,7 @@ env:
 
   # Presets
   IMGPROXY_INFO_ONLY_PRESETS: false #default
-  IMGPROXY_PRESETS: test=c:100:100/w:100
+  IMGPROXY_PRESETS:
 
   # Image Settings
   IMGPROXY_ENFORCE_WEBP: false
