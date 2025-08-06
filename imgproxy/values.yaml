@@ -1,6 +1,5 @@
 replicaCount: 2
 
-nameOverride: "imgproxy"
 image:
   repository: ghcr.io/imgproxy/imgproxy
   pullPolicy: Always
