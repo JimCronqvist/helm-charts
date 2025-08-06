@@ -4,6 +4,7 @@ nameOverride: "imgproxy"
 image:
   repository: ghcr.io/imgproxy/imgproxy
   pullPolicy: Always
+  # tag: "3.28.0"
 
 imagePullSecrets: []
 

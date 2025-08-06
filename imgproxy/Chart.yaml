@@ -4,7 +4,7 @@ description: A Helm chart for imgproxy
 type: application
 
 version: 0.1.0
-appVersion: 3.0
+appVersion: latest # 3.28.0
 
 dependencies:
   - name: microservice
