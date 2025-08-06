@@ -1,0 +1,12 @@
+{{- $fullName := include "microservice.fullname" . -}}
+
+{{/* Dynamic computed values helper */}}
+{{- define "computedConfig" -}}
+{{- $fullName := .fullName }}
+{{- $global := .global }}
+{{- end }}
+
+{{- $dynamicValues := fromYaml (include "computedConfig" (dict "fullName" $fullName "global" $ )) }}
+{{- $mergedValues := mergeOverwrite (deepCopy $.Values.microservice) $dynamicValues $.Values }}
+{{- $context := set (deepCopy $) "Values" $mergedValues }}
+{{- include "microservice.fullchart" $context }}

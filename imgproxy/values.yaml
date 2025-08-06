@@ -1,0 +1,89 @@
+replicaCount: 2
+
+nameOverride: "imgproxy"
+image:
+  repository: ghcr.io/imgproxy/imgproxy
+  pullPolicy: Always
+
+imagePullSecrets: []
+
+serviceAccount:
+  annotations:
+    eks.amazonaws.com/role-arn:
+
+resources:
+  requests:
+    cpu: 1
+    memory: 512Mi
+  limits:
+    cpu: 1
+    memory: 512Mi
+
+microservice:
+  renderTemplates: false
+
+datadog:
+  enabled: true
+  env: production
+
+probes:
+  livenessPath: /health
+  readinessPath: /health
+
+tolerations: {}
+
+nodeSelector: {}
+
+service:
+  containerPort: 8080
+
+#scheduler:
+#  minZones: 2
+
+env:
+  # https://docs.imgproxy.net/configuration/options
+
+  # AWS S3
+  IMGPROXY_USE_S3: true
+  IMGPROXY_S3_ENDPOINT_USE_PATH_STYLE: true
+  IMGPROXY_S3_USE_DECRYPTION_CLIENT: false
+
+  IMGPROXY_S3_REGION: eu-north-1
+
+  # Presets
+  IMGPROXY_INFO_ONLY_PRESETS: false #default
+  IMGPROXY_PRESETS: test=c:100:100/w:100
+
+  # Image Settings
+  IMGPROXY_ENFORCE_WEBP: false
+
+  # URL Settings
+  IMGPROXY_MAX_REDIRECTS: 0 # 0 = No redirects allowed
+  IMGPROXY_BASE_URL: s3://
+  IMGPROXY_URL_REPLACEMENTS: ""
+
+  # OpenTelemetry
+  IMGPROXY_OPEN_TELEMETRY_ENABLE: false
+  IMGPROXY_OPEN_TELEMETRY_ENABLE_METRICS: false
+
+  # Logging
+  IMGPROXY_REPORT_DOWNLOADING_ERRORS: true
+  IMGPROXY_LOG_FORMAT: pretty # Allowed values: pretty|structured|json
+  IMGPROXY_LOG_LEVEL: info # Allowed values: debug|info|warn|error
+
+  # Security
+  IMGPROXY_COOKIE_PASSTHROUGH: false
+  IMGPROXY_COOKIE_PASSTHROUGH_ALL: false
+
+  # This will require the following header below, this is used to secure the imgproxy service behind a CDN or similar.
+  # Authorization: Bearer %secret%
+  IMGPROXY_SECRET: ""
+
+  # Datadog
+  # https://docs.imgproxy.net/monitoring/datadog
+  IMGPROXY_DATADOG_ENABLE: false
+
+secrets:
+  # AWS credentials
+  AWS_ACCESS_KEY_ID:
+  AWS_SECRET_ACCESS_KEY:
