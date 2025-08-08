@@ -57,6 +57,12 @@ env:
   # Image Settings
   IMGPROXY_ENFORCE_WEBP: false
 
+  # Cache Settings
+  IMGPROXY_CACHE_CONTROL_PASSTHROUGH: false
+  IMGPROXY_TTL: 2592000 # 30 days (imgproxy default is 1 year)
+  IMGPROXY_USE_ETAG: false
+  IMGPROXY_USE_LAST_MODIFIED: true
+
   # URL Settings
   IMGPROXY_MAX_REDIRECTS: 0 # 0 = No redirects allowed
   IMGPROXY_BASE_URL: s3://
