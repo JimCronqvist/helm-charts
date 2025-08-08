@@ -75,10 +75,6 @@ env:
   IMGPROXY_COOKIE_PASSTHROUGH: false
   IMGPROXY_COOKIE_PASSTHROUGH_ALL: false
 
-  # This will require the following header below, this is used to secure the imgproxy service behind a CDN or similar.
-  # Authorization: Bearer %secret%
-  IMGPROXY_SECRET: ""
-
   # Datadog
   # https://docs.imgproxy.net/monitoring/datadog
   IMGPROXY_DATADOG_ENABLE: false
@@ -87,3 +83,7 @@ secrets:
   # AWS credentials
   AWS_ACCESS_KEY_ID:
   AWS_SECRET_ACCESS_KEY:
+
+  # This will require the following header below, this is used to secure the imgproxy service behind a CDN or similar.
+  # Authorization: Bearer %secret%
+  IMGPROXY_SECRET: ""
