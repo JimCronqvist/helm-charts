@@ -36,4 +36,4 @@ aws-s3-csi-driver:
       name: s3-csi-driver-sa
       annotations:
         # Specify the SA's role ARN if running in EKS. Otherwise, the driver will be "Forbidden" from accessing s3 buckets
-        eks.amazonaws.com/role-arn:
+        eks.amazonaws.com/role-arn: ""

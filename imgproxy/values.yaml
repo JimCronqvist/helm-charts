@@ -9,7 +9,7 @@ imagePullSecrets: []
 
 serviceAccount:
   annotations:
-    eks.amazonaws.com/role-arn:
+    eks.amazonaws.com/role-arn: ""
 
 resources:
   requests:

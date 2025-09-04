@@ -15,7 +15,7 @@ cert-manager:
     create: true
     name: cert-manager
     annotations:
-      eks.amazonaws.com/role-arn:
+      eks.amazonaws.com/role-arn: ""
   securityContext:
     fsGroup: 1001
   podLabels:

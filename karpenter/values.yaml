@@ -62,7 +62,7 @@ karpenter:
     name: karpenter
     annotations:
       # Karpenter IAM role for service account (IRSA)
-      eks.amazonaws.com/role-arn:
+      eks.amazonaws.com/role-arn: ""
 
 provisioners:
   - name: default

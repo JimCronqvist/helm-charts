@@ -7,4 +7,4 @@ external-secrets:
     name: "external-secrets-sa"
     annotations:
       # External Secrets IAM role for service account (IRSA)
-      eks.amazonaws.com/role-arn:
+      eks.amazonaws.com/role-arn: ""

@@ -48,7 +48,7 @@ registry:
 
 serviceAccount:
   annotations:
-    eks.amazonaws.com/role-arn:
+    eks.amazonaws.com/role-arn: ""
 
 imagePullSecrets: []
 replicaCount: 1

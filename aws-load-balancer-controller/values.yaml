@@ -6,7 +6,7 @@ aws-load-balancer-controller:
     name: aws-load-balancer-controller
     annotations:
       # AWS Load Balancer Controller IAM role for service account (IRSA)
-      eks.amazonaws.com/role-arn:
+      eks.amazonaws.com/role-arn: ""
 
   # If enabled, cert-manager issues the webhook certificates instead of the helm template, requires cert-manager, and it's CRDs to be installed
   enableCertManager: false

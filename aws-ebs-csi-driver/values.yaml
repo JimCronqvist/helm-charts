@@ -99,6 +99,6 @@ aws-ebs-csi-driver:
     serviceAccount:
       name: ebs-csi-controller-sa
       annotations:
-        eks.amazonaws.com/role-arn:
+        eks.amazonaws.com/role-arn: ""
 
     region:
