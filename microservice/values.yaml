@@ -340,8 +340,8 @@ secrets: {}
 externalSecrets: {}
   # aws:
   #   secrets:
-  #     MYSQL_PASSWORD: db01_secret/password
-  #     MYSQL_USERNAME: db01_secret/username
+  #     MYSQL_PASSWORD: db01_secret/password   # plaintext format, the secret name must exist in AWS Secret Manager
+  #     MYSQL_USERNAME: db01_secret@username   # json format, with @ to separate the secret name and json key
   # vault:
   #   enabled: true
   #   priority: 2  # Higher priority (will be last in env, so it wins)
