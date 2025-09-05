@@ -8,3 +8,16 @@ external-secrets:
     annotations:
       # External Secrets IAM role for service account (IRSA)
       eks.amazonaws.com/role-arn: ""
+
+external-secrets-stores:
+  aws:
+    enabled: false
+    region: eu-north-1
+    
+    provider: aws
+    service: SecretsManager
+    auth:
+      jwt:
+        serviceAccountRef:
+          name: external-secrets-sa
+          namespace: external-secrets
