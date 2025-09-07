@@ -1,0 +1,24 @@
+ingressroute:
+  enabled: false
+
+step-certificates:
+  # https://github.com/smallstep/helm-charts/tree/master/step-certificates#advanced-configuration
+
+  existingSecrets:
+    enabled: true
+    ca: true
+    issuer: true
+    certsAsSecret: true
+    configAsSecret: true
+
+    sshHostCa: false
+    sshUserCa: false
+
+  bootstrap:
+    secrets: false
+    enabled: false
+    configmaps: false
+
+  inject:
+    enabled: false
+
