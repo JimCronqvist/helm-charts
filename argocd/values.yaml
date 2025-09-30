@@ -173,25 +173,21 @@ argocdApps:
       #  namespace: argocd
       #  project: default
       #  sources:
-      #    - repoURL: oci://ghcr.io/jimcronqvist/helm-charts
-      #      chart: argocd
-      #      targetRevision: 0.1.* # chart version
+      #    - repoURL: ghcr.io
+      #      chart: jimcronqvist/helm-charts/argocd
+      #      targetRevision: 0.1.*
+      #      helm:
+      #        valueFiles:
+      #          - $values/argocd/values.yaml
       #    - repoURL: https://github.com/<org>/gitops.git
       #      targetRevision: master
       #      ref: values
-      #  source:
-      #    repoURL: oci://ghcr.io/jimcronqvist/helm-charts
-      #    chart: argocd
-      #    targetRevision: 0.1.* # chart version
-      #    helm:
-      #      valueFiles:
-      #        - $values/argocd/values.yaml # path inside your Git repo
       #  destination:
       #    name: in-cluster
       #    namespace: argocd
       #  syncPolicy:
       #    automated: {}
-      #    syncOptions:
-      #      - CreateNamespace=true
+      #  syncOptions:
+      #    - CreateNamespace=true
     applicationsets: {}
     itemTemplates: []
