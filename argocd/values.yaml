@@ -31,6 +31,7 @@ argocd:
     cm:
       exec.enabled: true
       admin.enabled: true
+      application.instanceLabelKey: argocd.argoproj.io/instance
 
       #oidc.config: |
       #  name: <company> SSO
