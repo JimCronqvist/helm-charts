@@ -59,6 +59,12 @@ argocd:
     #  .sidebar {}
 
   controller:
+    #resources:
+    #  limits:
+    #    memory: 2Gi
+    #  requests:
+    #    cpu: 2
+    #    memory: 2Gi
     podAnnotations:
       ad.datadoghq.com/argocd-application-controller.checks: |
         {
@@ -73,8 +79,20 @@ argocd:
         }
 
   server:
+    #resources:
+    #  limits:
+    #    memory: 4Gi
+    #  requests:
+    #    cpu: 500m
+    #    memory: 1Gi
     service:
       type: ClusterIP
+    clusterRoleRules:
+      enabled: true
+      rules:
+        - apiGroups: [""]
+          resources: ["pods/exec"]
+          verbs: ["create"]
     podAnnotations:
       ad.datadoghq.com/argocd-server.checks: |
         {
@@ -89,6 +107,12 @@ argocd:
         }
 
   repoServer:
+    #resources:
+    #  limits:
+    #    memory: 1Gi
+    #  requests:
+    #    cpu: 1
+    #    memory: 1Gi
     podAnnotations:
       ad.datadoghq.com/argocd-repo-server.checks: |
         {
