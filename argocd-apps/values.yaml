@@ -1,7 +1,37 @@
 argocdApps:
   # https://github.com/argoproj/argo-helm/blob/main/charts/argocd-apps/values.yaml
 
-  applications: {}
   projects: {}
+    # Example project with read-only access to all applications in a 'portal' project, with a role 'portal-read-only' assigned to the argocd_users group.
+    #portal:
+    #  namespace: argocd
+    #  description: ""
+    #  sourceRepos:
+    #    - "*"
+    #  destinations:
+    #    - namespace: "*"
+    #      server: "*"
+    #      name: "*"
+    #  clusterResourceWhitelist:
+    #    - group: "*"
+    #      kind: "*"
+    #  namespaceResourceWhitelist:
+    #    - group: "*"
+    #      kind: "*"
+    #  roles:
+    #    - name: portal-read-only
+    #      description: Read-only privileges to portal project
+    #      policies:
+    #        - p, proj:portal:portal-read-only, applicationsets, get, portal/*, allow
+    #        - p, proj:portal:portal-read-only, applications, get, portal/*, allow
+    #        - p, proj:portal:portal-read-only, applications, action/apps/Deployment/restart, portal/*, allow
+    #        - p, proj:portal:portal-read-only, applications, action/apps/StatefulSet/restart, portal/*, allow
+    #        - p, proj:portal:portal-read-only, applications, action/batch/CronJob/create-job, portal/*, allow
+    #        - p, proj:portal:portal-read-only, applications, action/apps/Pod/delete, portal/*, allow
+    #        - p, proj:portal:portal-read-only, logs, get, portal/*, allow
+    #      groups:
+    #        - argocd_users
+
+  applications: {}
   applicationsets: {}
   itemTemplates: []

@@ -126,52 +126,54 @@ argocd:
           }
         }
 
-# Define your Applications, ApplicationSets and Projects here if you don't want to deploy them separately - see 'argocd-apps' helm chart.
 argocdApps:
-  projects: {}
-  applications: {}
-    # Example of 'Sync ArgoCD itself - using Kustomize' - Recommended to use the Helm example below as this is in a helm context.
-    #
-    #argocd:
-    #  namespace: argocd
-    #  project: default
-    #  source:
-    #    repoURL: https://github.com/<org>/gitops.git
-    #    targetRevision: master
-    #    path: argocd
-    #  destination:
-    #    name: in-cluster
-    #    namespace: argocd
-    #  syncPolicy:
-    #    automated: {}
-    #    syncOptions:
-    #      - CreateNamespace=true
+  # Define your Applications, ApplicationSets and Projects here if you don't want to deploy them separately - see 'argocd-apps' helm chart.
+  # Note: Intentional nested structure.
+  argocdApps:
+    projects: {}
+    applications: {}
+      # Example of 'Sync ArgoCD itself - using Kustomize' - Recommended to use the Helm example below as this is in a helm context.
+      #
+      #argocd:
+      #  namespace: argocd
+      #  project: default
+      #  source:
+      #    repoURL: https://github.com/<org>/gitops.git
+      #    targetRevision: master
+      #    path: argocd
+      #  destination:
+      #    name: in-cluster
+      #    namespace: argocd
+      #  syncPolicy:
+      #    automated: {}
+      #    syncOptions:
+      #      - CreateNamespace=true
 
-    # Example of 'Sync ArgoCD itself - using Helm chart from OCI registry and values from a git repo'
-    #
-    #argocd:
-    #  namespace: argocd
-    #  project: default
-    #  sources:
-    #    - repoURL: oci://ghcr.io/jimcronqvist/helm-charts
-    #      chart: argocd
-    #      targetRevision: 0.1.* # chart version
-    #    - repoURL: https://github.com/<org>/gitops.git
-    #      targetRevision: master
-    #      ref: values
-    #  source:
-    #    repoURL: oci://ghcr.io/jimcronqvist/helm-charts
-    #    chart: argocd
-    #    targetRevision: 0.1.* # chart version
-    #    helm:
-    #      valueFiles:
-    #        - $values/argocd/values.yaml # path inside your Git repo
-    #  destination:
-    #    name: in-cluster
-    #    namespace: argocd
-    #  syncPolicy:
-    #    automated: {}
-    #    syncOptions:
-    #      - CreateNamespace=true
-  applicationsets: {}
-  itemTemplates: []
+      # Example of 'Sync ArgoCD itself - using Helm chart from OCI registry and values from a git repo'
+      #
+      #argocd:
+      #  namespace: argocd
+      #  project: default
+      #  sources:
+      #    - repoURL: oci://ghcr.io/jimcronqvist/helm-charts
+      #      chart: argocd
+      #      targetRevision: 0.1.* # chart version
+      #    - repoURL: https://github.com/<org>/gitops.git
+      #      targetRevision: master
+      #      ref: values
+      #  source:
+      #    repoURL: oci://ghcr.io/jimcronqvist/helm-charts
+      #    chart: argocd
+      #    targetRevision: 0.1.* # chart version
+      #    helm:
+      #      valueFiles:
+      #        - $values/argocd/values.yaml # path inside your Git repo
+      #  destination:
+      #    name: in-cluster
+      #    namespace: argocd
+      #  syncPolicy:
+      #    automated: {}
+      #    syncOptions:
+      #      - CreateNamespace=true
+    applicationsets: {}
+    itemTemplates: []
