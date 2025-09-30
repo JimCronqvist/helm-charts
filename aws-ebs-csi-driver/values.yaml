@@ -77,7 +77,7 @@ aws-ebs-csi-driver:
       tags.datadoghq.com/service: aws-ebs-csi-driver
     initContainers:
       - name: disable-default-sc-gp2
-        image: bitnami/kubectl:latest
+        image: ghcr.io/jimcronqvist/docker-devops:master
         command: ["kubectl", "patch", "storageclass", "gp2", "-p", '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"false"}}}']
 
     tolerations:
