@@ -2,3 +2,102 @@ argocd:
   fullnameOverride: "argocd"
   podLabels:
     tags.datadoghq.com/service: argocd
+
+  global:
+    domain: argocd.example.com
+
+    tolerations:
+      - key: CriticalAddonsOnly
+        operator: Exists
+
+  configs:
+    cm:
+      exec.enabled: true
+      admin.enabled: true
+
+      #oidc.config: |
+      #  name: <company> SSO
+      #  issuer:
+      #  clientID:
+      #  clientSecret:
+      #  requestedScopes:
+      #    - openid
+      #    - profile
+      #    - email
+      #    - groups
+      #  logoutURL:
+
+      server.insecure: true
+      server.log.level: info # debug
+
+      # Kyverno specific setting
+      resource.compareoptions: |
+        # disables status field diffing in specified resource types
+        ignoreAggregatedRoles: true
+
+    params:
+      # Performance tuning for large clusters
+      controller.cluster.cache.batch.events.processing: "true"
+      controller.cluster.cache.events.processing.interval: "100ms"
+
+      controller.status.processors: 40
+      controller.operation.processors: 20
+
+    rbac:
+      scopes: '[groups]'
+      policy.default: ''
+      policy.csv: ''
+
+    secret:
+      # -- Bcrypt hashed admin password
+      ## Argo expects the password in the secret to be bcrypt hashed. You can create this hash with
+      ## `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
+      argocdServerAdminPassword: ""
+
+    # Custom CSS in ArgoCD UI
+    #styles: |
+    #  .sidebar {}
+
+  controller:
+    podAnnotations:
+      ad.datadoghq.com/argocd-application-controller.checks: |
+        {
+          "argocd": {
+            "init_config": {},
+            "instances": [
+              {
+                "app_controller_endpoint": "http://%%host%%:8082/metrics"
+              }
+            ]
+          }
+        }
+
+  server:
+    service:
+      type: ClusterIP
+    podAnnotations:
+      ad.datadoghq.com/argocd-server.checks: |
+        {
+          "argocd": {
+            "init_config": {},
+            "instances": [
+              {
+                "api_server_endpoint": "http://%%host%%:8083/metrics"
+              }
+            ]
+          }
+        }
+
+  repoServer:
+    podAnnotations:
+      ad.datadoghq.com/argocd-repo-server.checks: |
+        {
+          "argocd": {
+            "init_config": {},
+            "instances": [
+              {
+                "repo_server_endpoint": "http://%%host%%:8084/metrics"
+              }
+            ]
+          }
+        }

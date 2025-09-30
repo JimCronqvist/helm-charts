@@ -1,0 +1,7 @@
+argocdApps:
+  # https://github.com/argoproj/argo-helm/blob/main/charts/argocd-apps/values.yaml
+
+  applications: {}
+  projects: {}
+  applicationsets: {}
+  itemTemplates: []
