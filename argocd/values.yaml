@@ -132,7 +132,7 @@ argocdApps:
   applications: {}
     # Example of 'Sync ArgoCD itself - using Kustomize' - Recommended to use the Helm example below as this is in a helm context.
     #
-    #- name: argocd
+    #argocd:
     #  namespace: argocd
     #  project: default
     #  source:
@@ -149,7 +149,7 @@ argocdApps:
 
     # Example of 'Sync ArgoCD itself - using Helm chart from OCI registry and values from a git repo'
     #
-    #- name: argocd
+    #argocd:
     #  namespace: argocd
     #  project: default
     #  sources:
