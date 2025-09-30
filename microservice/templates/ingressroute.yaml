@@ -308,6 +308,9 @@ spec:
           {{- with .serviceNamespace }}
           namespace: {{ . }}
           {{- end }}
+          {{- with .serviceScheme }}
+          scheme: {{ . }}
+          {{- end }}
           port: {{ .servicePort | default $svcPort }}
           nativeLB: {{ .nativeLB | default false }}
           {{- with .weight }}
@@ -317,6 +320,9 @@ spec:
         - name: {{ .fallbackServiceName }}
           {{- with .serviceNamespace }}
           namespace: {{ . }}
+          {{- end }}
+          {{- with .serviceScheme }}
+          scheme: {{ . }}
           {{- end }}
           port: {{ .fallbackServicePort | default $svcPort }}
           nativeLB: {{ .nativeLB | default false }}
