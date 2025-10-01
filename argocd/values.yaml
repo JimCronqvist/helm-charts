@@ -71,6 +71,7 @@ argocd:
       ## Argo expects the password in the secret to be bcrypt hashed. You can create this hash with
       ## `htpasswd -nbBC 10 "" $ARGO_PWD | tr -d ':\n' | sed 's/$2y/$2a/'`
       argocdServerAdminPassword: ""
+      argocdServerAdminPasswordMtime: "2025-10-01T00:00:00Z"
 
     # Custom CSS in ArgoCD UI
     #styles: |
