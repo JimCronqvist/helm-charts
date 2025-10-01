@@ -15,6 +15,13 @@ customConfigmap:
 #      fallthrough
 #    }
 
+
+# Default values for coredns.
+# When installing the chart on EKS, you can delete the old coredns by running:
+# > kubectl delete deployment/coredns service/kube-dns service/coredns-metrics configmap/coredns configmap/coredns-custom pdb/coredns sa/coredns clusterrole/coredns clusterrole/coredns-extra clusterrolebinding/coredns clusterrolebinding/coredns-extra clusterrolebinding/system:coredns -n kube-system
+# Then install this chart in the kube-system namespace.
+# > helm upgrade --install coredns oci://ghcr.io/jimcronqvist/helm-charts/coredns -n kube-system
+
 coredns:
   replicaCount: 2
 
