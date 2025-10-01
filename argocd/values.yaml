@@ -45,15 +45,15 @@ argocd:
       #    - groups
       #  logoutURL:
 
-      server.insecure: true
-      server.log.level: info # debug
-
       # Kyverno specific setting
       resource.compareoptions: |
         # disables status field diffing in specified resource types
         ignoreAggregatedRoles: true
 
     params:
+      server.insecure: true
+      server.log.level: info # debug
+
       # Performance tuning for large clusters
       controller.cluster.cache.batch.events.processing: "true"
       controller.cluster.cache.events.processing.interval: "100ms"
