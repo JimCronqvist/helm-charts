@@ -106,12 +106,6 @@ argocd:
     #    memory: 1Gi
     service:
       type: ClusterIP
-    clusterRoleRules:
-      enabled: true
-      rules:
-        - apiGroups: [""]
-          resources: ["pods/exec"]
-          verbs: ["create"]
     podAnnotations:
       ad.datadoghq.com/argocd-server.checks: |
         {
