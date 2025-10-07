@@ -97,6 +97,9 @@ argocd:
           }
         }
 
+  dex:
+    enabled: false
+
   server:
     #resources:
     #  limits:
