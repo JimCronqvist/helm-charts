@@ -42,6 +42,10 @@ mysql:
   podLabels:
     tags.datadoghq.com/service: mysql
 
+  priorityClassName: ""
+  nodeSelector: {}
+  tolerations: []
+
   resources:
     requests:
       memory: 256Mi

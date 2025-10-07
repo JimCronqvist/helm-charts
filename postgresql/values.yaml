@@ -44,6 +44,10 @@ postgresql:
   podLabels:
     tags.datadoghq.com/service: postgresql
 
+  priorityClassName: ""
+  nodeSelector: {}
+  tolerations: []
+
   resources:
     requests:
       memory: 256Mi
