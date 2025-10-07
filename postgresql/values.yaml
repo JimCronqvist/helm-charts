@@ -1,39 +1,68 @@
+# Warning: This chart is primarily used for development, so we don't retain the PVCs by default. RDS is recommended for production.
 postgresql:
   serviceAccount:
     create: true
 
-  architecture: standalone
+  useDeployment: true
 
-  auth:
-    enablePostgresUser: true
-    postgresPassword: ""
+  settings:
+    initDbArgs: ""
 
-    database: ""
+    superuser:
+      value: "postgres"
 
-    username: ""
-    password: ""
+    superuserPassword:
+      value: ""
 
-    #existingSecret: postgresql-secret
+    # Use an existing secret for superuser credentials instead of static values
+    # existingSecret: "postgresql-secret"
+    # superuser:
+    #   secretKey: "superuserUsername"
+    # superuserPassword:
+    #   secretKey: "superuserPassword"
 
-  primary:
-    name: master
+  userDatabase:
+    # Create a user database on startup
+    name:
+      value: "temp"
 
-    podLabels:
-      tags.datadoghq.com/service: postgresql
+    # Create a user with access to the database
+    user:
+      value: ""
+    password:
+      value: ""
 
-    resources:
-      requests:
-        memory: 256Mi
-        cpu: 250m
-    #  limits:
-    #    memory: 512Mi
-    #    cpu: 500m
+    # Use an existing secret for credentials instead of static values
+    # existingSecret: "mysql-secret"
+    # name:
+    #   secretKey: "database"
+    # user:
+    #   secretKey: "user"
+    # password:
+    #   secretKey: "password"
 
-    persistence:
-      size: 8Gi
+  podLabels:
+    tags.datadoghq.com/service: postgresql
 
-    persistentVolumeClaimRetentionPolicy:
-      enabled: true
-      whenScaled: Retain
-      whenDeleted: Delete # default is 'Retain'
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    # limits:
+    #   memory: 512Mi
+    #   cpu: 500m
 
+  storage:
+    volumeName: "postgresql-data"
+    size: 8Gi
+    keepPVC: false
+
+  networkPolicy: {}
+  customScripts: {} # custom scripts to run on startup (.sh, .sql files that will be placed in /docker-entrypoint-initdb.d)
+  extraScripts: "" # configmap that contains custom scripts to run on startup
+  #extraConfigs: []
+
+  # Custom configuration that will be mounted in /etc/postgresql/postgresql.conf
+  customConfig: |
+  #   # Custom config
+  #   ...

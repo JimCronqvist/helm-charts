@@ -1,39 +1,67 @@
+# Warning: This chart is primarily used for development, so we don't retain the PVCs by default. RDS is recommended for production.
 mysql:
   serviceAccount:
     create: true
 
-  architecture: standalone
+  useDeployment: true
 
-  auth:
-    rootPassword: ""
+  settings:
+    allowEmptyRootPassword: false
+    skipTZInfo: false
+    arguments: []
+    #  - --character-set-server=utf8mb4
+    #  - --collation-server=utf8mb4_unicode_ci
 
-    createDatabase: true
-    database: "temp"
+    rootPassword:
+      value: ""
 
-    username: ""
-    password: ""
+    # Use an existing secret for root credentials instead of static values
+    # existingSecret: "mysql-secret"
+    # rootPassword:
+    #   secretKey: "rootPassword"
 
-    #existingSecret: mysql-secret
+  userDatabase:
+    # Create a user database on startup
+    name:
+      value: "temp"
+    # Create a user with access to the database
+    user:
+      value: ""
+    password:
+      value: ""
 
-  primary:
-    name: master
+    # Use an existing secret for credentials instead of static values
+    # existingSecret: "mysql-secret"
+    # name:
+    #   secretKey: "database"
+    # user:
+    #   secretKey: "user"
+    # password:
+    #   secretKey: "password"
 
-    podLabels:
-      tags.datadoghq.com/service: mysql
+  podLabels:
+    tags.datadoghq.com/service: mysql
 
-    resources:
-      requests:
-        memory: 256Mi
-        cpu: 250m
-    #  limits:
-    #    memory: 512Mi
-    #    cpu: 500m
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 250m
+    # limits:
+    #   memory: 512Mi
+    #   cpu: 500m
 
-    persistence:
-      size: 8Gi
+  storage:
+    volumeName: "mysql-data"
+    size: 8Gi
+    keepPVC: false
 
-    # Missing support for this in the official helm chart for now
-    # persistentVolumeClaimRetentionPolicy:
-    #   enabled: true
-    #   whenScaled: Retain
-    #   whenDeleted: Delete # default is 'Retain'
+  networkPolicy: {}
+  customScripts: {} # custom scripts to run on startup (.sh, .sql, .sql.gz files that will be placed in /docker-entrypoint-initdb.d)
+  extraScripts: "" # configmap that contains custom scripts to run on startup
+  #extraConfigs: []
+
+
+  # Custom my.cnf overrides
+  # customConfig: |
+  #   [mysqld]
+  #   max_connections = 200

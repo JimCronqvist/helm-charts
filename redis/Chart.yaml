@@ -8,9 +8,9 @@ type: application
 
 # The chart version. This version number should be incremented each time you make changes
 # to the chart and its templates, including the app version.
-version: 0.1.0
+version: 0.2.0
 
 dependencies:
   - name: redis
-    version: 20.1.6
-    repository: oci://registry-1.docker.io/bitnamicharts
+    version: "2.1.5"
+    repository: https://groundhog2k.github.io/helm-charts/

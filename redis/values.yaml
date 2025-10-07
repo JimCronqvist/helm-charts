@@ -1,35 +1,34 @@
 redis:
-  architecture: standalone
-  auth:
+  serviceAccount:
+    create: true
+
+  useDeploymentWhenNonHA: true
+
+  # Use a high available sentinel architecture instead of a single Redis instance
+  haMode:
     enabled: false
-    password: ""
 
-  networkPolicy:
-    enabled: true
+  podLabels:
+    tags.datadoghq.com/service: redis
 
-  # Override how pvc's are managed throughout the lifecycle of the Stateful Set for the different components of redis
-  master:
-    podLabels:
-      tags.datadoghq.com/service: redis
-    persistentVolumeClaimRetentionPolicy:
-      enabled: true
-      whenScaled: Retain
-      whenDeleted: Delete # default is 'Retain'
-    persistence:
-      enabled: true
-  replica:
-    podLabels:
-      tags.datadoghq.com/service: redis
-    persistentVolumeClaimRetentionPolicy:
-      enabled: true
-      whenScaled: Retain
-      whenDeleted: Delete # default is 'Retain'
-    persistence:
-      enabled: true
-  sentinel:
-    persistentVolumeClaimRetentionPolicy:
-      enabled: true
-      whenScaled: Retain
-      whenDeleted: Delete # default is 'Retain'
-    persistence:
-      enabled: true
+  storage:
+    volumeName: "redis-data"
+    size: 8Gi
+    # Keep the dynamically created PVC (only for non-HA mode with option useDeploymentWhenNonHA: true)
+    keepPVC: false
+
+  # Resource requests/limits for Redis pods
+  resources:
+    requests:
+      memory: 256Mi
+      cpu: 100m
+    # limits:
+    #   memory: 512Mi
+    #   cpu: 200m
+
+  ## Additional redis.conf
+  redisConfig: |
+    #requirepass <password>  # Uncomment and set a password if authentication is needed
+
+  ## Additional sentinel.conf (only when haMode is enabled) - Ensure to configure the auth appropriately.
+  sentinelConfig: |
