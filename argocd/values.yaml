@@ -23,6 +23,19 @@ argocd:
   global:
     domain: argocd.example.com
 
+    logging:
+      format: text # json' or 'text'
+      level: info # debug
+
+    networkPolicy:
+      create: true
+      defaultDenyIngress: false
+
+    priorityClassName: ""
+
+    nodeSelector:
+      kubernetes.io/os: linux
+
     tolerations:
       - key: CriticalAddonsOnly
         operator: Exists
@@ -52,7 +65,6 @@ argocd:
 
     params:
       server.insecure: true
-      server.log.level: info # debug
 
       # Performance tuning for large clusters
       controller.cluster.cache.batch.events.processing: "true"
@@ -77,13 +89,18 @@ argocd:
     #styles: |
     #  .sidebar {}
 
+  redisSecretInit:
+    # Creates the initial Redis password secret if it doesn't exist. If you want to manage it yourself, set to false.
+    # or if you want, you can disable it after the initial creation.
+    enabled: true
+
   controller:
     #resources:
     #  limits:
-    #    memory: 2Gi
+    #    memory: 4Gi
     #  requests:
     #    cpu: 2
-    #    memory: 2Gi
+    #    memory: 4Gi
     podAnnotations:
       ad.datadoghq.com/argocd-application-controller.checks: |
         {
@@ -106,7 +123,7 @@ argocd:
     #    memory: 4Gi
     #  requests:
     #    cpu: 500m
-    #    memory: 1Gi
+    #    memory: 4Gi
     service:
       type: ClusterIP
     podAnnotations:
@@ -184,8 +201,12 @@ argocdApps:
       #    name: in-cluster
       #    namespace: argocd
       #  syncPolicy:
-      #    automated: {}
+      #    automated:
+      #      selfHeal: true
+      #      prune: true
       #  syncOptions:
       #    - CreateNamespace=true
+      #    - PrunePropagationPolicy=foreground
+
     applicationsets: {}
     itemTemplates: []
