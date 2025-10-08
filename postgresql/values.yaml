@@ -58,7 +58,7 @@ postgresql:
 
   storage:
     volumeName: "postgresql-data"
-    size: 8Gi
+    requestedSize: 8Gi
     keepPVC: false
 
   networkPolicy: {}

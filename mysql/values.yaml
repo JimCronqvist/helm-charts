@@ -56,7 +56,7 @@ mysql:
 
   storage:
     volumeName: "mysql-data"
-    size: 8Gi
+    requestedSize: 8Gi
     keepPVC: false
 
   networkPolicy: {}

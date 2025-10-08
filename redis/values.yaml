@@ -18,7 +18,7 @@ redis:
   storage:
     volumeName: "redis-data"
     # If no size is set, emptyDir will be used (no persistence).
-    size: 8Gi
+    requestedSize: 8Gi
     # Keep the dynamically created PVC (only for non-HA mode with option useDeploymentWhenNonHA: true)
     keepPVC: false
 
