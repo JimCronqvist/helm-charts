@@ -42,6 +42,10 @@ mysql:
   podLabels:
     tags.datadoghq.com/service: mysql
 
+  service:
+    annotations: {}
+      # tailscale.com/expose: "true"
+
   priorityClassName: ""
   nodeSelector: {}
   tolerations: []
