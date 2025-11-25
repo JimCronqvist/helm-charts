@@ -47,7 +47,7 @@ spec:
             - name: UPSTREAM
               value: "http://{{ $svcName }}:{{ $svcPort }}"
             - name: PORT
-              value: {{ .Values.proxy.service.port | default 80 }}
+              value: {{ .Values.proxy.service.port | default 80 | quote }}
             {{- with .Values.proxy.env }}
             {{- range $key, $val := . }}
             - name: {{ $key }}
