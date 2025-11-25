@@ -15,7 +15,7 @@ spec:
   ports:
     - port: {{ .Values.proxy.service.port | default 80 }}
       appProtocol: http
-      targetPort: {{ .Values.proxy.service.targetPort | default 80 }}
+      targetPort: varnish-http
       protocol: TCP
       name: proxy-http
   selector:
