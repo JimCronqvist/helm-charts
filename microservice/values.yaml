@@ -169,6 +169,7 @@ ingressroute:
     #   priority: 0
     #   stripPrefix:
     #   useCache: true
+    #   proxy: true
     #
     # - path: /([0-9]{6,}
     #   host: test(.*).local
@@ -185,6 +186,18 @@ ingressrouteTCP:
   tls:
     enabled: false
     passthrough: false
+
+proxy:
+  enabled: false
+  replicaCount: 1
+  image:
+    repository: ghcr.io/jimcronqvist/http-proxy
+    tag: master
+    pullPolicy: IfNotPresent
+  resources: {}
+  # env:
+  #   HANDLER_FILE: "log.mjs"
+  #   PARSE_REQUEST_BODY: true
 
 cache:
   enabled: false

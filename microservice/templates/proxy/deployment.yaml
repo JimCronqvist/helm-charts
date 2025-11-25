@@ -1,0 +1,82 @@
+{{- if .Values.proxy.enabled }}
+{{- $fullName := include "microservice.fullname" . -}}
+{{- $svcName := $fullName -}}
+{{- $svcPort := dig "port" 80 (default (dict) .Values.service) -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ $fullName }}-proxy
+  labels:
+    {{- include "microservice.labels" (dict "context" $ "component" "proxy") | nindent 4 }}
+    {{- include "helpers.datadog-service-labels" . | indent 4 }}
+spec:
+  {{- if not .Values.proxy.autoscalingEnabled }}
+  replicas: {{ .Values.proxy.replicaCount | default 1 }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "microservice.selectorLabels" (dict "context" $ "component" "proxy") | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        {{- include "helpers.datadog-service-labels" . | indent 8 }}
+        {{- include "microservice.selectorLabels" (dict "context" $ "component" "proxy") | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
+    spec:
+      {{- if .Values.priorityClassValue }}
+      priorityClassName: {{ .Release.Namespace }}-{{ $fullName }}
+      {{- else if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.terminationGracePeriodSeconds | default 30 }}
+      containers:
+        - name: {{ $fullName | default .Chart.Name }}-proxy
+          image: "{{ .Values.proxy.image.repository }}:{{ .Values.proxy.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.proxy.image.pullPolicy | default "IfNotPresent" }}
+          ports:
+            - containerPort: {{ .Values.proxy.service.port | default 80 }}
+              name: proxy-http
+              protocol: TCP
+          {{- with .Values.proxy.env }}
+          env:
+            - name: UPSTREAM
+              value: "http://{{ $svcName }}:{{ $svcPort }}"
+            - name: PORT
+              value: {{ .Values.proxy.service.port | default 80 }}
+            {{- range $key, $val := . }}
+            - name: {{ $key }}
+              value: {{ $val | quote }}
+            {{- end }}
+          {{- end }}
+          resources:
+            {{- include "helpers.wrapResourcesWithQuotes" .Values.proxy.resources | indent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.affinity }}
+      affinity:
+        {{- with .Values.affinity }}
+        {{- tpl (toYaml .) $ | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      {{- if or .Values.tolerations .Values.nodeSelector }}
+      tolerations:
+        {{- include "microservice.tolerations" . | nindent 8 }}
+      {{- end }}
+      {{- if .Values.topologySpreadConstraints }}
+      topologySpreadConstraints:
+        {{- with .Values.topologySpreadConstraints }}
+        {{- tpl (toYaml .) $ | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      enableServiceLinks: false
+{{- end }}
+
+

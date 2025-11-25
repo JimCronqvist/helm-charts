@@ -1,0 +1,25 @@
+{{- if .Values.proxy.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "microservice.fullname" . }}-proxy
+  labels:
+    {{- include "microservice.labels" (dict "context" $ "component" "proxy") | nindent 4 }}
+  annotations:
+    {{- with .Values.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- include "helpers.tailscale-annotations" . | indent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - port: {{ .Values.proxy.service.port | default 80 }}
+      appProtocol: http
+      targetPort: {{ .Values.proxy.service.targetPort | default 80 }}
+      protocol: TCP
+      name: proxy-http
+  selector:
+    {{- include "microservice.selectorLabels" (dict "context" $ "component" "proxy") | nindent 4 }}
+{{- end }}
+
+

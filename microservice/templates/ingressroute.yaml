@@ -4,6 +4,7 @@
 {{- $fullName := include "microservice.fullname" . -}}
 {{- $labels := include "microservice.labels" (dict "context" $) -}}
 {{- $svcPort := dig "port" 80 (default (dict) .Values.service) -}}
+{{- $proxyPort := dig "port" 80 (default (dict) .Values.proxy.service) -}}
 {{- $svcName := $fullName -}}
 {{/*
 StripPrefix middleware
@@ -296,7 +297,14 @@ spec:
       priority: {{ .priority | default (len $matchRule) }}
       match: {{ $matchRule }}
       services:
-        {{- if .useCache }}
+        {{- if .proxy }}
+        - name: {{ $svcName }}-proxy
+          port: {{ $proxyPort }}
+          nativeLB: {{ .nativeLB | default false }}
+          {{- with .weight }}
+          weight: {{ . }}
+          {{- end }}
+        {{- else if .useCache }}
         - name: {{ $svcName }}-varnish
           port: 80
           nativeLB: {{ .nativeLB | default false }}
