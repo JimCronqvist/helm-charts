@@ -9,4 +9,4 @@ appVersion: latest # 3.28.0
 dependencies:
   - name: microservice
     repository: "file://../microservice"
-    version: 0.3.x
+    version: 0.4.x

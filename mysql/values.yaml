@@ -68,6 +68,9 @@ mysql:
   extraScripts: "" # configmap that contains custom scripts to run on startup
   #extraConfigs: []
 
+  env: []
+  #  - name: TZ
+  #    value: Europe/Stockholm#
 
   # Custom my.cnf overrides
   # customConfig: |
