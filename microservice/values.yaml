@@ -189,7 +189,7 @@ ingressrouteTCP:
 
 proxy:
   enabled: false
-  replicaCount: 1
+  replicaCount: 2
   image:
     repository: ghcr.io/jimcronqvist/http-proxy
     tag: 1.2.0
@@ -197,9 +197,16 @@ proxy:
   resources: {}
   service:
     port: 80
-  # env:
-  #   HANDLER_FILE: "log.mjs"
-  #   PARSE_REQUEST_BODY: true
+  env:
+    PARSE_REQUEST_BODY: true
+    HANDLER_FILE: "log.mjs"
+    #NODE_ENV: development
+    LOG_RESPONSE: true
+    LOG_REQUEST: true
+    LOG_REQUEST_BODY: true
+    LOG_RESPONSE_BODY: true
+    LOG_SINGLE_ROW: true
+    LOG_IP: true
 
 cache:
   enabled: false

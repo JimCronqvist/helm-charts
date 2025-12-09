@@ -2,6 +2,7 @@
 {{- $fullName := include "microservice.fullname" . -}}
 {{- $svcName := $fullName -}}
 {{- $svcPort := dig "port" 80 (default (dict) .Values.service) -}}
+{{- $env := default (dict) .Values.proxy.env -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -44,15 +45,15 @@ spec:
               name: proxy-http
               protocol: TCP
           env:
+            {{- if not (hasKey $env "UPSTREAM") }}
             - name: UPSTREAM
               value: "http://{{ $svcName }}:{{ $svcPort }}"
+            {{- end }}
             - name: PORT
               value: {{ .Values.proxy.service.port | default 80 | quote }}
-            {{- with .Values.proxy.env }}
-            {{- range $key, $val := . }}
+            {{- range $key, $val := $env }}
             - name: {{ $key }}
               value: {{ $val | quote }}
-            {{- end }}
             {{- end }}
           resources:
             {{- include "helpers.wrapResourcesWithQuotes" .Values.proxy.resources | indent 12 }}
