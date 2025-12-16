@@ -1,0 +1,27 @@
+ingressroute:
+  enabled: false
+  overrideHost: ""
+  routes:
+    - path: /
+      host: chat.[a-z0-9.]+
+      priority: 900
+      serviceName: open-webui
+      servicePort: 80
+
+open-webui:
+
+  sso:
+    enabled: false
+
+    google:
+      enabled: false
+      clientId: ""
+      clientSecret: ""
+
+    oidc:
+      enabled: false
+      clientId: ""
+      clientSecret: ""
+      providerUrl: ""
+      providerName: "SSO"
+      scopes: "openid email profile"

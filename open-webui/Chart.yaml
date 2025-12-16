@@ -1,0 +1,17 @@
+apiVersion: v2
+name: open-webui
+description: A Helm chart for Open WebUI
+type: application
+
+# The chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: 0.1.0
+
+dependencies:
+  - name: open-webui
+    version: 8.19.0
+    repository: https://open-webui.github.io/helm-charts
+  - name: ingressroute
+    version: 0.2.x
+    repository: file://../ingressroute
+    condition: ingressroute.enabled
