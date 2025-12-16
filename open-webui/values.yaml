@@ -10,8 +10,18 @@ ingressroute:
 
 open-webui:
 
+  ollama:
+    gpu:
+      enabled: false
+      type: 'nvidia'
+      number: 1
+    models:
+      pull: []
+      run: []
+
   sso:
     enabled: false
+    enableSignup: true
 
     google:
       enabled: false
@@ -25,3 +35,14 @@ open-webui:
       providerUrl: ""
       providerName: "SSO"
       scopes: "openid email profile"
+
+  # https://docs.openwebui.com/getting-started/env-configuration
+  extraEnvVars:
+    - name: OPENID_PROVIDER_URL
+      value: "https://accounts.google.com/.well-known/openid-configuration"
+    - name: ENABLE_SIGNUP
+      value: "False"
+    - name: DEFAULT_USER_ROLE
+      value: "user"
+    - name: ENABLE_PERSISTENT_CONFIG
+      value: "false"
