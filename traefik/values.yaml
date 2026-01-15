@@ -15,6 +15,25 @@ traefik:
   # Enable dashboard - don't keep it publicly open on production environments without appropriate protection (fw, security groups, auth, ip filtering, etc.)
     dashboard:
       enabled: true
+      middlewares:
+        - name: traefik-dashboard-auth
+
+  extraObjects:
+    - apiVersion: traefik.io/v1alpha1
+      kind: Middleware
+      metadata:
+        name: traefik-dashboard-auth
+      spec:
+        basicAuth:
+          secret: traefik-dashboard-auth
+    - apiVersion: v1
+      kind: Secret
+      metadata:
+        name: traefik-dashboard-auth
+      type: kubernetes.io/basic-auth
+      stringData:
+        username: admin
+        password: changeme # Change this password if you enable the dashboard! NOTE: Enabled by default.
 
   ports:
     traefik:
