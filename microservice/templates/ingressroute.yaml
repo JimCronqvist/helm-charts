@@ -398,6 +398,10 @@ spec:
         {{- end }}
     {{- end }}
     {{- end }}
+    {{- if $ingressroute.tls.options }}
+    options:
+      {{- $ingressroute.tls.options | toYaml | nindent 6 }}
+    {{- end }}
   {{- end }}
 {{- if lt $manifestIndex (sub (len $suffixes) 1) }}
 ---

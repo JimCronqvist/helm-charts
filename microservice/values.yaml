@@ -155,6 +155,9 @@ ingressroute:
     #  - main: domain.com
     #    sans:
     #      - test.domain.com
+    #options:
+    #  name: mtls
+    #  namespace: traefik
   routes:
     # Path is required, and will match against PathPrefix(`...`), with an optional Host() or HostRegexp() match (multiple with commas)
     # priority: 0, means the priority will be ignored, and the default traefik rules length sorting is applied.
