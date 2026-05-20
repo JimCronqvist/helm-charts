@@ -31,7 +31,7 @@ argocd:
       create: true
       defaultDenyIngress: false
 
-    priorityClassName: ""
+    priorityClassName: "system-cluster-critical"
 
     nodeSelector:
       kubernetes.io/os: linux
