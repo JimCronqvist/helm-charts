@@ -1,4 +1,6 @@
 redis:
+  enabled: true
+
   serviceAccount:
     create: true
 
