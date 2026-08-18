@@ -187,6 +187,7 @@ traefik:
 
   # Enable the experimental plugins
   experimental:
+    abortOnPluginFailure: true
     plugins: {}
       # traefik-api-key-auth:
       #   moduleName: github.com/JimCronqvist/traefik-api-key-auth
