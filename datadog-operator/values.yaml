@@ -30,7 +30,6 @@ datadog-operator:
 
   watchNamespaces:
     - datadog
-    - monitoring
 
 secrets:
   secrets:
