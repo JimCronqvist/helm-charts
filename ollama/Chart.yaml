@@ -11,3 +11,7 @@ dependencies:
   - name: ollama
     repository: https://otwld.github.io/ollama-helm/
     version: 1.84.0
+  - name: ingressroute
+    version: 0.2.x
+    repository: file://../ingressroute
+    condition: ingressroute.enabled
