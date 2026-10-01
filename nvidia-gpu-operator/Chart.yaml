@@ -12,3 +12,4 @@ dependencies:
     alias: nvidia-gpu-operator
     version: v26.7.1
     repository: oci://nvcr.io/nvidia/cloud-native-charts
+    condition: nvidia-gpu-operator.enabled
