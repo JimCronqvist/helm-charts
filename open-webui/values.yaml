@@ -10,14 +10,9 @@ ingressroute:
 
 open-webui:
 
+  # Use the separate helm chart for Ollama.
   ollama:
-    gpu:
-      enabled: false
-      type: 'nvidia'
-      number: 1
-    models:
-      pull: []
-      run: []
+    enabled: false
 
   sso:
     enabled: false
@@ -45,4 +40,6 @@ open-webui:
     - name: DEFAULT_USER_ROLE
       value: "user"
     - name: ENABLE_PERSISTENT_CONFIG
-      value: "false"
+      value: "False"
+    - name: ENABLE_API_KEYS
+      value: "False"
