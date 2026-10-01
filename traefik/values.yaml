@@ -105,7 +105,7 @@ traefik:
       allowEmptyServices: true
       # Allow the IngressRoute to reference an externalName Service
       allowExternalNameServices: false
-      # Allow the IngressRoute to reference a Service in a different namespace
+      # Allow the IngressRoute to reference a Service/TLSOption/etc in a different namespace
       allowCrossNamespace: false
 
   ## Use an existing tls cert and set as default, for example when you use cert-manager for certificate management
