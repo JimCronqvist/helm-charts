@@ -1,0 +1,16 @@
+ollama:
+  gpu:
+    # -- Enable GPU integration
+    enabled: false
+    # -- GPU type: 'nvidia' or 'amd'
+    type: 'nvidia'
+    # -- Number of GPUs to use
+    number: 1
+
+  models:
+    pull:
+      - gemma3
+      #- qwen2.5:0.5b
+
+    run:
+      - gemma3

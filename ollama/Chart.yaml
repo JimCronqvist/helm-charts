@@ -1,0 +1,13 @@
+apiVersion: v2
+name: ollama
+description: A Helm chart for Ollama
+type: application
+
+# The chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: 0.1.0
+
+dependencies:
+  - name: ollama
+    repository: https://otwld.github.io/ollama-helm/
+    version: 1.84.0
