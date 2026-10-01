@@ -1,0 +1,13 @@
+nvidia-gpu-operator:
+  # Don't install drivers if you already have them installed on the host, such as when using a GPU-optimized AMI in AWS.
+  driver:
+    enabled: false
+
+  toolkit:
+    enabled: true
+  devicePlugin:
+    enabled: true
+  dcgmExporter:
+    enabled: true
+  gfd:
+    enabled: true

@@ -1,0 +1,14 @@
+apiVersion: v2
+name: nvidia-gpu-operator
+description: A Helm chart for Nvidia GPU Operator
+type: application
+
+# The chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: 0.1.0
+
+dependencies:
+  - name: gpu-operator
+    alias: nvidia-gpu-operator
+    version: v26.7.1
+    repository: oci://nvcr.io/nvidia/cloud-native-charts
