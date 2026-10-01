@@ -6,6 +6,14 @@ nvidia-gpu-operator:
 
 
   # Don't install drivers if you already have them installed on the host, such as when using a GPU-optimized AMI in AWS.
+  # If you want to install it on Ubuntu and get an error message, that nouveau is already installed. Do the following:
+  #   > cat <<EOF | sudo tee /etc/modprobe.d/blacklist-nouveau.conf
+  #     blacklist nouveau
+  #     options nouveau modeset=0
+  #     EOF
+  #   > sudo update-initramfs -u
+  #   > sudo reboot
+
   driver:
     enabled: false
 
