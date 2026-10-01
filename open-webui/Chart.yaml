@@ -9,7 +9,7 @@ version: 0.1.0
 
 dependencies:
   - name: open-webui
-    version: 8.19.0
+    version: 16.6.0
     repository: https://open-webui.github.io/helm-charts
   - name: ingressroute
     version: 0.2.x
