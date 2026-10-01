@@ -1,6 +1,10 @@
 nvidia-gpu-operator:
   enabled: false
 
+  # See configurable values here:
+  # https://docs.nvidia.com/datacenter/cloud-native/gpu-operator/latest/getting-started.html#gpu-operator-helm-chart-options
+
+
   # Don't install drivers if you already have them installed on the host, such as when using a GPU-optimized AMI in AWS.
   driver:
     enabled: false
