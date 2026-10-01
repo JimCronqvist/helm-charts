@@ -14,6 +14,10 @@ open-webui:
   ollama:
     enabled: false
 
+  # A list of Ollama API endpoints. These can be added in lieu of automatically installing the Ollama Helm chart, or in addition to it.
+  ollamaUrls: []
+    #- "http://ollama:11434"
+
   sso:
     enabled: false
     enableSignup: true
