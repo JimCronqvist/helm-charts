@@ -7,6 +7,7 @@ tailscale-operator:
     clientSecret: ""
 
   operatorConfig:
+    #hostname: "tailscale-operator"
     podLabels:
       tags.datadoghq.com/service: tailscale-operator
 
