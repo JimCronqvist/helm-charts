@@ -9,3 +9,6 @@ tailscale-operator:
   operatorConfig:
     podLabels:
       tags.datadoghq.com/service: tailscale-operator
+
+  apiServerProxyConfig:
+    mode: "noauth"
