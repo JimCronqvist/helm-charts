@@ -7,6 +7,13 @@ metadata:
   namespace: {{ .namespace | default $.Release.Namespace }}
   labels:
     {{- include "external-name.labels" $ | nindent 4 }}
+    {{- with .labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- with .annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   type: ExternalName
   externalName: {{ .externalName }}
