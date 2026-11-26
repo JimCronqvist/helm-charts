@@ -6,6 +6,7 @@ external-name:
       annotations:
         tailscale.com/expose: "true"
         tailscale.com/hostname: "kubernetes-api" # kubernetes-api-{clusterName}
+        tailscale.com/tags: "tag:k8s-api"
       ports:
         - name: https
           port: 443
