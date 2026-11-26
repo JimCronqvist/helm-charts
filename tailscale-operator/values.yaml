@@ -17,4 +17,4 @@ tailscale-operator:
       tags.datadoghq.com/service: tailscale-operator
 
   apiServerProxyConfig:
-    mode: false
+    mode: "noauth"
