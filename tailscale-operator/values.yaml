@@ -1,3 +1,16 @@
+external-name:
+  enabled: false
+  externalNames:
+    - name: kubernetes-api
+      externalName: kubernetes.default.svc.cluster.local
+      annotations:
+        tailscale.com/expose: "true"
+        tailscale.com/hostname: "kubernetes-api" # kubernetes-api-{clusterName}
+      ports:
+        - name: https
+          port: 443
+          protocol: TCP
+
 tailscale-operator:
   # Create an OAuth client in the admin console, with the following permissions:
   # - 'Devices -> Core' write scope and the tag 'tag:k8s-operator'
@@ -12,4 +25,4 @@ tailscale-operator:
       tags.datadoghq.com/service: tailscale-operator
 
   apiServerProxyConfig:
-    mode: "noauth"
+    mode: false
