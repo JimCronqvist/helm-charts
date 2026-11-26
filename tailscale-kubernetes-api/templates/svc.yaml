@@ -1,0 +1,29 @@
+{{- if and .Values.service (dig "enabled" true .Values.service) }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Values.service.name | default (include "tailscale-kubernetes-api.fullname" .) }}
+  namespace: {{ .Values.service.namespace | default .Release.Namespace }}
+  labels:
+    {{- include "tailscale-kubernetes-api.labels" . | nindent 4 }}
+    {{- with .Values.service.labels }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+  {{- $tailscaleAnnotations := include "helpers.tailscale-annotations" . | trim }}
+  {{- if or .Values.service.annotations $tailscaleAnnotations }}
+  annotations:
+    {{- with .Values.service.annotations }}
+    {{- toYaml . | nindent 4 }}
+    {{- end }}
+    {{- if $tailscaleAnnotations }}
+    {{- $tailscaleAnnotations | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: ExternalName
+  externalName: {{ .Values.service.externalName }}
+  {{- with .Values.service.ports }}
+  ports:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}

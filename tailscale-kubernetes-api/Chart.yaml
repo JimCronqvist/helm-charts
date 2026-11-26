@@ -1,0 +1,8 @@
+apiVersion: v2
+name: tailscale-kubernetes-api
+description: A Helm chart to expose the Kubernetes API as an ExternalName service via Tailscale.
+type: application
+
+# The chart version. This version number should be incremented each time you make changes
+# to the chart and its templates, including the app version.
+version: 0.1.0

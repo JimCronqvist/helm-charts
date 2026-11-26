@@ -1,0 +1,25 @@
+nameOverride: ""
+fullnameOverride: ""
+
+tailscale:
+  enabled: true
+  hostname: "" # leave empty to use the default hostname (kubernetes-api-{clusterName})
+  tags: "tag:k8s-api"
+  prefix: ""
+
+service:
+  enabled: true
+  name: "kubernetes-api"
+  namespace: "tailscale"
+  externalName: kubernetes.default.svc.cluster.local
+  ports:
+    - name: https
+      port: 443
+      targetPort: 443
+      protocol: TCP
+  labels: {}
+  annotations: {}
+
+# Unique Cluster Name for the Tailscale Kubernetes API. This is used to generate the hostname for the Tailscale
+# Kubernetes API service.
+clusterName: ""

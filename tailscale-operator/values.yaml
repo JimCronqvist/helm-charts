@@ -1,16 +1,7 @@
+# Consider using the tailscale-kubernetes-api helm chart instead of this.
 external-name:
   enabled: false
-  externalNames:
-    - name: kubernetes-api
-      externalName: kubernetes.default.svc.cluster.local
-      annotations:
-        tailscale.com/expose: "true"
-        tailscale.com/hostname: "kubernetes-api" # kubernetes-api-{clusterName}
-        tailscale.com/tags: "tag:k8s-api"
-      ports:
-        - name: https
-          port: 443
-          protocol: TCP
+  externalNames: []
 
 tailscale-operator:
   # Create an OAuth client in the admin console, with the following permissions:
