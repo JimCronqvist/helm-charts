@@ -23,3 +23,7 @@ dependencies:
     version: 0.2.x
     repository: file://../ingressroute
     condition: ingressroute.enabled
+  - name: external-name
+    version: 0.1.x
+    repository: file://../external-name
+    condition: external-name.enabled
